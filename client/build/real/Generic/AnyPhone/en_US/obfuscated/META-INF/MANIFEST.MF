@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+MIDlet-Name: Blank
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Enough Software
+MIDlet-Description: Please describe me
+MIDlet-Info-URL: http://www.j2mepolish.org
+MIDlet-1: BlankApp,,app.App
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
+Polish-Version: 2.2.1 (2011-05-27)
