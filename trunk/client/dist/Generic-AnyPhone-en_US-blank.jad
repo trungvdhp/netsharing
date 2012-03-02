@@ -1,0 +1,8 @@
+MIDlet-Name: Blank
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Enough Software
+MIDlet-Jar-URL: Generic-AnyPhone-en_US-blank.jar
+MIDlet-Jar-Size: 120304
+MIDlet-Description: Please describe me
+MIDlet-Info-URL: http://www.j2mepolish.org
+MIDlet-1: BlankApp,,app.App
