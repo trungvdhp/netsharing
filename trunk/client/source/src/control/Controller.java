@@ -30,6 +30,7 @@ import java.io.IOException;
 import javax.microedition.lcdui.Image;
 
 import view.MainMenuList;
+import view.frmLogin;
 
 import model.Configuration;
 
@@ -128,7 +129,8 @@ implements ApplicationInitializer, CommandListener
 				// ignore
 			}
 		}
-		this.display.setCurrent( this.screenMainMenu );
+		this.display.setCurrent((Displayable) new frmLogin("Login"));
+		//this.display.setCurrent( this.screenMainMenu );
 	}
 
 	private MainMenuList createMainMenu() {

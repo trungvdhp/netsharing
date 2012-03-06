@@ -54,13 +54,13 @@ public class StringItem extends Item
 	protected int textColor;
 	protected Font font;
 	//#ifdef polish.css.text-wrap
-		//# protected boolean useSingleLine;
-		//# protected boolean clipText;
-		//# protected int xOffset;
-		//# protected int textWidth;
-		//# protected boolean isHorizontalAnimationDirectionRight;
-		//# protected boolean animateTextWrap = true;
-		//# protected int availableTextWidth;
+		protected boolean useSingleLine;
+		protected boolean clipText;
+		protected int xOffset;
+		protected int textWidth;
+		protected boolean isHorizontalAnimationDirectionRight;
+		protected boolean animateTextWrap = true;
+		protected int availableTextWidth;
 		//#ifdef polish.css.text-wrap-animation-direction
 			//# protected int textWrapDirection = DIRECTION_BACK_AND_FORTH;
 		//#endif
@@ -220,33 +220,33 @@ public class StringItem extends Item
 	
 	
 	//#if tmp.useTextEffect || polish.css.text-wrap
-	//# /* (non-Javadoc)
-	 //# * @see de.enough.polish.ui.Item#animate(long, de.enough.polish.ui.ClippingRegion)
-	 //# */
-	//# public void animate(long currentTime, ClippingRegion repaintRegion)
-	//# {
-		//# super.animate(currentTime, repaintRegion);
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Item#animate(long, de.enough.polish.ui.ClippingRegion)
+	 */
+	public void animate(long currentTime, ClippingRegion repaintRegion)
+	{
+		super.animate(currentTime, repaintRegion);
 		//#if polish.css.text-wrap
-			//# if (this.animateTextWrap) {
-				//# if (this.useSingleLine && this.clipText) {
-					//# int speed = 1;
+			if (this.animateTextWrap) {
+				if (this.useSingleLine && this.clipText) {
+					int speed = 1;
 					//#ifdef polish.css.text-wrap-animation-speed
 						//# speed = this.textWrapSpeed;
 					//#endif
 					//#ifdef polish.css.text-wrap-animation-direction
 						//# if (this.textWrapDirection == 0) {
 					//#endif
-							//# if (this.isHorizontalAnimationDirectionRight) {
-								//# this.xOffset += speed;
-								//# if (this.xOffset >= 0) {
-									//# this.isHorizontalAnimationDirectionRight = false;
-								//# }
-							//# } else {
-								//# this.xOffset -= speed;
-								//# if (this.xOffset + this.textWidth < this.availableTextWidth) {
-									//# this.isHorizontalAnimationDirectionRight = true;
-								//# }
-							//# }
+							if (this.isHorizontalAnimationDirectionRight) {
+								this.xOffset += speed;
+								if (this.xOffset >= 0) {
+									this.isHorizontalAnimationDirectionRight = false;
+								}
+							} else {
+								this.xOffset -= speed;
+								if (this.xOffset + this.textWidth < this.availableTextWidth) {
+									this.isHorizontalAnimationDirectionRight = true;
+								}
+							}
 					//#ifdef polish.css.text-wrap-animation-direction
 						//# } else if (this.textWrapDirection == DIRECTION_LEFT) {
 							//# int offset = this.xOffset - speed;
@@ -262,17 +262,17 @@ public class StringItem extends Item
 							//# this.xOffset = offset;							
 						//# } 
 					//#endif
-//# 
-					//# addRelativeToContentRegion(repaintRegion, 0, 0, this.contentWidth, this.contentHeight );
-				//# }
-			//# }
+
+					addRelativeToContentRegion(repaintRegion, 0, 0, this.contentWidth, this.contentHeight );
+				}
+			}
 		//#endif
 		//#if tmp.useTextEffect
 			//# if (this.textEffect != null) {
 				//# this.textEffect.animate( this, currentTime, repaintRegion );
 			//# }
 		//#endif
-	//# }
+	}
 	//#endif
 
 	//#if tmp.useTextFilter
@@ -315,15 +315,15 @@ public class StringItem extends Item
 	//#endif
 	
 	//#if polish.css.text-wrap
-	//# /* (non-Javadoc)
-	 //# * @see de.enough.polish.ui.Item#defocus(de.enough.polish.ui.Style)
-	 //# */
-	//# protected void defocus(Style originalStyle) {
-		//# super.defocus(originalStyle);
-		//# if (this.clipText) {
-			//# this.xOffset = 0;
-		//# }
-	//# }	
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Item#defocus(de.enough.polish.ui.Style)
+	 */
+	protected void defocus(Style originalStyle) {
+		super.defocus(originalStyle);
+		if (this.clipText) {
+			this.xOffset = 0;
+		}
+	}	
 	//#endif
 
 
@@ -549,17 +549,17 @@ public class StringItem extends Item
 		}
 		
 		//#if polish.css.text-wrap
-			//# int clipX = 0;
-			//# int clipY = 0;
-			//# int clipWidth = 0;
-			//# int clipHeight = 0;
-			//# if (this.useSingleLine && this.clipText ) {
-				//# clipX = g.getClipX();
-				//# clipY = g.getClipY();
-				//# clipWidth = g.getClipWidth();
-				//# clipHeight = g.getClipHeight();
-				//# g.clipRect( x, y, this.availableTextWidth, this.contentHeight );
-			//# }
+			int clipX = 0;
+			int clipY = 0;
+			int clipWidth = 0;
+			int clipHeight = 0;
+			if (this.useSingleLine && this.clipText ) {
+				clipX = g.getClipX();
+				clipY = g.getClipY();
+				clipWidth = g.getClipWidth();
+				clipHeight = g.getClipHeight();
+				g.clipRect( x, y, this.availableTextWidth, this.contentHeight );
+			}
 		//#endif
 		//#ifdef polish.css.text-vertical-adjustment
 			//# y += this.textVerticalAdjustment;
@@ -655,15 +655,15 @@ public class StringItem extends Item
 //				}
 				
 				//#if polish.css.text-wrap
-					//# if (this.clipText) {
-						//# // when clipping (and therefore a scrolling animation) is needed,
-						//# // center and right layouts don't really make sense - this would
-						//# // start and stop the scrolling at wrong places outside of the clipping area: 
-						//# orientation = Graphics.LEFT;
-						//# lineX = x + this.xOffset;
-						//# isCenter = false;
-						//# isRight = false;
-					//# }
+					if (this.clipText) {
+						// when clipping (and therefore a scrolling animation) is needed,
+						// center and right layouts don't really make sense - this would
+						// start and stop the scrolling at wrong places outside of the clipping area: 
+						orientation = Graphics.LEFT;
+						lineX = x + this.xOffset;
+						isCenter = false;
+						isRight = false;
+					}
 				//#endif
 				//#if polish.Bugs.needsBottomOrientiationForStringDrawing
 					orientation = Graphics.BOTTOM | orientation;
@@ -709,9 +709,9 @@ public class StringItem extends Item
 			//# }
 		//#endif
 		//#if polish.css.text-wrap
-			//# if (this.useSingleLine && this.clipText ) {
-				//# g.setClip( clipX, clipY, clipWidth, clipHeight );
-			//# }
+			if (this.useSingleLine && this.clipText ) {
+				g.setClip( clipX, clipY, clipWidth, clipHeight );
+			}
 		//#endif
 	}
 	
@@ -815,21 +815,21 @@ public class StringItem extends Item
 		this.lastAvailableContentWidth = availWidth;
 		this.textLines.clear();
 		//#if polish.css.text-wrap
-			//# if ( this.useSingleLine ) {
-				//# this.availableTextWidth = availWidth;
-				//# int myTextWidth = stringWidth(body);
-				//# this.textLines.addLine(body, myTextWidth);
-				//# if (myTextWidth > availWidth) {
-					//# this.clipText = true;
-					//# this.textWidth = myTextWidth;
-					//# this.isHorizontalAnimationDirectionRight = false;
-					//# this.contentWidth = availWidth;
-				//# } else {
-					//# this.clipText = false;
-					//# this.contentWidth = myTextWidth;
-				//# }
-				//# this.contentHeight = getFontHeight();
-			//# } else {
+			if ( this.useSingleLine ) {
+				this.availableTextWidth = availWidth;
+				int myTextWidth = stringWidth(body);
+				this.textLines.addLine(body, myTextWidth);
+				if (myTextWidth > availWidth) {
+					this.clipText = true;
+					this.textWidth = myTextWidth;
+					this.isHorizontalAnimationDirectionRight = false;
+					this.contentWidth = availWidth;
+				} else {
+					this.clipText = false;
+					this.contentWidth = myTextWidth;
+				}
+				this.contentHeight = getFontHeight();
+			} else {
 		//#endif
 				wrap(body, firstLineWidth, availWidth);
 				WrappedText lines = this.textLines;
@@ -846,7 +846,7 @@ public class StringItem extends Item
 				//#endif
 				this.contentWidth = maxWidth;
 		//#if polish.css.text-wrap
-			//# }
+			}
 		//#endif
 		this.lastContentWidth = this.contentWidth;
 		this.lastContentHeight = this.contentHeight;
@@ -1036,16 +1036,16 @@ public class StringItem extends Item
 		//#endif
 		// reset useSingleLine:
 		//#if polish.css.text-wrap
-			//# Boolean textWrapBool = style.getBooleanProperty(150);
-			//# if (textWrapBool != null) {
-				//# if (textWrapBool.booleanValue() == this.useSingleLine) {
-					//# this.useSingleLine = !textWrapBool.booleanValue();
-					//# this.isTextInitializationRequired = true;
-				//# }
-			//# } else if (resetStyle && this.useSingleLine) {
-				//# this.useSingleLine = false;
-				//# this.isTextInitializationRequired = true;
-			//# }
+			Boolean textWrapBool = style.getBooleanProperty(150);
+			if (textWrapBool != null) {
+				if (textWrapBool.booleanValue() == this.useSingleLine) {
+					this.useSingleLine = !textWrapBool.booleanValue();
+					this.isTextInitializationRequired = true;
+				}
+			} else if (resetStyle && this.useSingleLine) {
+				this.useSingleLine = false;
+				this.isTextInitializationRequired = true;
+			}
 			//#if polish.css.text-wrap-animate
 				//# Boolean animateTextWrapBool = style.getBooleanProperty(253);
 				//# if (animateTextWrapBool != null) {

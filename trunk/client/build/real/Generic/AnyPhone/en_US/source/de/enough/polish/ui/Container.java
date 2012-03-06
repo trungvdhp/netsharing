@@ -2948,13 +2948,13 @@ public class Container extends Item {
 //			}
 			// change the label-style of this container:
 			//#ifdef polish.css.label-style
-				//# if (this.label != null && focusStyle != null) {
-					//# Style labStyle = (Style) focusStyle.getObjectProperty(3);
-					//# if (labStyle != null) {
-						//# this.labelStyle = this.label.style;
-						//# this.label.setStyle( labStyle );
-					//# }
-				//# }
+				if (this.label != null && focusStyle != null) {
+					Style labStyle = (Style) focusStyle.getObjectProperty(3);
+					if (labStyle != null) {
+						this.labelStyle = this.label.style;
+						this.label.setStyle( labStyle );
+					}
+				}
 			//#endif
 			return result;
 		}
@@ -3045,16 +3045,16 @@ public class Container extends Item {
 			}
 			// change the label-style of this container:
 			//#ifdef polish.css.label-style
-				//# Style tmpLabelStyle = null;
-				//# if ( originalStyle != null) {
-					//# tmpLabelStyle = (Style) originalStyle.getObjectProperty(3);
-				//# }
-				//# if (tmpLabelStyle == null) {
-					//# tmpLabelStyle = StyleSheet.labelStyle;
-				//# }
-				//# if (this.label != null && tmpLabelStyle != null && this.label.style != tmpLabelStyle) {
-					//# this.label.setStyle( tmpLabelStyle );
-				//# }
+				Style tmpLabelStyle = null;
+				if ( originalStyle != null) {
+					tmpLabelStyle = (Style) originalStyle.getObjectProperty(3);
+				}
+				if (tmpLabelStyle == null) {
+					tmpLabelStyle = StyleSheet.labelStyle;
+				}
+				if (this.label != null && tmpLabelStyle != null && this.label.style != tmpLabelStyle) {
+					this.label.setStyle( tmpLabelStyle );
+				}
 			//#endif
 		}
 	}

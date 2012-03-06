@@ -101,7 +101,7 @@ public abstract class Background implements Serializable
 		if (parent != null) {
 			parent.addRelativeToBackgroundRegion(
 					//#if polish.css.complete-background
-						//# this, null, // provide references to this background so that the correct background dimensions are selected 
+						this, null, // provide references to this background so that the correct background dimensions are selected 
 					//#endif
 					repaintRegion, left, top, parent.backgroundWidth - left + right + 1, parent.backgroundHeight - top + bottom + 1 
 			);
