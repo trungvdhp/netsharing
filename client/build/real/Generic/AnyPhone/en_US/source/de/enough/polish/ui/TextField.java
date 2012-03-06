@@ -825,133 +825,133 @@ public static final Command DELETE_CMD = new Command( "Delete", DELETE_TYPE, DEL
 				//# public static final Command ENTER_SYMBOL_CMD = new Command( "Add Symbol", Command.SCREEN, ENTER_SYMBOL_PRIORITY ); 
 			//#endif
 		//#endif
-		//# private boolean isKeyDown;
+		private boolean isKeyDown;
 		//#ifdef polish.TextField.InputTimeout:defined
 			//#= private static final int INPUT_TIMEOUT = ${polish.TextField.InputTimeout};  
 		//#else
-			//# private static final int INPUT_TIMEOUT = 1000;
+			private static final int INPUT_TIMEOUT = 1000;
 		//#endif
-		//# /** input mode for lowercase characters */
-		//# public static final int MODE_LOWERCASE = 0;
-		//# /** input mode for entering one uppercase followed by lowercase characters */
-		//# public static final int MODE_FIRST_UPPERCASE = 1; // only the first character should be written in uppercase
-		//# /** input mode for uppercase characters */
-		//# public static final int MODE_UPPERCASE = 2;
-		//# /** input mode for numeric characters */
-		//# public static final int MODE_NUMBERS = 3;
-		//# /** input mode for input using a separete native TextBox */
-		//# public static final int MODE_NATIVE = 4;
+		/** input mode for lowercase characters */
+		public static final int MODE_LOWERCASE = 0;
+		/** input mode for entering one uppercase followed by lowercase characters */
+		public static final int MODE_FIRST_UPPERCASE = 1; // only the first character should be written in uppercase
+		/** input mode for uppercase characters */
+		public static final int MODE_UPPERCASE = 2;
+		/** input mode for numeric characters */
+		public static final int MODE_NUMBERS = 3;
+		/** input mode for input using a separete native TextBox */
+		public static final int MODE_NATIVE = 4;
 		//#ifdef polish.key.ChangeInputModeKey:defined
 			//#= protected static final int KEY_CHANGE_MODE = ${polish.key.ChangeInputModeKey};
 		//#elif ${polish.vendor} == Generic
-			//# public static final int KEY_CHANGE_MODE = DeviceInfo.getKeyInputModeSwitch();
+			public static final int KEY_CHANGE_MODE = DeviceInfo.getKeyInputModeSwitch();
 		//#else
 			//# public static final int KEY_CHANGE_MODE = Canvas.KEY_POUND;
 		//#endif
 		//#ifdef polish.key.ClearKey:defined
 		   //#= public static final int KEY_DELETE = ${polish.key.ClearKey};
 		//#else
-		   //# public static final int KEY_DELETE = -8 ; //Canvas.KEY_STAR;
+		   public static final int KEY_DELETE = -8 ; //Canvas.KEY_STAR;
 		//#endif
 		//#if polish.key.shift:defined
 		   //#= private static final int KEY_SHIFT = ${polish.key.shift};
 		//#else
-		   //# private static final int KEY_SHIFT = -50;
+		   private static final int KEY_SHIFT = -50;
 		//#endif
-		//# private boolean nextCharUppercase; // is needed for the FIRST_UPPERCASE-mode
-//# 		
-		//# private String[] realTextLines; // the textLines with spaces and line breaks at the end
-		//# private String originalRowText; // current line including spaces and line breaks at the end
-		//# private int caretPosition; // the position of the caret in the text
-		//# private int caretColumn; // the current column of the caret, 0 is the first column
-		//# private int caretRow; // the current row of the caret, 0 is the first row
-		//# private int caretRowWidth; // the width of the current row
-		//# private int caretX;
-		//# private int caretY;
-		//# private int caretWidth;
-//# 		
+		private boolean nextCharUppercase; // is needed for the FIRST_UPPERCASE-mode
+		
+		private String[] realTextLines; // the textLines with spaces and line breaks at the end
+		private String originalRowText; // current line including spaces and line breaks at the end
+		private int caretPosition; // the position of the caret in the text
+		private int caretColumn; // the current column of the caret, 0 is the first column
+		private int caretRow; // the current row of the caret, 0 is the first row
+		private int caretRowWidth; // the width of the current row
+		private int caretX;
+		private int caretY;
+		private int caretWidth;
+		
 		//#ifdef polish.css.textfield-show-length
 			//# private boolean showLength;
 		//#endif
-//# 
-		//# private int lastKey; // the last key which has been pressed
-		//# long lastInputTime; // the last time a key has been pressed
-		//# private int characterIndex; // the index within the available characters of the current key
-		//# // the characters for each key:
+
+		private int lastKey; // the last key which has been pressed
+		long lastInputTime; // the last time a key has been pressed
+		private int characterIndex; // the index within the available characters of the current key
+		// the characters for each key:
 		//#ifdef polish.TextField.charactersKey1:defined
 			//#= private static String charactersKey1 = "${polish.TextField.charactersKey1}";
 		//#else
-		//# private static String charactersKey1 = ".,!?\u00bf:/()@_-+1'\";";
+		private static String charactersKey1 = ".,!?\u00bf:/()@_-+1'\";";
 		//#endif
 		//#ifdef polish.TextField.charactersKey2:defined
 			//#= private static String charactersKey2 = "${polish.TextField.charactersKey2}";
 		//#else
-			//# private static String charactersKey2 = "abc2\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7";
+			private static String charactersKey2 = "abc2\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7";
 		//#endif
 		//#ifdef polish.TextField.charactersKey3:defined
 			//#= private static String charactersKey3 = "${polish.TextField.charactersKey3}";
 		//#else
-			//# private static String charactersKey3 = "def3\u00e8\u00e9\u00ea\u00eb";
+			private static String charactersKey3 = "def3\u00e8\u00e9\u00ea\u00eb";
 		//#endif
 		//#ifdef polish.TextField.charactersKey4:defined
 			//#= private static String charactersKey4 = "${polish.TextField.charactersKey4}";
 		//#else
-			//# private static String charactersKey4 = "ghi4\u00ec\u00ed\u00ee\u00ef";
+			private static String charactersKey4 = "ghi4\u00ec\u00ed\u00ee\u00ef";
 		//#endif
 		//#ifdef polish.TextField.charactersKey5:defined
 			//#= private static String charactersKey5 = "${polish.TextField.charactersKey5}";
 		//#else
-			//# private static String charactersKey5 = "jkl5";
+			private static String charactersKey5 = "jkl5";
 		//#endif
 		//#ifdef polish.TextField.charactersKey6:defined
 			//#= private static String charactersKey6 = "${polish.TextField.charactersKey6}";
 		//#else
-			//# private static String charactersKey6 = "mno6\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6";
+			private static String charactersKey6 = "mno6\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6";
 		//#endif
 		//#ifdef polish.TextField.charactersKey7:defined
 			//#= private static String charactersKey7 = "${polish.TextField.charactersKey7}";
 		//#else
-			//# private static String charactersKey7 = "pqrs7\u00df";
+			private static String charactersKey7 = "pqrs7\u00df";
 		//#endif
 		//#ifdef polish.TextField.charactersKey8:defined
 			//#= private static String charactersKey8 = "${polish.TextField.charactersKey8}";
 		//#else
-			//# private static String charactersKey8 = "tuv8\u00f9\u00fa\u00fb\u00fc";
+			private static String charactersKey8 = "tuv8\u00f9\u00fa\u00fb\u00fc";
 		//#endif
 		//#ifdef polish.TextField.charactersKey9:defined
 			//#= private static String charactersKey9 = "${polish.TextField.charactersKey9}";
 		//#else
-			//# private static String charactersKey9 = "wxyz9\u00fd";
+			private static String charactersKey9 = "wxyz9\u00fd";
 		//#endif
 		//#ifdef polish.TextField.charactersKey0:defined
 			//#= private static String charactersKey0 = "${polish.TextField.charactersKey0}";
 		//#else
-			//# protected static String charactersKey0 = " 0";
+			protected static String charactersKey0 = " 0";
 		//#endif
 		//#ifdef polish.TextField.charactersKeyStar:defined
 			//#= protected static String charactersKeyStar = "${polish.TextField.charactersKeyStar}";
 		//#else
-			//# protected static String charactersKeyStar = ".,!?\u00bf:/@_-+1'\";";
+			protected static String charactersKeyStar = ".,!?\u00bf:/@_-+1'\";";
 		//#endif
 		//#ifdef polish.TextField.charactersKeyPound:defined
 			//#= protected static String charactersKeyPound = "${polish.TextField.charactersKeyPound}";
 		//#else
-			//# protected static String charactersKeyPound = null;
+			protected static String charactersKeyPound = null;
 		//#endif
-		//# /** map of characters that can be triggered witht the 0..9 and #, * keys */
-		//# public static String[] CHARACTERS = new String[]{ charactersKey0, charactersKey1, charactersKey2, charactersKey3, charactersKey4, charactersKey5, charactersKey6, charactersKey7, charactersKey8, charactersKey9 };
+		/** map of characters that can be triggered witht the 0..9 and #, * keys */
+		public static String[] CHARACTERS = new String[]{ charactersKey0, charactersKey1, charactersKey2, charactersKey3, charactersKey4, charactersKey5, charactersKey6, charactersKey7, charactersKey8, charactersKey9 };
 		//#if tmp.useDynamicCharset
 			//# public static String[] CHARACTERS_UPPER = new String[]{ charactersKey0, charactersKey1, charactersKey2, charactersKey3, charactersKey4, charactersKey5, charactersKey6, charactersKey7, charactersKey8, charactersKey9 };
 			//# public static boolean usesDynamicCharset;
 		//#endif
-		//# private static final String[] EMAIL_CHARACTERS = new String[]{ VALID_LOCAL_EMAIL_ADDRESS_CHARACTERS + "0", VALID_LOCAL_EMAIL_ADDRESS_CHARACTERS + "1", "abc2", "def3", "ghi4", "jkl5", "mno6", "pqrs7", "tuv8", "wxyz9" };
-		//# private String[] characters;
-		//# private boolean isNumeric;
-		//# private boolean isDecimal;
-		//# private boolean isEmail;
-		//# private boolean isUrl;
-//# 
-		//# private int rowHeight;
+		private static final String[] EMAIL_CHARACTERS = new String[]{ VALID_LOCAL_EMAIL_ADDRESS_CHARACTERS + "0", VALID_LOCAL_EMAIL_ADDRESS_CHARACTERS + "1", "abc2", "def3", "ghi4", "jkl5", "mno6", "pqrs7", "tuv8", "wxyz9" };
+		private String[] characters;
+		private boolean isNumeric;
+		private boolean isDecimal;
+		private boolean isEmail;
+		private boolean isUrl;
+
+		private int rowHeight;
 		//#if polish.TextField.includeInputInfo
 			//#define tmp.includeInputInfo
 			//#define tmp.useInputInfo
@@ -959,8 +959,8 @@ public static final Command DELETE_CMD = new Command( "Delete", DELETE_TYPE, DEL
 		//#elif polish.TextField.showInputInfo != false
 			//#define tmp.useInputInfo
 		//#endif
-		//# protected final Object lock = new Object();
-		//# private long deleteKeyRepeatCount;
+		protected final Object lock = new Object();
+		private long deleteKeyRepeatCount;
 	//#endif
 	protected char emailSeparatorChar = ';';
 	//#if polish.blackberry
@@ -1250,11 +1250,11 @@ public static final Command DELETE_CMD = new Command( "Delete", DELETE_TYPE, DEL
 	{
 		super( label, null, INTERACTIVE, style );
 		//#if polish.vendor == Generic && tmp.directInput
-			//# int spaceKey = DeviceInfo.getKeySpace();
-			//# if (spaceKey == Canvas.KEY_POUND) {
-				//# charactersKey0 = "0";
-				//# charactersKeyPound = " ";
-			//# }
+			int spaceKey = DeviceInfo.getKeySpace();
+			if (spaceKey == Canvas.KEY_POUND) {
+				charactersKey0 = "0";
+				charactersKeyPound = " ";
+			}
 		//#endif
 		this.constraints = constraints;
 		this.maxSize = maxSize;
@@ -1277,7 +1277,7 @@ this.title = "Input";
 			//# }
 		//#endif
 		//#if tmp.forceDirectInput
-			//# this.enableDirectInput = true;
+			this.enableDirectInput = true;
 		//#endif
 			
 		setConstraints(constraints);
@@ -1394,41 +1394,41 @@ this.title = "Input";
 			//#if tmp.allowDirectInput
 				//# if (this.enableDirectInput) {
 			//#endif
-					//# if (!this.isDecimal) {
-						//# throw new IllegalStateException();
-					//# }
-					//# String value = getString();
-					//# if ((this.constraints & FIXED_POINT_DECIMAL) == FIXED_POINT_DECIMAL) {
-						//# // remove grouping separator:
-						//# StringBuffer buffer = new StringBuffer(value.length());
-						//# for (int i=0; i<value.length(); i++) {
-							//# char c = value.charAt(i);
-							//# if (c == Locale.DECIMAL_SEPARATOR) {
-								//# buffer.append('.');
-							//# } else if (c != Locale.GROUPING_SEPARATOR) {
-								//# buffer.append(c);
-							//# }
-						//# }
-						//# return buffer.toString();
-					//# }
-					//# if ( Locale.DECIMAL_SEPARATOR == '.' || value == null) {
-						//# return value;
-					//# } else {
-						//# return value.replace( Locale.DECIMAL_SEPARATOR, '.');
-					//# }
+					if (!this.isDecimal) {
+						throw new IllegalStateException();
+					}
+					String value = getString();
+					if ((this.constraints & FIXED_POINT_DECIMAL) == FIXED_POINT_DECIMAL) {
+						// remove grouping separator:
+						StringBuffer buffer = new StringBuffer(value.length());
+						for (int i=0; i<value.length(); i++) {
+							char c = value.charAt(i);
+							if (c == Locale.DECIMAL_SEPARATOR) {
+								buffer.append('.');
+							} else if (c != Locale.GROUPING_SEPARATOR) {
+								buffer.append(c);
+							}
+						}
+						return buffer.toString();
+					}
+					if ( Locale.DECIMAL_SEPARATOR == '.' || value == null) {
+						return value;
+					} else {
+						return value.replace( Locale.DECIMAL_SEPARATOR, '.');
+					}
 			//#if tmp.allowDirectInput
 				//# }
 			//#endif
 		//#endif
 		//#if !tmp.forceDirectInput
-			if (( getConstraints() & DECIMAL)!= DECIMAL) {
-				throw new IllegalStateException();
-			}
-			String value = getString();
-			if (value == null) {
-				return null;
-			}
-			return value.replace(',', '.');			
+			//# if (( getConstraints() & DECIMAL)!= DECIMAL) {
+				//# throw new IllegalStateException();
+			//# }
+			//# String value = getString();
+			//# if (value == null) {
+				//# return null;
+			//# }
+			//# return value.replace(',', '.');			
 		//#endif
 	}
 	
@@ -1499,20 +1499,20 @@ this.title = "Input";
 		}
 				
 		//#ifdef tmp.directInput
-			//# if (text == null) {
-				//# this.caretPosition = 0;
-				//# this.caretRow = 0;
-				//# this.caretColumn = 0;
-				//# this.caretX = 0;
-				//# this.caretY = 0;
-			//# } else if (
-					//# (this.caretPosition == 0  && (this.text == null || this.text.length() == 0) )
-					//# || ( this.caretPosition > text.length())
-					//# || (this.text != null && text != null && text.length() > (this.text.length()+1))
-					//# )
-			//# {
-				//# this.caretPosition = text.length();
-			//# }
+			if (text == null) {
+				this.caretPosition = 0;
+				this.caretRow = 0;
+				this.caretColumn = 0;
+				this.caretX = 0;
+				this.caretY = 0;
+			} else if (
+					(this.caretPosition == 0  && (this.text == null || this.text.length() == 0) )
+					|| ( this.caretPosition > text.length())
+					|| (this.text != null && text != null && text.length() > (this.text.length()+1))
+					)
+			{
+				this.caretPosition = text.length();
+			}
 		//#endif
 		//#if tmp.updateDeleteCommand
 			if (this.isFocused) {
@@ -1521,9 +1521,9 @@ this.title = "Input";
 		//#endif
 		setText(text);
 		//#ifdef tmp.directInput
-			//# if ((text == null || text.length() == 0) && this.inputMode == MODE_FIRST_UPPERCASE) {
-				//# this.nextCharUppercase = true;
-			//# }
+			if ((text == null || text.length() == 0) && this.inputMode == MODE_FIRST_UPPERCASE) {
+				this.nextCharUppercase = true;
+			}
 			//#if polish.css.textfield-show-length && tmp.useInputInfo
 				//# if (this.isFocused && this.showLength) {
 					//# updateInfo();
@@ -1637,17 +1637,17 @@ this.title = "Input";
 			if ( !this.isUneditable ) {
 				if ( newText == null 
 					//#ifdef tmp.directInput
-						//# || (this.caretPosition == 0    &&    this.caretChar == this.editingCaretChar)
+						|| (this.caretPosition == 0    &&    this.caretChar == this.editingCaretChar)
 					//#else 
-						|| newText.length() == 0 
+						//# || newText.length() == 0 
 					//#endif
 				) {
 					removeCommand( DELETE_CMD );
 				} else if ((this.text == null || this.text.length() == 0)
 					//#if tmp.directInput
-						//# // needed for native input as the string is passed as a whole
-						//# // and thus skips caretPosition == 1
-						//# || this.caretPosition > 0
+						// needed for native input as the string is passed as a whole
+						// and thus skips caretPosition == 1
+						|| this.caretPosition > 0
 					//#endif						
 				) {
 					addCommand( DELETE_CMD );
@@ -1756,9 +1756,9 @@ this.title = "Input";
 		String end = txt.substring( position );
 		setString( start + src + end );
 		//#if tmp.directInput
-			//# if (position == this.caretPosition) {
-				//# this.caretPosition += src.length();
-			//# }
+			if (position == this.caretPosition) {
+				this.caretPosition += src.length();
+			}
 		//#endif
 		//#if tmp.usePredictiveInput
 			//# if(this.predictiveInput)
@@ -1903,14 +1903,14 @@ this.title = "Input";
 		//#elif polish.blackberry
 			//# return this.editField.getInsertPositionOffset();
 		//#elif tmp.forceDirectInput
-			//# return this.caretPosition;
+			return this.caretPosition;
 		//#else
 			//#ifdef tmp.useNativeTextBox
-				if (this.midpTextBox != null) {
-					return this.midpTextBox.getCaretPosition();
-				}
+				//# if (this.midpTextBox != null) {
+					//# return this.midpTextBox.getCaretPosition();
+				//# }
 			//#endif
-			return 0;
+			//# return 0;
 		//#endif
 	}
 	
@@ -1928,43 +1928,43 @@ this.title = "Input";
 				//# this.editField.setCursorPosition(position);
 			//# }
 		//#elif tmp.allowDirectInput || tmp.forceDirectInput
-			//# this.caretPosition = position;
-			//# if ( this.isInitialized  && this.realTextLines != null ){
-				//# int row = 0;
-				//# int col = 0;
-				//# int passedCharacters = 0;
-				//# String textLine = null;
-				//# for (int i = 0; i < this.textLines.size(); i++) {
-					//# textLine = this.realTextLines[i]; //this.textLines[i];
-					//# passedCharacters += textLine.length();
-					//# //System.out.println("passedCharacters=" + passedCharacters + ", line=" + textLine );
-					//# if (passedCharacters >= position ) {
-						//# row = i;
-						//# col = textLine.length() - (passedCharacters - position);
-						//# break;
-					//# }
-				//# }
+			this.caretPosition = position;
+			if ( this.isInitialized  && this.realTextLines != null ){
+				int row = 0;
+				int col = 0;
+				int passedCharacters = 0;
+				String textLine = null;
+				for (int i = 0; i < this.textLines.size(); i++) {
+					textLine = this.realTextLines[i]; //this.textLines[i];
+					passedCharacters += textLine.length();
+					//System.out.println("passedCharacters=" + passedCharacters + ", line=" + textLine );
+					if (passedCharacters >= position ) {
+						row = i;
+						col = textLine.length() - (passedCharacters - position);
+						break;
+					}
+				}
 				//#debug
 				//# System.out.println("setCaretPosition, position=" + position + ", row=" + row + ", col=" + col );
-				//# this.caretRow = row;	
-				//# this.caretColumn = col;
-//# 				
-				//# textLine = this.textLines.getLine( row );
-				//# String firstPart;
-				//# if (this.caretColumn < textLine.length()) {
-					//# firstPart = textLine.substring(0, this.caretColumn);
-				//# } else {
-					//# firstPart = textLine;
-				//# }
-				//# if (this.isPassword) {
-					//# this.caretX = stringWidth( "*" ) * firstPart.length();
-				//# } else {
-					//# this.caretX = stringWidth( firstPart );
-				//# }
-				//# this.internalY = this.caretRow * this.rowHeight;
-				//# this.caretY = this.internalY;
-				//# repaint();
-			//# }
+				this.caretRow = row;	
+				this.caretColumn = col;
+				
+				textLine = this.textLines.getLine( row );
+				String firstPart;
+				if (this.caretColumn < textLine.length()) {
+					firstPart = textLine.substring(0, this.caretColumn);
+				} else {
+					firstPart = textLine;
+				}
+				if (this.isPassword) {
+					this.caretX = stringWidth( "*" ) * firstPart.length();
+				} else {
+					this.caretX = stringWidth( firstPart );
+				}
+				this.internalY = this.caretRow * this.rowHeight;
+				this.caretY = this.internalY;
+				repaint();
+			}
 		//#endif
 	}
 
@@ -1987,7 +1987,7 @@ this.title = "Input";
 		int fieldType = constraints & 0xffff;
 		this.isUneditable = (constraints & UNEDITABLE) == UNEDITABLE;
 		//#if polish.css.text-wrap
-			//# this.animateTextWrap = this.isUneditable;
+			this.animateTextWrap = this.isUneditable;
 		//#endif
 		//#if polish.blackberry
 //# 						
@@ -2092,41 +2092,41 @@ this.title = "Input";
 			}
 		//#endif
 		//#ifdef tmp.directInput
-			//# this.characters = CHARACTERS;
-			//# this.isEmail = false;
-			//# this.isUrl = false;
-			//# if ((constraints & PASSWORD) == PASSWORD) {
-				//# this.isPassword = true;
-			//# }
-			//# if (fieldType == NUMERIC || fieldType == PHONENUMBER) {
-				//# this.isNumeric = true;
-				//# this.inputMode = MODE_NUMBERS;
+			this.characters = CHARACTERS;
+			this.isEmail = false;
+			this.isUrl = false;
+			if ((constraints & PASSWORD) == PASSWORD) {
+				this.isPassword = true;
+			}
+			if (fieldType == NUMERIC || fieldType == PHONENUMBER) {
+				this.isNumeric = true;
+				this.inputMode = MODE_NUMBERS;
 				//#ifndef polish.hasPointerEvents
 					//# this.enableDirectInput = true;
 				//#endif
-			//# } else {
-				//# this.isNumeric = false;
-			//# }
-			//# if (fieldType == DECIMAL || fieldType == FIXED_POINT_DECIMAL) {
-				//# this.isNumeric = true;
-				//# this.isDecimal = true;
-				//# this.inputMode = MODE_NUMBERS;
-			//# } else {
-				//# this.isDecimal = false;
-			//# }
-			//# if (fieldType == EMAILADDR) {
-				//# this.isEmail = true;
-				//# this.characters = EMAIL_CHARACTERS;
-			//# }
-			//# if (fieldType == URL) {
-				//# this.isUrl = true;
-			//# }
-			//# if ((constraints & INITIAL_CAPS_WORD) == INITIAL_CAPS_WORD) {
-				//# this.inputMode = MODE_FIRST_UPPERCASE;
-				//# this.nextCharUppercase = true;
-			//# } 
+			} else {
+				this.isNumeric = false;
+			}
+			if (fieldType == DECIMAL || fieldType == FIXED_POINT_DECIMAL) {
+				this.isNumeric = true;
+				this.isDecimal = true;
+				this.inputMode = MODE_NUMBERS;
+			} else {
+				this.isDecimal = false;
+			}
+			if (fieldType == EMAILADDR) {
+				this.isEmail = true;
+				this.characters = EMAIL_CHARACTERS;
+			}
+			if (fieldType == URL) {
+				this.isUrl = true;
+			}
+			if ((constraints & INITIAL_CAPS_WORD) == INITIAL_CAPS_WORD) {
+				this.inputMode = MODE_FIRST_UPPERCASE;
+				this.nextCharUppercase = true;
+			} 
 			//#if tmp.useInputInfo
-				//# updateInfo();
+				updateInfo();
 			//#endif
 		//#endif
 				
@@ -2340,7 +2340,7 @@ this.title = "Input";
 			//#ifdef tmp.allowDirectInput
 				//# if ( this.enableDirectInput ) {
 			//#endif
-				//# // adjust text-start for input info abc|Abc|ABC|123 if it should be shown on the same line:
+				// adjust text-start for input info abc|Abc|ABC|123 if it should be shown on the same line:
 				//#if tmp.includeInputInfo && !polish.TextField.useExternalInfo
 					//# if (this.isFocused && this.infoItem != null && this.isShowInputInfo) {
 						//# int infoWidth = this.infoItem.getItemWidth( availWidth, availWidth, availHeight);
@@ -2362,166 +2362,166 @@ this.title = "Input";
 						//# this.helpItem.paint(x, y, leftBorder, rightBorder, g);
 					//# } else
 				//#endif
-				//# if (this.isPassword && !(this.showCaret || this.isNumeric || this.caretChar == this.editingCaretChar)) {
-					//# int cX = getCaretXPosition(x, rightBorder, availWidth);
-					//# int cY = y + this.caretY;
-					//# int clipX = g.getClipX();
-					//# int clipY = g.getClipY();
-					//# int clipWidth = g.getClipWidth();
-					//# int clipHeight = g.getClipHeight();
-					//# g.clipRect( x, y, cX - x, clipHeight );
-					//# super.paintContent(x, y, leftBorder, rightBorder, g);
-					//# g.setClip( clipX, clipY, clipWidth, clipHeight );
-					//# int w = this.caretWidth;
-                	//# int starWidth = charWidth('*');
-                	//# if (starWidth > w) {
-                		//# w = starWidth;
-                	//# }
-                	//# if (this.caretX + w < this.contentWidth) {
-						//# g.clipRect( cX + w, y, clipWidth, clipHeight );
-						//# super.paintContent(x, y, leftBorder, rightBorder, g);
-						//# g.setClip( clipX, clipY, clipWidth, clipHeight );
-                	//# }
-					//# if (cY > y) {
-						//# g.clipRect( clipX, clipY, clipWidth, cY - clipY );
-						//# super.paintContent(x, y, leftBorder, rightBorder, g);
-						//# g.setClip( clipX, clipY, clipWidth, clipHeight );
-					//# }
-					//# int h = getFontHeight();
-					//# if (this.caretY + h < this.contentHeight) {
-						//# g.clipRect( x, cY + h, clipWidth, clipHeight );
-						//# super.paintContent(x, y, leftBorder, rightBorder, g);
-						//# g.setClip( clipX, clipY, clipWidth, clipHeight );
-					//# }
-					//# g.setColor( this.textColor);
-                    //# int anchor = Graphics.TOP | Graphics.LEFT;
+				if (this.isPassword && !(this.showCaret || this.isNumeric || this.caretChar == this.editingCaretChar)) {
+					int cX = getCaretXPosition(x, rightBorder, availWidth);
+					int cY = y + this.caretY;
+					int clipX = g.getClipX();
+					int clipY = g.getClipY();
+					int clipWidth = g.getClipWidth();
+					int clipHeight = g.getClipHeight();
+					g.clipRect( x, y, cX - x, clipHeight );
+					super.paintContent(x, y, leftBorder, rightBorder, g);
+					g.setClip( clipX, clipY, clipWidth, clipHeight );
+					int w = this.caretWidth;
+                	int starWidth = charWidth('*');
+                	if (starWidth > w) {
+                		w = starWidth;
+                	}
+                	if (this.caretX + w < this.contentWidth) {
+						g.clipRect( cX + w, y, clipWidth, clipHeight );
+						super.paintContent(x, y, leftBorder, rightBorder, g);
+						g.setClip( clipX, clipY, clipWidth, clipHeight );
+                	}
+					if (cY > y) {
+						g.clipRect( clipX, clipY, clipWidth, cY - clipY );
+						super.paintContent(x, y, leftBorder, rightBorder, g);
+						g.setClip( clipX, clipY, clipWidth, clipHeight );
+					}
+					int h = getFontHeight();
+					if (this.caretY + h < this.contentHeight) {
+						g.clipRect( x, cY + h, clipWidth, clipHeight );
+						super.paintContent(x, y, leftBorder, rightBorder, g);
+						g.setClip( clipX, clipY, clipWidth, clipHeight );
+					}
+					g.setColor( this.textColor);
+                    int anchor = Graphics.TOP | Graphics.LEFT;
         			//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-                    	//# cY += h;
-                    	//# anchor = Graphics.BOTTOM | Graphics.LEFT;
+                    	cY += h;
+                    	anchor = Graphics.BOTTOM | Graphics.LEFT;
                     //#endif
                     //#if polish.css.text-effect
                     	//# if (this.textEffect != null) {
                     		//# this.textEffect.drawChar( this.caretChar, cX, cY, anchor, g);
                     	//# } else {
                     //#endif
-                    		//# g.drawChar( this.caretChar, cX, cY, anchor );
+                    		g.drawChar( this.caretChar, cX, cY, anchor );
                     //#if polish.css.text-effect
                     	//# }
                     //#endif
-				//# } else {
-					//# super.paintContent(x, y, leftBorder, rightBorder, g);
-				//# }
-//# 
-//# 
+				} else {
+					super.paintContent(x, y, leftBorder, rightBorder, g);
+				}
+
+
 		  		//#ifdef polish.css.text-wrap
-		        	//# if (this.useSingleLine) {
-		        		//# x += this.xOffset;
-		        	//# }
+		        	if (this.useSingleLine) {
+		        		x += this.xOffset;
+		        	}
 		        //#endif
-//# 					
-//# 
-				//# if (this.showCaret) {
+					
+
+				if (this.showCaret) {
 					//#ifdef polish.css.textfield-caret-color
 						//# g.setColor( this.caretColor );
 					//#else
-						//# g.setColor( this.textColor );
+						g.setColor( this.textColor );
 					//#endif
-					//# int cX = getCaretXPosition(x, rightBorder, availWidth);
-					//# int cY = y + this.caretY;
-                    //# if (this.caretChar != this.editingCaretChar) {
-                    	//# // draw background rectangle
-                        //# int w = this.caretWidth;
-                        //# if (this.isPassword) {
-                        	//# int starWidth = charWidth('*');
-                        	//# if (starWidth > w) {
-                        		//# w = starWidth;
-                        	//# }
-                        //# }
-                        //# int h = getFontHeight();
-                        //# g.fillRect( cX, cY, w, h);
-                        //# //display highlighted text in white color
-                        //# g.setColor( DrawUtil.getComplementaryColor(g.getColor()) );
-                        //# int anchor = Graphics.TOP | Graphics.LEFT;
+					int cX = getCaretXPosition(x, rightBorder, availWidth);
+					int cY = y + this.caretY;
+                    if (this.caretChar != this.editingCaretChar) {
+                    	// draw background rectangle
+                        int w = this.caretWidth;
+                        if (this.isPassword) {
+                        	int starWidth = charWidth('*');
+                        	if (starWidth > w) {
+                        		w = starWidth;
+                        	}
+                        }
+                        int h = getFontHeight();
+                        g.fillRect( cX, cY, w, h);
+                        //display highlighted text in white color
+                        g.setColor( DrawUtil.getComplementaryColor(g.getColor()) );
+                        int anchor = Graphics.TOP | Graphics.LEFT;
             			//#if polish.Bugs.needsBottomOrientiationForStringDrawing
-                        	//# cY += h;
-                        	//# anchor = Graphics.BOTTOM | Graphics.LEFT;
+                        	cY += h;
+                        	anchor = Graphics.BOTTOM | Graphics.LEFT;
                         //#endif
                         //#if polish.css.text-effect
                         	//# if (this.textEffect != null) {
                         		//# this.textEffect.drawChar( this.caretChar, cX, cY, anchor, g);
                         	//# } else {
                         //#endif
-                        		//# g.drawChar( this.caretChar, cX, cY, anchor );
+                        		g.drawChar( this.caretChar, cX, cY, anchor );
                         //#if polish.css.text-effect
                         	//# }
                         //#endif
-                    //# } else {
-                        //# g.drawLine( cX, cY, cX, cY + getFontHeight() - 2);
-                    //# }
-				//# }
-//# 
-//# 				
+                    } else {
+                        g.drawLine( cX, cY, cX, cY + getFontHeight() - 2);
+                    }
+				}
+
+				
 				//#if tmp.usePredictiveInput
 					//# this.predictiveAccess.paintChoices(x, y, this.caretX, this.caretY, leftBorder, rightBorder, g);
 				//#endif
-//# 					
-//# //					g.setColor( 0xffffff );
-//# //					g.fillRect( x, y, 10, getFontHeight() );
-//# //					g.setColor( 0xff0000 );
-//# //					g.drawChar( this.caretChar, x, y, Graphics.LEFT | Graphics.TOP );
-//# 
-				//# return;
+					
+//					g.setColor( 0xffffff );
+//					g.fillRect( x, y, 10, getFontHeight() );
+//					g.setColor( 0xff0000 );
+//					g.drawChar( this.caretChar, x, y, Graphics.LEFT | Graphics.TOP );
+
+				return;
 			//#ifdef tmp.allowDirectInput
 			//# } else { 
 				//# super.paintContent(x, y, leftBorder, rightBorder, g);
 			//# }
 			//#endif
 		//#else
-			super.paintContent(x, y, leftBorder, rightBorder, g);
-			// no direct input possible, but paint caret
-			if (this.showCaret && this.isFocused ) {
+			//# super.paintContent(x, y, leftBorder, rightBorder, g);
+			//# // no direct input possible, but paint caret
+			//# if (this.showCaret && this.isFocused ) {
 				//#ifndef polish.css.textfield-caret-color
-					g.setColor( this.textColor );
+					//# g.setColor( this.textColor );
 				//#else
 					//# g.setColor( this.caretColor );
 				//#endif	
-				if (this.isLayoutCenter) {
-					x = leftBorder 
-						+ ((availWidth) >> 1) 
-						+ (this.contentWidth >> 1)
-						+ 2;
-				} else if (this.isLayoutRight){
-					x = rightBorder; 
-				} else {
-					x += this.contentWidth + 2;
-				}
-				g.drawLine( x, y, x, y + getFontHeight() );
-			}
+				//# if (this.isLayoutCenter) {
+					//# x = leftBorder 
+						//# + ((availWidth) >> 1) 
+						//# + (this.contentWidth >> 1)
+						//# + 2;
+				//# } else if (this.isLayoutRight){
+					//# x = rightBorder; 
+				//# } else {
+					//# x += this.contentWidth + 2;
+				//# }
+				//# g.drawLine( x, y, x, y + getFontHeight() );
+			//# }
 		//#endif	
 		// end of non-blackberry block
 		//#endif
 	}
 
 	//#ifdef tmp.directInput
-	//# /**
-	 //# * Calculates the exact horizontal caret position. 
-	 //# * @param x the x position of this field
-	 //# * @param rightBorder the right border
-	 //# * @param availWidth the available width
-	 //# * @return the caret position
-	 //# */
-	//# private int getCaretXPosition(int x, int rightBorder, int availWidth) {
-		//# int cX;
+	/**
+	 * Calculates the exact horizontal caret position. 
+	 * @param x the x position of this field
+	 * @param rightBorder the right border
+	 * @param availWidth the available width
+	 * @return the caret position
+	 */
+	private int getCaretXPosition(int x, int rightBorder, int availWidth) {
+		int cX;
 		//#if polish.i18n.rightToLeft
 			//# if (this.isLayoutRight) {
 				//# cX = rightBorder -  this.caretX;
 			//# } else
 		//#endif
-		//# {
-			//# cX = x + this.caretX;	
-		//# }
-		//# return cX;
-	//# }
+		{
+			cX = x + this.caretX;	
+		}
+		return cX;
+	}
 	//#endif
 
 	/* (non-Javadoc)
@@ -2588,144 +2588,144 @@ this.title = "Input";
 				//# updateInternalArea();
 			//# }
 		//#elif tmp.directInput
-			//# this.rowHeight = getFontHeight() + this.paddingVertical;			
-			//# if (this.textLines == null || this.text == null || this.text.length() == 0) {
-				//# this.caretX = 0;
-				//# this.caretY = 0;
-				//# this.caretPosition = 0;
-				//# this.caretColumn = 0;
-				//# this.caretRow = 0;
-				//# this.originalRowText = "";
-				//# this.realTextLines = null;
+			this.rowHeight = getFontHeight() + this.paddingVertical;			
+			if (this.textLines == null || this.text == null || this.text.length() == 0) {
+				this.caretX = 0;
+				this.caretY = 0;
+				this.caretPosition = 0;
+				this.caretColumn = 0;
+				this.caretRow = 0;
+				this.originalRowText = "";
+				this.realTextLines = null;
 				//#if polish.css.text-wrap
-					//# if (this.useSingleLine) {
-						//# this.xOffset = 0;
-					//# }
+					if (this.useSingleLine) {
+						this.xOffset = 0;
+					}
 				//#endif
-			//# } else {
-				//# // init the original text-lines with spaces and line-breaks:
- 				//# //System.out.println("TextField.initContent(): text=[" + this.text + "], (this.realTextLines == null): " + (this.realTextLines == null) + ", this.caretPosition=" + this.caretPosition + ", caretColumn=" + this.caretColumn + ", doSetCaretPos=" + this.doSetCaretPosition + ", hasBeenSet=" + this.caretPositionHasBeenSet);
-				//# int length = this.textLines.size();
-				//# int textLength = this.text.length();
-				//# String[] realLines = this.realTextLines;
-				//# if (realLines == null || realLines.length != length) {
-					//# realLines = new String[ length ];
-				//# }
-				//# boolean caretPositionHasBeenSet = false;
-				//# int cp = this.caretPosition;
-//# //				if (this.caretChar != this.editingCaretChar) {
-//# //					cp++;
-//# //				}
-				//# int endOfLinePos = 0;
-				//# for (int i = 0; i < length; i++) {
-					//# String line = this.textLines.getLine(i);
-					//# endOfLinePos += line.length();
-					//# if (endOfLinePos < textLength) {
-						//# char c = this.text.charAt( endOfLinePos );
-						//# if (c == ' '  || c == '\t'  || c == '\n') {
-							//# line += c;
-							//# endOfLinePos++;
-						//# }
-					//# }
-					//# realLines[i] = line;
-					//# if (!caretPositionHasBeenSet && ((endOfLinePos > cp) || (endOfLinePos == cp && i == length -1 )) ) {
-						//# //System.out.println("TextField: caretPos=" + this.caretPosition + ", line=" + line + ", endOfLinePos=" + endOfLinePos );
-						//# this.caretRow = i;
-						//# setCaretRow(line, line.length() - (endOfLinePos - cp) );
-						//# this.caretY = this.caretRow * this.rowHeight;
-						//# caretPositionHasBeenSet = true;
-					//# }
-				//# } // for each line
-				//# this.realTextLines = realLines;
-				//# if (!caretPositionHasBeenSet) {
-					//# //System.out.println("caret position has not been set before");
-					//# //this.caretPosition = this.text.length();
-					//# this.caretRow = 0; //this.realTextLines.length - 1;
-					//# String caretRowText = this.realTextLines[ this.caretRow ];
-					//# int caretRowLength = caretRowText.length();
-					//# if (caretRowLength > 0 && caretRowText.charAt( caretRowLength-1) == '\n' ) {
-						//# caretRowText = caretRowText.substring(0, caretRowLength-1);
-					//# }
-					//# setCaretRow( caretRowText, caretRowLength );						
-					//# this.caretPosition = this.caretColumn;
-					//# this.caretY = 0; // this.rowHeight * (this.realTextLines.length - 1);
-					//# //System.out.println(this + ".initContent()/font3: caretX=" + this.caretX);
-					//# //this.textLines[ this.textLines.length -1 ] += " "; 
-					//# this.textLines.setLine( 0, this.textLines.getLine(0) + " " );
-				//# }
-			//# }
-			//# // set the internal information so that big TextBoxes can still be scrolled
-			//# // correctly:
-			//# this.internalX = 0;
-			//# this.internalY = this.caretY;
-			//# this.internalWidth = this.contentWidth;
-			//# this.internalHeight = this.rowHeight;
-			//# this.screen = getScreen();
-			//# if (this.isFocused && this.parent instanceof Container ) {
-				//# // ensure that the visible area of this TextField is shown:
-				//# ((Container)this.parent).scroll(0, this, true); // problem: itemHeight is not yet set
-			//# }
+			} else {
+				// init the original text-lines with spaces and line-breaks:
+ 				//System.out.println("TextField.initContent(): text=[" + this.text + "], (this.realTextLines == null): " + (this.realTextLines == null) + ", this.caretPosition=" + this.caretPosition + ", caretColumn=" + this.caretColumn + ", doSetCaretPos=" + this.doSetCaretPosition + ", hasBeenSet=" + this.caretPositionHasBeenSet);
+				int length = this.textLines.size();
+				int textLength = this.text.length();
+				String[] realLines = this.realTextLines;
+				if (realLines == null || realLines.length != length) {
+					realLines = new String[ length ];
+				}
+				boolean caretPositionHasBeenSet = false;
+				int cp = this.caretPosition;
+//				if (this.caretChar != this.editingCaretChar) {
+//					cp++;
+//				}
+				int endOfLinePos = 0;
+				for (int i = 0; i < length; i++) {
+					String line = this.textLines.getLine(i);
+					endOfLinePos += line.length();
+					if (endOfLinePos < textLength) {
+						char c = this.text.charAt( endOfLinePos );
+						if (c == ' '  || c == '\t'  || c == '\n') {
+							line += c;
+							endOfLinePos++;
+						}
+					}
+					realLines[i] = line;
+					if (!caretPositionHasBeenSet && ((endOfLinePos > cp) || (endOfLinePos == cp && i == length -1 )) ) {
+						//System.out.println("TextField: caretPos=" + this.caretPosition + ", line=" + line + ", endOfLinePos=" + endOfLinePos );
+						this.caretRow = i;
+						setCaretRow(line, line.length() - (endOfLinePos - cp) );
+						this.caretY = this.caretRow * this.rowHeight;
+						caretPositionHasBeenSet = true;
+					}
+				} // for each line
+				this.realTextLines = realLines;
+				if (!caretPositionHasBeenSet) {
+					//System.out.println("caret position has not been set before");
+					//this.caretPosition = this.text.length();
+					this.caretRow = 0; //this.realTextLines.length - 1;
+					String caretRowText = this.realTextLines[ this.caretRow ];
+					int caretRowLength = caretRowText.length();
+					if (caretRowLength > 0 && caretRowText.charAt( caretRowLength-1) == '\n' ) {
+						caretRowText = caretRowText.substring(0, caretRowLength-1);
+					}
+					setCaretRow( caretRowText, caretRowLength );						
+					this.caretPosition = this.caretColumn;
+					this.caretY = 0; // this.rowHeight * (this.realTextLines.length - 1);
+					//System.out.println(this + ".initContent()/font3: caretX=" + this.caretX);
+					//this.textLines[ this.textLines.length -1 ] += " "; 
+					this.textLines.setLine( 0, this.textLines.getLine(0) + " " );
+				}
+			}
+			// set the internal information so that big TextBoxes can still be scrolled
+			// correctly:
+			this.internalX = 0;
+			this.internalY = this.caretY;
+			this.internalWidth = this.contentWidth;
+			this.internalHeight = this.rowHeight;
+			this.screen = getScreen();
+			if (this.isFocused && this.parent instanceof Container ) {
+				// ensure that the visible area of this TextField is shown:
+				((Container)this.parent).scroll(0, this, true); // problem: itemHeight is not yet set
+			}
 		//#endif
 	}
 	
 	//#if tmp.directInput
-	//# /**
-	 //# * Sets the caret row.
-	 //# * The fields originalRowText, caretColumn, caretRowFirstPart, caretX, caretRowLastPart and caretRowLastPartWidth
-	 //# * are being set. Note that the field caretRowLastPartWidth is only set whent the
-	 //# * layout is either center or right.
-	 //# *  
-	 //# * @param line the new caret row text
-	 //# * @param column the column position of the caret
-	 //# */
-	//# private void setCaretRow( String line, int column ) {
+	/**
+	 * Sets the caret row.
+	 * The fields originalRowText, caretColumn, caretRowFirstPart, caretX, caretRowLastPart and caretRowLastPartWidth
+	 * are being set. Note that the field caretRowLastPartWidth is only set whent the
+	 * layout is either center or right.
+	 *  
+	 * @param line the new caret row text
+	 * @param column the column position of the caret
+	 */
+	private void setCaretRow( String line, int column ) {
 		//#debug
 		//# System.out.println("setCaretRow( line=\"" + line + "\", column=" + column + ")");
-		//# this.originalRowText = line;
-		//# int length = line.length();
-		//# if (column > length )  {
-			//# column = length;
-		//# }
-		//# this.caretColumn = column;
-		//# boolean endsInLineBreak = (length >= 1) && (line.charAt(length-1) == '\n'); 
-		//# String caretRowFirstPart;
-		//# boolean firstPartIsFullRow = false;
-		//# if (column == length || ( endsInLineBreak && column == length -1 )) {
-			//# if ( endsInLineBreak ) {
-				//# caretRowFirstPart = line.substring( 0, length - 1);								
-			//# } else {
-				//# caretRowFirstPart = line;				
-			//# }
-			//# firstPartIsFullRow = true;
-		//# } else {
-			//# caretRowFirstPart = line.substring( 0, column );
-			//# //this.caretRowLastPartWidth = this.font.stringWidth(this.caretRowLastPart);;
-		//# }
-		//# if (this.isPassword) {
-			//# this.caretX = stringWidth( "*" ) * caretRowFirstPart.length();
-		//# } else {
-			//# this.caretX = stringWidth(caretRowFirstPart);
-		//# }
-		//# if (this.isLayoutCenter || this.isLayoutRight) {
-			//# if (firstPartIsFullRow) {
-				//# this.caretRowWidth = this.caretX;
-			//# } else {
-				//# this.caretRowWidth = stringWidth( line );
-			//# }
-		//# }
-		//# //System.out.println("caretRowWidth=" + this.caretRowWidth + " for line=" + line);
+		this.originalRowText = line;
+		int length = line.length();
+		if (column > length )  {
+			column = length;
+		}
+		this.caretColumn = column;
+		boolean endsInLineBreak = (length >= 1) && (line.charAt(length-1) == '\n'); 
+		String caretRowFirstPart;
+		boolean firstPartIsFullRow = false;
+		if (column == length || ( endsInLineBreak && column == length -1 )) {
+			if ( endsInLineBreak ) {
+				caretRowFirstPart = line.substring( 0, length - 1);								
+			} else {
+				caretRowFirstPart = line;				
+			}
+			firstPartIsFullRow = true;
+		} else {
+			caretRowFirstPart = line.substring( 0, column );
+			//this.caretRowLastPartWidth = this.font.stringWidth(this.caretRowLastPart);;
+		}
+		if (this.isPassword) {
+			this.caretX = stringWidth( "*" ) * caretRowFirstPart.length();
+		} else {
+			this.caretX = stringWidth(caretRowFirstPart);
+		}
+		if (this.isLayoutCenter || this.isLayoutRight) {
+			if (firstPartIsFullRow) {
+				this.caretRowWidth = this.caretX;
+			} else {
+				this.caretRowWidth = stringWidth( line );
+			}
+		}
+		//System.out.println("caretRowWidth=" + this.caretRowWidth + " for line=" + line);
 		//#if polish.css.text-wrap
-			//# if (this.useSingleLine) {
-				//# if (this.caretX > this.availableTextWidth) {
-					//# this.xOffset = this.availableTextWidth - this.caretX - this.caretWidth - 5;
-				//# } else {
-					//# this.xOffset = 0;
-				//# }
-			//# }
+			if (this.useSingleLine) {
+				if (this.caretX > this.availableTextWidth) {
+					this.xOffset = this.availableTextWidth - this.caretX - this.caretWidth - 5;
+				} else {
+					this.xOffset = 0;
+				}
+			}
 		//#endif
 		//#debug
 		//# System.out.println("setCaretRow() result: endsInLineBreak=" + endsInLineBreak + ", firstPart=[" + caretRowFirstPart + "].");
-	//# }
+	}
 	//#endif
 	
 	//#ifdef polish.useDynamicStyles
@@ -2809,76 +2809,76 @@ this.title = "Input";
 	}
 
 	//#ifdef tmp.directInput
-	//# protected boolean isValidInput( char insertChar, int position, String myText ) {
-		//# if (!this.isEmail) {
-			//# return true;
-		//# }
-		//# // check valid input for email addresses:
-		//# char lowerCaseInsertChar = Character.toLowerCase( insertChar );
-		//# boolean isValidInput = (insertChar >= '0' && insertChar <= '9')  || ( lowerCaseInsertChar >= 'a' && lowerCaseInsertChar <= 'z' ) ;
-		//# if (!isValidInput) {
-			//# boolean isInLocalPart = true; // are we in the first/local part before the '@' in the address?
-//# 			
-			//# String emailAddressText = myText;
-			//# int atPosition = -1;
-			//# int relativeCaretPosition = this.caretPosition;
-			//# if (emailAddressText != null) {
-				//# // extract single email address part when there are several email addresses (this can 
-				//# // only happen when a ChoiceTextField is used)
-				//# int separatorPosition;
-				//# while ( (separatorPosition = emailAddressText.indexOf(this.emailSeparatorChar)) != -1 ) {
-					//# if (separatorPosition < this.caretPosition) {
-						//# emailAddressText = emailAddressText.substring( separatorPosition + 1);
-						//# relativeCaretPosition -= separatorPosition;
-					//# } else {
-						//# emailAddressText = emailAddressText.substring( 0, separatorPosition );
-						//# break;
-					//# }
-				//# }
-				//# // check for the '@' sign as the separator between local part and domain name:
-				//# atPosition = emailAddressText.indexOf('@');
-				//# isInLocalPart = ( atPosition == -1 )  ||  ( atPosition >= this.caretPosition );
-			//# }
-			//# if (isInLocalPart) {
-				//# boolean isAtFirstChar = (emailAddressText == null || relativeCaretPosition == 0);
-				//# isValidInput = ( VALID_LOCAL_EMAIL_ADDRESS_CHARACTERS.indexOf( insertChar ) != -1 ) 
-							//# && !( (insertChar == '.') && isAtFirstChar) // the first char must not be a dot.
-							//# && !(atPosition != -1 && insertChar == '@' && atPosition != position) // it's not allowed to enter two @ characters
-							//# && !(insertChar == '@' &&  isAtFirstChar ); // the first character must not be the '@' sign
-			//# } else {
-				//# isValidInput = VALID_DOMAIN_CHARACTERS.indexOf( insertChar ) != -1;
-			//# }
-			//# if (!isValidInput) {
+	protected boolean isValidInput( char insertChar, int position, String myText ) {
+		if (!this.isEmail) {
+			return true;
+		}
+		// check valid input for email addresses:
+		char lowerCaseInsertChar = Character.toLowerCase( insertChar );
+		boolean isValidInput = (insertChar >= '0' && insertChar <= '9')  || ( lowerCaseInsertChar >= 'a' && lowerCaseInsertChar <= 'z' ) ;
+		if (!isValidInput) {
+			boolean isInLocalPart = true; // are we in the first/local part before the '@' in the address?
+			
+			String emailAddressText = myText;
+			int atPosition = -1;
+			int relativeCaretPosition = this.caretPosition;
+			if (emailAddressText != null) {
+				// extract single email address part when there are several email addresses (this can 
+				// only happen when a ChoiceTextField is used)
+				int separatorPosition;
+				while ( (separatorPosition = emailAddressText.indexOf(this.emailSeparatorChar)) != -1 ) {
+					if (separatorPosition < this.caretPosition) {
+						emailAddressText = emailAddressText.substring( separatorPosition + 1);
+						relativeCaretPosition -= separatorPosition;
+					} else {
+						emailAddressText = emailAddressText.substring( 0, separatorPosition );
+						break;
+					}
+				}
+				// check for the '@' sign as the separator between local part and domain name:
+				atPosition = emailAddressText.indexOf('@');
+				isInLocalPart = ( atPosition == -1 )  ||  ( atPosition >= this.caretPosition );
+			}
+			if (isInLocalPart) {
+				boolean isAtFirstChar = (emailAddressText == null || relativeCaretPosition == 0);
+				isValidInput = ( VALID_LOCAL_EMAIL_ADDRESS_CHARACTERS.indexOf( insertChar ) != -1 ) 
+							&& !( (insertChar == '.') && isAtFirstChar) // the first char must not be a dot.
+							&& !(atPosition != -1 && insertChar == '@' && atPosition != position) // it's not allowed to enter two @ characters
+							&& !(insertChar == '@' &&  isAtFirstChar ); // the first character must not be the '@' sign
+			} else {
+				isValidInput = VALID_DOMAIN_CHARACTERS.indexOf( insertChar ) != -1;
+			}
+			if (!isValidInput) {
 				//#debug
 				//# System.out.println("email: invalid input!");
-			//# }
-		//# }
-		//# return isValidInput;
-	//# }
-//# 	
-	//# protected void commitCurrentCharacter() {
+			}
+		}
+		return isValidInput;
+	}
+	
+	protected void commitCurrentCharacter() {
 		//#debug
 		//# System.out.println("comitting current character: " + this.caretChar);
-		//# String myText;
-		//# if (this.isPassword) {
-			//# myText = this.passwordText;
-		//# } else {
-			//# myText = this.text;
-		//# }
-		//# char insertChar  = this.caretChar; 
-		//# if (!isValidInput( insertChar, this.caretPosition, myText )) {
-			//# return;
-		//# }
-		//# this.caretChar = this.editingCaretChar;
-		//# // increase caret position after notifying itemstatelisteners in case they want to know the current caret position...
-		//# this.caretPosition++;
-		//# this.caretColumn++;
-		//# if (this.isPassword) {
-			//# this.caretX += stringWidth("*");
-		//# } else {
-			//# this.caretX += this.caretWidth;
-		//# }
-		//# boolean nextCharInputHasChanged = false;
+		String myText;
+		if (this.isPassword) {
+			myText = this.passwordText;
+		} else {
+			myText = this.text;
+		}
+		char insertChar  = this.caretChar; 
+		if (!isValidInput( insertChar, this.caretPosition, myText )) {
+			return;
+		}
+		this.caretChar = this.editingCaretChar;
+		// increase caret position after notifying itemstatelisteners in case they want to know the current caret position...
+		this.caretPosition++;
+		this.caretColumn++;
+		if (this.isPassword) {
+			this.caretX += stringWidth("*");
+		} else {
+			this.caretX += this.caretWidth;
+		}
+		boolean nextCharInputHasChanged = false;
 		//#if polish.TextField.suppressAutoInputModeChange
 			//# if ( this.inputMode == MODE_FIRST_UPPERCASE  
 				//# && (insertChar == ' ' ||  ( insertChar == '.' && !(this.isEmail || this.isUrl || (this.constraints & INITIAL_CAPS_NEVER) == INITIAL_CAPS_NEVER)) )) 
@@ -2888,76 +2888,76 @@ this.title = "Input";
 				//# this.nextCharUppercase = false;
 			//# }
 		//#else
-			//# nextCharInputHasChanged = this.nextCharUppercase;
-			//# if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase) 
-					//# && insertChar == ' ') 
-				//# || ( insertChar == '.' && !(this.isEmail || this.isUrl || (this.constraints & INITIAL_CAPS_NEVER) == INITIAL_CAPS_NEVER))) 
-			//# {
-				//# this.nextCharUppercase = true;
-			//# } else {
-				//# this.nextCharUppercase = false;
-			//# }
-			//# nextCharInputHasChanged = (this.nextCharUppercase != nextCharInputHasChanged);
-			//# if ( this.inputMode == MODE_FIRST_UPPERCASE ) {
-				//# this.inputMode = MODE_LOWERCASE;
-			//# }
+			nextCharInputHasChanged = this.nextCharUppercase;
+			if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase) 
+					&& insertChar == ' ') 
+				|| ( insertChar == '.' && !(this.isEmail || this.isUrl || (this.constraints & INITIAL_CAPS_NEVER) == INITIAL_CAPS_NEVER))) 
+			{
+				this.nextCharUppercase = true;
+			} else {
+				this.nextCharUppercase = false;
+			}
+			nextCharInputHasChanged = (this.nextCharUppercase != nextCharInputHasChanged);
+			if ( this.inputMode == MODE_FIRST_UPPERCASE ) {
+				this.inputMode = MODE_LOWERCASE;
+			}
 		//#endif
 			//#if polish.css.textfield-show-length  && tmp.useInputInfo
 			//# if (this.showLength || nextCharInputHasChanged) {
 				//# updateInfo();
 			//# }
 		//#elif tmp.useInputInfo
-			//# if (nextCharInputHasChanged) {
-				//# updateInfo();
-			//# }
+			if (nextCharInputHasChanged) {
+				updateInfo();
+			}
 		//#endif
-//# 
-//# 		
-		//# notifyStateChanged();
+
+		
+		notifyStateChanged();
 		//#ifdef polish.css.textfield-caret-flash
 			//# if (!this.flashCaret) {
 				//# repaint();
 			//# }
 		//#endif
-	//# }
-//# 
-	//# protected void insertCharacter( char insertChar, boolean append, boolean commit ) {
-		//# if (append && this.text != null && this.text.length() >= this.maxSize ) {
-			//# return;
-		//# }
+	}
+
+	protected void insertCharacter( char insertChar, boolean append, boolean commit ) {
+		if (append && this.text != null && this.text.length() >= this.maxSize ) {
+			return;
+		}
 		//#debug
 		//# System.out.println( "insertCharacter " + insertChar); // + ", append=" + append + ", commit=" + commit +", caretPos=" + this.caretPosition );
-		//# String myText = getString();
-//# 		
-		//# int cp = this.caretPosition;
-		//# if (!isValidInput( insertChar, cp, myText )) {
-			//# return;
-		//# }
-//# 	
-		//# if (myText == null || myText.length() == 0) {
-			//# myText = "" + insertChar;
-		//# } else if (append) {
-			//# StringBuffer buffer = new StringBuffer( myText.length() + 1 );
-			//# buffer.append( myText.substring( 0, cp ) )
-				//# .append( insertChar );
-			//# if (cp < myText.length() ) {
-				//# buffer.append( myText.substring( cp ) );
-			//# }
-			//# myText = buffer.toString();
-		//# } else {
-			//# // replace current caret char:
-			//# StringBuffer buffer = new StringBuffer(myText.length());
-			//# buffer.append(myText.substring( 0, cp ) ).append( insertChar );
-			//# if (cp < myText.length() - 1) {
-				//# buffer.append( myText.substring( this.caretPosition + 1 ) );
-			//# }
-			//# myText = buffer.toString();
-		//# }
-		//# //System.out.println("new text=[" + myText + "]" );
-		//# boolean nextCharInputHasChanged = false;
-		//# if (commit) {
-			//# this.caretPosition++;
-			//# this.caretColumn++;
+		String myText = getString();
+		
+		int cp = this.caretPosition;
+		if (!isValidInput( insertChar, cp, myText )) {
+			return;
+		}
+	
+		if (myText == null || myText.length() == 0) {
+			myText = "" + insertChar;
+		} else if (append) {
+			StringBuffer buffer = new StringBuffer( myText.length() + 1 );
+			buffer.append( myText.substring( 0, cp ) )
+				.append( insertChar );
+			if (cp < myText.length() ) {
+				buffer.append( myText.substring( cp ) );
+			}
+			myText = buffer.toString();
+		} else {
+			// replace current caret char:
+			StringBuffer buffer = new StringBuffer(myText.length());
+			buffer.append(myText.substring( 0, cp ) ).append( insertChar );
+			if (cp < myText.length() - 1) {
+				buffer.append( myText.substring( this.caretPosition + 1 ) );
+			}
+			myText = buffer.toString();
+		}
+		//System.out.println("new text=[" + myText + "]" );
+		boolean nextCharInputHasChanged = false;
+		if (commit) {
+			this.caretPosition++;
+			this.caretColumn++;
 			//#if polish.TextField.suppressAutoInputModeChange
 				//# if ( this.inputMode == MODE_FIRST_UPPERCASE  
 					//# && (insertChar == ' ' ||  ( insertChar == '.' && !(this.isEmail || this.isUrl)) )) 
@@ -2967,67 +2967,67 @@ this.title = "Input";
 					//# this.nextCharUppercase = false;
 				//# }
 			//#else
-				//# nextCharInputHasChanged = this.nextCharUppercase;
-				//# if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase) 
-						//# && insertChar == ' ') 
-					//# || ( insertChar == '.' && !(this.isEmail || this.isUrl))) 
-				//# {
-					//# this.nextCharUppercase = true;
-				//# } else {
-					//# this.nextCharUppercase = false;
-				//# }
-				//# nextCharInputHasChanged = (this.nextCharUppercase != nextCharInputHasChanged);
-				//# if ( this.inputMode == MODE_FIRST_UPPERCASE ) {
-					//# this.inputMode = MODE_LOWERCASE;
-				//# }
+				nextCharInputHasChanged = this.nextCharUppercase;
+				if ( ( (this.inputMode == MODE_FIRST_UPPERCASE || this.nextCharUppercase) 
+						&& insertChar == ' ') 
+					|| ( insertChar == '.' && !(this.isEmail || this.isUrl))) 
+				{
+					this.nextCharUppercase = true;
+				} else {
+					this.nextCharUppercase = false;
+				}
+				nextCharInputHasChanged = (this.nextCharUppercase != nextCharInputHasChanged);
+				if ( this.inputMode == MODE_FIRST_UPPERCASE ) {
+					this.inputMode = MODE_LOWERCASE;
+				}
 			//#endif
-			//# this.caretChar = this.editingCaretChar;
-		//# }
-		//# setString( myText );
-		//# if (!commit) {
-			//# if (myText.length() == 1) {
-				//# this.caretPosition = 0;
-			//# }
-		//# } else {
-			//# notifyStateChanged();			
-		//# }
-	//# }
+			this.caretChar = this.editingCaretChar;
+		}
+		setString( myText );
+		if (!commit) {
+			if (myText.length() == 1) {
+				this.caretPosition = 0;
+			}
+		} else {
+			notifyStateChanged();			
+		}
+	}
 	//#endif
 
 	//#if tmp.directInput && tmp.useInputInfo
-	//# /**
-	 //# * Updates the information text
-	 //# */
-	//# public void updateInfo() {
-		//# if (this.isUneditable || !this.isShowInputInfo) {
-			//# // don't show info when this field is not editable
-			//# return;
-		//# }
-		//# // # debug
-		//# // System.out.println("update info: " + this.text );
-		//# String modeStr;
-		//# switch (this.inputMode) {
-			//# case MODE_LOWERCASE:
-				//# if (this.nextCharUppercase) {
-					//# modeStr = "Abc";
-				//# } else {
-					//# modeStr = "abc";
-				//# }
-				//# break;
-			//# case MODE_FIRST_UPPERCASE:
-				//# modeStr = "Abc";
-				//# break;
-			//# case MODE_UPPERCASE:
-				//# modeStr = "ABC";
-				//# break;
-			//# case MODE_NATIVE:
-				//# modeStr = "Nat.";
-				//# break;
-			//# default:
-				//# modeStr = "123";
-				//# break;
-		//# }
-//# 		
+	/**
+	 * Updates the information text
+	 */
+	public void updateInfo() {
+		if (this.isUneditable || !this.isShowInputInfo) {
+			// don't show info when this field is not editable
+			return;
+		}
+		// # debug
+		// System.out.println("update info: " + this.text );
+		String modeStr;
+		switch (this.inputMode) {
+			case MODE_LOWERCASE:
+				if (this.nextCharUppercase) {
+					modeStr = "Abc";
+				} else {
+					modeStr = "abc";
+				}
+				break;
+			case MODE_FIRST_UPPERCASE:
+				modeStr = "Abc";
+				break;
+			case MODE_UPPERCASE:
+				modeStr = "ABC";
+				break;
+			case MODE_NATIVE:
+				modeStr = "Nat.";
+				break;
+			default:
+				modeStr = "123";
+				break;
+		}
+		
 		//#if tmp.usePredictiveInput
 		//# if(this.predictiveInput)
 		//# {
@@ -3050,7 +3050,7 @@ this.title = "Input";
 			//#endif
 		//# }
 		//#endif
-//# 		
+		
 		//#ifdef polish.css.textfield-show-length
 			//# if (this.showLength) {
 				//# int length = (this.text == null) ? 0 : this.text.length();
@@ -3071,14 +3071,14 @@ this.title = "Input";
 			//# }
 			//# //System.out.println("setting info to [" + modeStr + "]");
 		//#else
-			//# if (this.screen == null) {
-				//# this.screen = getScreen();
-			//# }
-			//# if (this.screen != null) {
-				//# this.screen.setInfo( modeStr );
-			//# }
+			if (this.screen == null) {
+				this.screen = getScreen();
+			}
+			if (this.screen != null) {
+				this.screen.setInfo( modeStr );
+			}
 		//#endif
-	//# }
+	}
 	//#endif
 	
 	
@@ -3120,37 +3120,37 @@ this.title = "Input";
 			//# return false;
 		//#else
 			//#if tmp.directInput
-				//# synchronized ( this.lock ) {
-					//# if (this.caretChar != this.editingCaretChar) {
-						//# if ( !this.isKeyDown && (currentTime - this.lastInputTime) >= INPUT_TIMEOUT ) {
-							//# commitCurrentCharacter();
-						//# }
-					//# } else if (this.isKeyDown && 
-							//# this.deleteKeyRepeatCount != 0 && 
-							//# (this.deleteKeyRepeatCount % 3) == 0 && 
-							//# this.text != null && 
-							//# this.caretPosition > 0
-							//# ) 
-					//# {
-						//# if (this.deleteKeyRepeatCount >= 9) {
-							//# String myText = this.text;
-							//# if (myText != null && myText.length() > 0) {
-								//# setString(null);
-								//# notifyStateChanged();
-							//# }
-						//# } else if (this.caretPosition > 0){
-							//# String myText = getString();
-//# 							
-							//# int nextStop = this.caretPosition - 1;
-							//# while (myText.charAt(nextStop) != ' ' && nextStop > 0) {
-								//# nextStop--;
-							//# }
-							//# //System.out.println("next stop=" + nextStop + ", caretPosition=" + this.caretPosition);
-							//# setString(myText.substring( 0, nextStop) + myText.substring( this.caretPosition ) );
-							//# notifyStateChanged();
-						//# }
-					//# }
-				//# }
+				synchronized ( this.lock ) {
+					if (this.caretChar != this.editingCaretChar) {
+						if ( !this.isKeyDown && (currentTime - this.lastInputTime) >= INPUT_TIMEOUT ) {
+							commitCurrentCharacter();
+						}
+					} else if (this.isKeyDown && 
+							this.deleteKeyRepeatCount != 0 && 
+							(this.deleteKeyRepeatCount % 3) == 0 && 
+							this.text != null && 
+							this.caretPosition > 0
+							) 
+					{
+						if (this.deleteKeyRepeatCount >= 9) {
+							String myText = this.text;
+							if (myText != null && myText.length() > 0) {
+								setString(null);
+								notifyStateChanged();
+							}
+						} else if (this.caretPosition > 0){
+							String myText = getString();
+							
+							int nextStop = this.caretPosition - 1;
+							while (myText.charAt(nextStop) != ' ' && nextStop > 0) {
+								nextStop--;
+							}
+							//System.out.println("next stop=" + nextStop + ", caretPosition=" + this.caretPosition);
+							setString(myText.substring( 0, nextStop) + myText.substring( this.caretPosition ) );
+							notifyStateChanged();
+						}
+					}
+				}
 			//#endif
 			if (!this.flashCaret || this.isUneditable) {
 				//System.out.println("TextField.animate():  flashCaret==false");
@@ -3213,7 +3213,7 @@ this.title = "Input";
 		this.isKeyPressedHandled = false;
 		
 		//#ifndef tmp.directInput
-			if (keyCode < 32 || keyCode > 126) {
+			//# if (keyCode < 32 || keyCode > 126) {
 				//#if polish.bugs.inversedGameActions
 					//# if ((gameAction == Canvas.UP && keyCode != Canvas.KEY_NUM8)
 						//# || (gameAction == Canvas.DOWN && keyCode != Canvas.KEY_NUM2)
@@ -3226,31 +3226,31 @@ this.title = "Input";
 						//# return false;
 					//# }
 				//#else
-					if ((gameAction == Canvas.UP && keyCode != Canvas.KEY_NUM2) 
-							|| (gameAction == Canvas.DOWN && keyCode != Canvas.KEY_NUM8)
-							|| (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4)
-							|| (gameAction == Canvas.RIGHT && keyCode != Canvas.KEY_NUM6)
-							|| (gameAction == Canvas.FIRE && keyCode != Canvas.KEY_NUM5)
-							|| (this.screen.isSoftKey(keyCode, gameAction))
-						) 
-					{
-						return false;
-					}
-				//#endif
-			}
-		//#elif !polish.blackberry
-			//# if (this.inputMode == MODE_NATIVE) {
-				//# if ((gameAction == Canvas.UP && keyCode != Canvas.KEY_NUM2) 
-						//# || (gameAction == Canvas.DOWN && keyCode != Canvas.KEY_NUM8)
-						//# || (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4)
-						//# || (gameAction == Canvas.RIGHT && keyCode != Canvas.KEY_NUM6)
-						//# || (!(gameAction == Canvas.FIRE && this.cskOpensNativeEditor) && this.screen.isSoftKey(keyCode, gameAction))
+					//# if ((gameAction == Canvas.UP && keyCode != Canvas.KEY_NUM2) 
+							//# || (gameAction == Canvas.DOWN && keyCode != Canvas.KEY_NUM8)
+							//# || (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4)
+							//# || (gameAction == Canvas.RIGHT && keyCode != Canvas.KEY_NUM6)
+							//# || (gameAction == Canvas.FIRE && keyCode != Canvas.KEY_NUM5)
+							//# || (this.screen.isSoftKey(keyCode, gameAction))
 						//# ) 
-				//# {
-					//# return false;
-				//# }
+					//# {
+						//# return false;
+					//# }
+				//#endif
 			//# }
-			//# this.isKeyDown = true;
+		//#elif !polish.blackberry
+			if (this.inputMode == MODE_NATIVE) {
+				if ((gameAction == Canvas.UP && keyCode != Canvas.KEY_NUM2) 
+						|| (gameAction == Canvas.DOWN && keyCode != Canvas.KEY_NUM8)
+						|| (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4)
+						|| (gameAction == Canvas.RIGHT && keyCode != Canvas.KEY_NUM6)
+						|| (!(gameAction == Canvas.FIRE && this.cskOpensNativeEditor) && this.screen.isSoftKey(keyCode, gameAction))
+						) 
+				{
+					return false;
+				}
+			}
+			this.isKeyDown = true;
 		//#endif
 		
 		//#if tmp.allowDirectInput
@@ -3258,11 +3258,11 @@ this.title = "Input";
 		//#endif
 				//#ifdef tmp.directInput
 					//#if !polish.blackberry
-						//# if (this.inputMode == MODE_NATIVE && keyCode != KEY_CHANGE_MODE
+						if (this.inputMode == MODE_NATIVE && keyCode != KEY_CHANGE_MODE
 						//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
 								//#= && keyCode != ${polish.key.ChangeNumericalAlphaInputModeKey}  
 						//#endif
-						//# ) {
+						) {
 							//#if tmp.useNativeTextBox
 								//#if polish.TextField.passCharacterToNativeEditor
 								//# this.lastTimeKeyPressed = System.currentTimeMillis();
@@ -3290,25 +3290,25 @@ this.title = "Input";
 									//# this.keyDelayTimer.schedule(this.keyDelayTimerTask, 0,this.delayBetweenKeys);
 								//# }
 								//#else
-								//# showTextBox();
+								showTextBox();
 								//#endif	
-								//# return true;
+								return true;
 							//#endif
-						//# }
+						}
 					//#endif
-//# 					
-					//# synchronized ( this.lock ) {
-//# 						
-	//# //					if (this.text == null) { // in that case no mode change can be done with an empty textfield 
-	//# //						return false;
-	//# //					}
-	//# //					else 
-						//# if (this.isUneditable) {
-							//# return false;
-						//# }
-//# 						
-						//# boolean handled = false;
-//# 						
+					
+					synchronized ( this.lock ) {
+						
+	//					if (this.text == null) { // in that case no mode change can be done with an empty textfield 
+	//						return false;
+	//					}
+	//					else 
+						if (this.isUneditable) {
+							return false;
+						}
+						
+						boolean handled = false;
+						
 						//#if tmp.usePredictiveInput && !polish.key.ChangeNumericalAlphaInputModeKey:defined
                         //# if ( keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable)
                         //# {
@@ -3336,21 +3336,21 @@ this.title = "Input";
                                 //# handled = true;
                         //# }
                         //#endif
-//# 
-						//# // Backspace
+
+						// Backspace
 						//#ifdef polish.key.ClearKey:defined
 							//#= if (keyCode == ${polish.key.ClearKey}
 						//#else
-							//# if ( keyCode == -8 || keyCode == 8 
+							if ( keyCode == -8 || keyCode == 8 
 						//#endif
 						//#if polish.key.backspace:defined
 							//#= || keyCode == ${polish.key.backspace}
 						//#endif
-							//# && !handled) 
-						//# {
-							//# handled = handleKeyClear(keyCode, gameAction);
-						//# }
-//# 						
+							&& !handled) 
+						{
+							handled = handleKeyClear(keyCode, gameAction);
+						}
+						
 						//#if polish.key.Menu:defined
 							//# int menuKey = 0;
 							//#= menuKey = ${polish.key.Menu};
@@ -3358,8 +3358,8 @@ this.title = "Input";
 								//# return false;
 							//# }
 						//#endif
-//# 							
-//# 							
+							
+							
 						//#ifdef polish.key.ChangeNumericalAlphaInputModeKey:defined
                         //#= if(!handled &&
                         //#=     !(keyCode == KEY_CHANGE_MODE && !this.isNumeric &&
@@ -3368,34 +3368,34 @@ this.title = "Input";
                         //#=     !(keyCode == ${polish.key.ChangeNumericalAlphaInputModeKey} &&
                         //#=       !this.isNumeric))
                         //#else
-                        //# if(!handled && keyCode != KEY_CHANGE_MODE)
+                        if(!handled && keyCode != KEY_CHANGE_MODE)
                         //#endif
-                        //# {
-                                //# handled = handleKeyInsert(keyCode, gameAction);
-                        //# }
-//# 	                        
-						//# // Navigate the caret
-						//# if (  !handled && 
-								//# (gameAction == Canvas.UP 	|| 
-								//# gameAction == Canvas.DOWN 	||
-								//# gameAction == Canvas.LEFT 	||
-								//# gameAction == Canvas.RIGHT  ||
-								//# gameAction == Canvas.FIRE
-								//# )
-						//# ) {
-							//# handled = handleKeyNavigation(keyCode, gameAction);
-							//# if (!handled && getScreen().isGameActionFire(keyCode, gameAction) && this.defaultCommand != null) {
-								//# notifyItemPressedStart();
-								//# handled = true;
-							//# }
-						//# }
-//# 						
-						//# if(true)
-						//# {
-							//# this.isKeyPressedHandled = handled;
-							//# return handled;
-						//# }
-					//# }
+                        {
+                                handled = handleKeyInsert(keyCode, gameAction);
+                        }
+	                        
+						// Navigate the caret
+						if (  !handled && 
+								(gameAction == Canvas.UP 	|| 
+								gameAction == Canvas.DOWN 	||
+								gameAction == Canvas.LEFT 	||
+								gameAction == Canvas.RIGHT  ||
+								gameAction == Canvas.FIRE
+								)
+						) {
+							handled = handleKeyNavigation(keyCode, gameAction);
+							if (!handled && getScreen().isGameActionFire(keyCode, gameAction) && this.defaultCommand != null) {
+								notifyItemPressedStart();
+								handled = true;
+							}
+						}
+						
+						if(true)
+						{
+							this.isKeyPressedHandled = handled;
+							return handled;
+						}
+					}
 				//#endif
 		//#if tmp.allowDirectInput
 			//# }
@@ -3472,58 +3472,58 @@ this.title = "Input";
 						//# return this.predictiveAccess.keyInsert(keyCode, gameAction);
 			//# }
 			//#endif
-//# 			
-			//# int currentLength = (this.text == null ? 0 : this.text.length());
-			//# char insertChar = (char) (' ' + (keyCode - 32));
+			
+			int currentLength = (this.text == null ? 0 : this.text.length());
+			char insertChar = (char) (' ' + (keyCode - 32));
 			//#if tmp.supportsAsciiKeyMap
-				//# try {
-					//# String name  = this.screen.getKeyName( keyCode );
-					//# if (name != null && name.length() == 1) {
-						//# insertChar = name.charAt(0);
-					//# }
-				//# } catch (IllegalArgumentException e) {
-					//# // ignore
-				//# }
+				try {
+					String name  = this.screen.getKeyName( keyCode );
+					if (name != null && name.length() == 1) {
+						insertChar = name.charAt(0);
+					}
+				} catch (IllegalArgumentException e) {
+					// ignore
+				}
 				//#if polish.key.maybeSupportsAsciiKeyMap
-					//# if (!useAsciiKeyMap) {
-						//# if (keyCode >= 32
-								//# && (keyCode < Canvas.KEY_NUM0 || keyCode > Canvas.KEY_NUM9)
-								//# && (keyCode != Canvas.KEY_POUND && keyCode != Canvas.KEY_STAR)
-								//# && (keyCode <= 126) // only allow ascii characters for the initial input...
-								//# && ( !getScreen().isSoftKey(keyCode, gameAction) )
-						//# ) {
-							//# useAsciiKeyMap = true;
+					if (!useAsciiKeyMap) {
+						if (keyCode >= 32
+								&& (keyCode < Canvas.KEY_NUM0 || keyCode > Canvas.KEY_NUM9)
+								&& (keyCode != Canvas.KEY_POUND && keyCode != Canvas.KEY_STAR)
+								&& (keyCode <= 126) // only allow ascii characters for the initial input...
+								&& ( !getScreen().isSoftKey(keyCode, gameAction) )
+						) {
+							useAsciiKeyMap = true;
 							//#if tmp.usePredictiveInput
 								//# this.predictiveInput = false;
 							//#endif
-						//# }
-					//# }
+						}
+					}
 				//#endif
-				//# if (keyCode >= 32 
+				if (keyCode >= 32 
 						//#if polish.key.maybeSupportsAsciiKeyMap
-							//# && useAsciiKeyMap
+							&& useAsciiKeyMap
 						//#endif
-						//# && this.inputMode != MODE_NUMBERS 
-						//# && !this.isNumeric
-						//# && this.screen.isKeyboardAccessible() 
-						//# && !( 	(insertChar < 'a' || insertChar > 'z')
-								//# && 
-								//# (  (gameAction == Canvas.UP     &&  insertChar != '2' && keyCode == this.screen.getKeyCode(Canvas.UP)   ) 
-								//# || (gameAction == Canvas.DOWN   &&  insertChar != '8' && keyCode == this.screen.getKeyCode(Canvas.DOWN) )
-								//# || (gameAction == Canvas.LEFT   &&  insertChar != '4' && keyCode == this.screen.getKeyCode(Canvas.LEFT)	)
-								//# || (gameAction == Canvas.RIGHT  &&  insertChar != '6' && keyCode == this.screen.getKeyCode(Canvas.RIGHT))
-								//# )
-								//# //|| (gameAction == Canvas.FIRE   &&  keyCode == this.screen.getKeyCode(Canvas.FIRE) )  
-							//# )
-						//# ) 
-				//# {
-//# 					
-					//# if (this.nextCharUppercase || this.inputMode == MODE_UPPERCASE) {
-						//# insertChar = Character.toUpperCase(insertChar);
-					//# }
-					//# insertCharacter( insertChar, true, true );
-					//# return true;
-				//# }
+						&& this.inputMode != MODE_NUMBERS 
+						&& !this.isNumeric
+						&& this.screen.isKeyboardAccessible() 
+						&& !( 	(insertChar < 'a' || insertChar > 'z')
+								&& 
+								(  (gameAction == Canvas.UP     &&  insertChar != '2' && keyCode == this.screen.getKeyCode(Canvas.UP)   ) 
+								|| (gameAction == Canvas.DOWN   &&  insertChar != '8' && keyCode == this.screen.getKeyCode(Canvas.DOWN) )
+								|| (gameAction == Canvas.LEFT   &&  insertChar != '4' && keyCode == this.screen.getKeyCode(Canvas.LEFT)	)
+								|| (gameAction == Canvas.RIGHT  &&  insertChar != '6' && keyCode == this.screen.getKeyCode(Canvas.RIGHT))
+								)
+								//|| (gameAction == Canvas.FIRE   &&  keyCode == this.screen.getKeyCode(Canvas.FIRE) )  
+							)
+						) 
+				{
+					
+					if (this.nextCharUppercase || this.inputMode == MODE_UPPERCASE) {
+						insertChar = Character.toUpperCase(insertChar);
+					}
+					insertCharacter( insertChar, true, true );
+					return true;
+				}
 				//#if polish.key.enter:defined
 					//#= if ( keyCode == ${polish.key.enter} ) {
 						//# //this.caretChar = '\n';
@@ -3532,17 +3532,17 @@ this.title = "Input";
 					//# }
 				//#endif
 			//#endif
-			//# if (this.inputMode == MODE_NUMBERS && !this.isUneditable) {
-				//# if ( keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9 )  
-				//# {
-					//# if (currentLength >= this.maxSize) {
-						//# // ignore this key event - also don't forward it to the parent component:
-						//# return true;
-					//# }
-					//# insertChar = Integer.toString( keyCode - Canvas.KEY_NUM0 ).charAt( 0 );
-					//# insertCharacter(insertChar, true, true );
-					//# return true;
-				//# }
+			if (this.inputMode == MODE_NUMBERS && !this.isUneditable) {
+				if ( keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9 )  
+				{
+					if (currentLength >= this.maxSize) {
+						// ignore this key event - also don't forward it to the parent component:
+						return true;
+					}
+					insertChar = Integer.toString( keyCode - Canvas.KEY_NUM0 ).charAt( 0 );
+					insertCharacter(insertChar, true, true );
+					return true;
+				}
 				//#if polish.TextField.numerickeys.1:defined
 					//# String numericKeyStr = "";
 					//# int foundNumber = -1;
@@ -3596,39 +3596,39 @@ this.title = "Input";
 						//# return true;						
 					//# }
 				//#endif
-				//# if ( this.isDecimal ) {
-					//# //System.out.println("handling key for DECIMAL TextField");
-					//# if (this.text == null || 
-						//# (currentLength < this.maxSize 
-						//# && ( keyCode == Canvas.KEY_POUND || keyCode == Canvas.KEY_STAR )
-						//# && this.text.indexOf( Locale.DECIMAL_SEPARATOR) == -1)
-						//# ) 
-					//# {
-						//# insertChar = Locale.DECIMAL_SEPARATOR;
-						//# insertCharacter(insertChar, true, true );
-						//# return true;								
-					//# }
-				//# }
+				if ( this.isDecimal ) {
+					//System.out.println("handling key for DECIMAL TextField");
+					if (this.text == null || 
+						(currentLength < this.maxSize 
+						&& ( keyCode == Canvas.KEY_POUND || keyCode == Canvas.KEY_STAR )
+						&& this.text.indexOf( Locale.DECIMAL_SEPARATOR) == -1)
+						) 
+					{
+						insertChar = Locale.DECIMAL_SEPARATOR;
+						insertCharacter(insertChar, true, true );
+						return true;								
+					}
+				}
 				//#if polish.javaplatform >= Android/1.5
 					//# if (this.isNumeric) {
 						//# this.androidLastInvalidCharacterTime = System.currentTimeMillis();
 					//# }
 				//#endif
-			//# }
-			//# if ( (!this.isNumeric) //this.inputMode != MODE_NUMBERS 
-					//# && !this.isUneditable
-					//# && ((currentLength < this.maxSize) || ( currentLength == this.maxSize && this.caretChar != this.editingCaretChar && keyCode == this.lastKey)) 
-					//# && ( (keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9)
-					  //# || (keyCode == Canvas.KEY_POUND ) 
-					  //# || (keyCode == Canvas.KEY_STAR )
+			}
+			if ( (!this.isNumeric) //this.inputMode != MODE_NUMBERS 
+					&& !this.isUneditable
+					&& ((currentLength < this.maxSize) || ( currentLength == this.maxSize && this.caretChar != this.editingCaretChar && keyCode == this.lastKey)) 
+					&& ( (keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9)
+					  || (keyCode == Canvas.KEY_POUND ) 
+					  || (keyCode == Canvas.KEY_STAR )
 					//#if tmp.supportsSymbolEntry && polish.key.AddSymbolKey:defined
 						//#= || (keyCode == ${polish.key.AddSymbolKey} )
 					//#endif
 					//#if tmp.supportsSymbolEntry && polish.key.AddSymbolKey2:defined
 						//#= || (keyCode == ${polish.key.AddSymbolKey2} )
 					//#endif
-					//# )) 
-			//# {	
+					)) 
+			{	
 				//#if tmp.supportsSymbolEntry && (polish.key.AddSymbolKey:defined || polish.key.AddSymbolKey2:defined)
 					//# boolean showSymbolList = false;
 					//#if polish.key.AddSymbolKey:defined
@@ -3642,43 +3642,43 @@ this.title = "Input";
 						//# return true;
 					//# }
 				//#endif
-				//# String alphabet;
-				//# if (keyCode == Canvas.KEY_POUND) {
-					//# alphabet = charactersKeyPound;
-				//# } else if (keyCode == Canvas.KEY_STAR) {
-					//# alphabet = charactersKeyStar;
-				//# } else {
-					//# alphabet = this.characters[ keyCode - Canvas.KEY_NUM0 ];
-				//# }
-				//# if (alphabet == null || (alphabet.length() == 0)) {
-					//# return false;
-				//# }
-				//# this.lastInputTime = System.currentTimeMillis();
-				//# char newCharacter;
-				//# int alphabetLength = alphabet.length();
-				//# boolean appendNewCharacter = false;
-				//# if (keyCode == this.lastKey && (this.caretChar != this.editingCaretChar)) {
-					//# this.characterIndex++;
-					//# if (this.characterIndex >= alphabetLength) {
-						//# this.characterIndex = 0;
-					//# }
-				//# } else {
-					//# // insert the last character into the text:
-					//# if (this.caretChar != this.editingCaretChar) {
-						//# commitCurrentCharacter();
-						//# if (currentLength + 1 > this.maxSize) {
-							//# return true;
-						//# }
-					//# }
-					//# appendNewCharacter = true;
-					//# this.characterIndex = 0;
-					//# this.lastKey = keyCode;
-				//# }
-				//# newCharacter = alphabet.charAt( this.characterIndex );
-				//# //System.out.println("TextField.handleKeyPressed(): newCharacter=" + newCharacter + ", currentLength=" + currentLength + ", maxSize=" + this.maxSize + ", text.length()=" + this.text.length() );
-				//# if ( this.inputMode == MODE_UPPERCASE 
-						//# || this.nextCharUppercase ) 
-				//# {
+				String alphabet;
+				if (keyCode == Canvas.KEY_POUND) {
+					alphabet = charactersKeyPound;
+				} else if (keyCode == Canvas.KEY_STAR) {
+					alphabet = charactersKeyStar;
+				} else {
+					alphabet = this.characters[ keyCode - Canvas.KEY_NUM0 ];
+				}
+				if (alphabet == null || (alphabet.length() == 0)) {
+					return false;
+				}
+				this.lastInputTime = System.currentTimeMillis();
+				char newCharacter;
+				int alphabetLength = alphabet.length();
+				boolean appendNewCharacter = false;
+				if (keyCode == this.lastKey && (this.caretChar != this.editingCaretChar)) {
+					this.characterIndex++;
+					if (this.characterIndex >= alphabetLength) {
+						this.characterIndex = 0;
+					}
+				} else {
+					// insert the last character into the text:
+					if (this.caretChar != this.editingCaretChar) {
+						commitCurrentCharacter();
+						if (currentLength + 1 > this.maxSize) {
+							return true;
+						}
+					}
+					appendNewCharacter = true;
+					this.characterIndex = 0;
+					this.lastKey = keyCode;
+				}
+				newCharacter = alphabet.charAt( this.characterIndex );
+				//System.out.println("TextField.handleKeyPressed(): newCharacter=" + newCharacter + ", currentLength=" + currentLength + ", maxSize=" + this.maxSize + ", text.length()=" + this.text.length() );
+				if ( this.inputMode == MODE_UPPERCASE 
+						|| this.nextCharUppercase ) 
+				{
 					//#if polish.TextField.useDynamicCharset 
 					//# if(usesDynamicCharset && keyCode >= Canvas.KEY_NUM0 && keyCode <= Canvas.KEY_NUM9)
 					//# {
@@ -3687,19 +3687,19 @@ this.title = "Input";
 					//# }
 					//# else
 					//#endif
-					//# {
-						//# newCharacter = Character.toUpperCase(newCharacter);
-					//# }
-				//# }
-				//# this.caretWidth = charWidth( newCharacter );
-				//# this.caretChar = newCharacter;
-				//# if (alphabetLength == 1) {
-					//# insertCharacter( newCharacter, true, true );
-				//# } else {
-					//# insertCharacter( newCharacter, appendNewCharacter, false );
-				//# }
-				//# return true;
-			//# }
+					{
+						newCharacter = Character.toUpperCase(newCharacter);
+					}
+				}
+				this.caretWidth = charWidth( newCharacter );
+				this.caretChar = newCharacter;
+				if (alphabetLength == 1) {
+					insertCharacter( newCharacter, true, true );
+				} else {
+					insertCharacter( newCharacter, appendNewCharacter, false );
+				}
+				return true;
+			}
 		//#endif
 		return false;
 	}
@@ -3707,15 +3707,15 @@ this.title = "Input";
 	protected boolean handleKeyClear(int keyCode, int gameAction)
 	{
 		//#if tmp.directInput
-			//# if (this.isUneditable) {
-				//# return false;
-			//# }
+			if (this.isUneditable) {
+				return false;
+			}
 			//#if tmp.usePredictiveInput
 				//# if (this.predictiveInput) {
 					//# return this.predictiveAccess.keyClear(keyCode, gameAction);
 				//# }
 			//#endif			
-			//# if ( this.text != null && this.text.length() > 0) {
+			if ( this.text != null && this.text.length() > 0) {
 				//#if polish.javaplatform >= Android/1.5
 					//# long invalidCharInputTime = this.androidLastInvalidCharacterTime;
 					//# if (invalidCharInputTime != 0) {
@@ -3726,8 +3726,8 @@ this.title = "Input";
 						//# }
 					//# }
 				//#endif
-				//# return deleteCurrentChar();
-			//# }
+				return deleteCurrentChar();
+			}
 		//#endif
 			
 		return false;
@@ -3741,7 +3741,7 @@ this.title = "Input";
 					//# return this.predictiveAccess.keyMode(keyCode, gameAction);
 				//# }
 			//#endif
-//# 			
+			
 			//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
 				//# int changeNumericalAlphaInputModeKey = 0;
 				//#= changeNumericalAlphaInputModeKey = ${polish.key.ChangeNumericalAlphaInputModeKey};
@@ -3770,16 +3770,16 @@ this.title = "Input";
 				//# // is only used when the device is opened up - example includes the Nokia/E70.
 				//# if (!this.screen.isKeyboardAccessible()) {
 			//#endif
-				//# if ( keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable
+				if ( keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable
 						//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
 							//# && (!(KEY_CHANGE_MODE == Canvas.KEY_NUM0 && this.inputMode == MODE_NUMBERS)) 
 						//#endif
-				//# ) {
-					//# if (this.nextCharUppercase && this.inputMode == MODE_LOWERCASE) {
-						//# this.nextCharUppercase = false;
-					//# } else {
-						//# this.inputMode++;							
-					//# }
+				) {
+					if (this.nextCharUppercase && this.inputMode == MODE_LOWERCASE) {
+						this.nextCharUppercase = false;
+					} else {
+						this.inputMode++;							
+					}
 					//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
 						//# if (this.inputMode > MODE_UPPERCASE) {
 							//#if polish.TextField.allowNativeModeSwitch
@@ -3797,23 +3797,23 @@ this.title = "Input";
 							//# this.inputMode = MODE_LOWERCASE;
 						//# }
 					//#else
-						//# if (this.inputMode > MODE_NUMBERS) {
-							//# this.inputMode = MODE_LOWERCASE;
-						//# }
+						if (this.inputMode > MODE_NUMBERS) {
+							this.inputMode = MODE_LOWERCASE;
+						}
 					//#endif
 					//#if tmp.useInputInfo
-						//# updateInfo();
+						updateInfo();
 					//#endif
-					//# if (this.caretChar != this.editingCaretChar) {
-						//# commitCurrentCharacter();
-					//# }
-					//# if (this.inputMode == MODE_FIRST_UPPERCASE) {
-						//# this.nextCharUppercase = true;
-					//# } else {
-						//# this.nextCharUppercase = false;
-					//# }
-					//# return true;
-				//# }
+					if (this.caretChar != this.editingCaretChar) {
+						commitCurrentCharacter();
+					}
+					if (this.inputMode == MODE_FIRST_UPPERCASE) {
+						this.nextCharUppercase = true;
+					} else {
+						this.nextCharUppercase = false;
+					}
+					return true;
+				}
 			//#if polish.key.supportsAsciiKeyMap.condition:defined && polish.key.shift:defined
 				//# }
 			//#endif
@@ -3847,105 +3847,105 @@ this.title = "Input";
 	protected boolean handleKeyNavigation(int keyCode, int gameAction)
 	{
 		//#if tmp.directInput
-			//# if (this.realTextLines == null) {
-				//# return false;
-			//# }
-//# 		
+			if (this.realTextLines == null) {
+				return false;
+			}
+		
 			//#if tmp.usePredictiveInput
 				//# if(this.predictiveInput && this.predictiveAccess.keyNavigation(keyCode, gameAction)) {
 					//# return true;
 				//# }
 			//#endif
-//# 			
-			//# char character = this.caretChar;
-			//# boolean characterInserted = character != this.editingCaretChar;
-			//# if (characterInserted) {
-				//# commitCurrentCharacter();
-			//# }
-//# 			
-			//# if (getScreen().isGameActionFire(keyCode, gameAction)
-					//# && this.defaultCommand != null 
-					//# && this.itemCommandListener != null) 
-			//# {
-				//# this.itemCommandListener.commandAction(this.defaultCommand, this);
-				//# return true;
-			//# }
-			//# else if (gameAction == Canvas.UP && keyCode != Canvas.KEY_NUM2) {
-				//# if (this.caretRow ==  0) {
-					//# return false;
-				//# } 
-				//# // restore the text-line:
-				//# this.caretRow--;
-				//# this.caretY -= this.rowHeight;
-				//# this.internalY = this.caretY;
-				//# String fullLine = this.realTextLines[ this.caretRow ];
-				//# int previousCaretRowFirstLength = this.caretColumn;
-				//# setCaretRow(fullLine, this.caretColumn );
-				//# this.caretPosition -= previousCaretRowFirstLength + (this.originalRowText.length() - this.caretColumn);
-				//# this.internalX = 0;
-				//# this.internalY = this.caretRow * this.rowHeight;
+			
+			char character = this.caretChar;
+			boolean characterInserted = character != this.editingCaretChar;
+			if (characterInserted) {
+				commitCurrentCharacter();
+			}
+			
+			if (getScreen().isGameActionFire(keyCode, gameAction)
+					&& this.defaultCommand != null 
+					&& this.itemCommandListener != null) 
+			{
+				this.itemCommandListener.commandAction(this.defaultCommand, this);
+				return true;
+			}
+			else if (gameAction == Canvas.UP && keyCode != Canvas.KEY_NUM2) {
+				if (this.caretRow ==  0) {
+					return false;
+				} 
+				// restore the text-line:
+				this.caretRow--;
+				this.caretY -= this.rowHeight;
+				this.internalY = this.caretY;
+				String fullLine = this.realTextLines[ this.caretRow ];
+				int previousCaretRowFirstLength = this.caretColumn;
+				setCaretRow(fullLine, this.caretColumn );
+				this.caretPosition -= previousCaretRowFirstLength + (this.originalRowText.length() - this.caretColumn);
+				this.internalX = 0;
+				this.internalY = this.caretRow * this.rowHeight;
 				//#if tmp.updateDeleteCommand
-					//# updateDeleteCommand( this.text );
+					updateDeleteCommand( this.text );
 				//#endif
-				//# return true;
-			//# } else if (gameAction == Canvas.DOWN && keyCode != Canvas.KEY_NUM8) {
-				//# if (this.textLines == null || this.caretRow >= this.textLines.size() - 1) {
-					//# return false;
-				//# } 
-//# 	
-				//# String lastLine = this.originalRowText;
-				//# int lastLineLength = lastLine.length();
-				//# this.caretRow++;	
-				//# this.caretY += this.rowHeight;
-				//# this.internalY = this.caretY;
-				//# int lastCaretRowLastPartLength = lastLineLength - this.caretColumn;
-				//# String nextLine = this.realTextLines[ this.caretRow ];
-				//# setCaretRow( nextLine, this.caretColumn );
-				//# this.caretPosition += (lastCaretRowLastPartLength + this.caretColumn );
-				//# this.internalY = this.caretRow * this.rowHeight;
+				return true;
+			} else if (gameAction == Canvas.DOWN && keyCode != Canvas.KEY_NUM8) {
+				if (this.textLines == null || this.caretRow >= this.textLines.size() - 1) {
+					return false;
+				} 
+	
+				String lastLine = this.originalRowText;
+				int lastLineLength = lastLine.length();
+				this.caretRow++;	
+				this.caretY += this.rowHeight;
+				this.internalY = this.caretY;
+				int lastCaretRowLastPartLength = lastLineLength - this.caretColumn;
+				String nextLine = this.realTextLines[ this.caretRow ];
+				setCaretRow( nextLine, this.caretColumn );
+				this.caretPosition += (lastCaretRowLastPartLength + this.caretColumn );
+				this.internalY = this.caretRow * this.rowHeight;
 				//#if tmp.updateDeleteCommand
-					//# updateDeleteCommand( this.text );
+					updateDeleteCommand( this.text );
 				//#endif
-				//# return true;
+				return true;
 			//#if polish.i18n.rightToLeft
 			//# } else if (gameAction == Canvas.RIGHT && keyCode != Canvas.KEY_NUM6) {
 			//#else
-			//# } else if (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4) {
+			} else if (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4) {
 			//#endif
-				//# int column = this.caretColumn;
-				//# if (column > 0) {
-					//# this.caretPosition--;
-					//# column--;
-					//# setCaretRow( this.originalRowText, column );
+				int column = this.caretColumn;
+				if (column > 0) {
+					this.caretPosition--;
+					column--;
+					setCaretRow( this.originalRowText, column );
 					//#if tmp.updateDeleteCommand
-						//# updateDeleteCommand( this.text );
+						updateDeleteCommand( this.text );
 					//#endif
-//# 						
-					//# return true;
-				//# } else if ( this.caretRow > 0) {
-					//# // this is just a visual line-break:
-					//# //this.caretPosition--;
-					//# this.caretRow--;
-					//# String prevLine = this.realTextLines[ this.caretRow ];
-					//# int carColumn = prevLine.length();
-					//# boolean isOnNewlineChar = prevLine.charAt( carColumn - 1 ) == '\n';
-					//# if (isOnNewlineChar) {
-						//# this.caretPosition--;
-						//# carColumn--;
-					//# }
-					//# setCaretRow(prevLine, carColumn );
-					//# //System.out.println(this + ".handleKeyPressed()/font4: caretX=" + this.caretX);
-					//# this.caretY -= this.rowHeight;
-					//# this.internalY = this.caretY;
+						
+					return true;
+				} else if ( this.caretRow > 0) {
+					// this is just a visual line-break:
+					//this.caretPosition--;
+					this.caretRow--;
+					String prevLine = this.realTextLines[ this.caretRow ];
+					int carColumn = prevLine.length();
+					boolean isOnNewlineChar = prevLine.charAt( carColumn - 1 ) == '\n';
+					if (isOnNewlineChar) {
+						this.caretPosition--;
+						carColumn--;
+					}
+					setCaretRow(prevLine, carColumn );
+					//System.out.println(this + ".handleKeyPressed()/font4: caretX=" + this.caretX);
+					this.caretY -= this.rowHeight;
+					this.internalY = this.caretY;
 					//#if tmp.updateDeleteCommand
-						//# updateDeleteCommand( this.text );
+						updateDeleteCommand( this.text );
 					//#endif
-					//# return true;
-				//# }
+					return true;
+				}
 			//#if polish.i18n.rightToLeft
 			//# } else if (gameAction == Canvas.LEFT && keyCode != Canvas.KEY_NUM4) {
 			//#else
-			//# } else if ( gameAction == Canvas.RIGHT  && keyCode != Canvas.KEY_NUM6) {
+			} else if ( gameAction == Canvas.RIGHT  && keyCode != Canvas.KEY_NUM6) {
 			//#endif
 				//#ifdef polish.debug.debug
 				//# if (this.isPassword) {
@@ -3953,61 +3953,61 @@ this.title = "Input";
 					//# System.out.println("originalRowText=" + this.originalRowText );
 				//# }
 				//#endif
-				//# if (characterInserted) {
-					//# //System.out.println("right but character inserted");
-					//# return true;
-				//# }
-				//# boolean isOnNewlineChar = this.caretColumn < this.originalRowText.length() 
-										//# && this.originalRowText.charAt( this.caretColumn ) == '\n';
-				//# if (this.caretColumn < this.originalRowText.length() && !isOnNewlineChar ) {
-					//# //System.out.println("right not in last column");
-					//# this.caretColumn++;
-					//# this.caretPosition++;
-					//# setCaretRow( this.originalRowText, this.caretColumn );
+				if (characterInserted) {
+					//System.out.println("right but character inserted");
+					return true;
+				}
+				boolean isOnNewlineChar = this.caretColumn < this.originalRowText.length() 
+										&& this.originalRowText.charAt( this.caretColumn ) == '\n';
+				if (this.caretColumn < this.originalRowText.length() && !isOnNewlineChar ) {
+					//System.out.println("right not in last column");
+					this.caretColumn++;
+					this.caretPosition++;
+					setCaretRow( this.originalRowText, this.caretColumn );
 					//#if tmp.updateDeleteCommand
-						//# updateDeleteCommand( this.text );
+						updateDeleteCommand( this.text );
 					//#endif
-					//# return true;
-				//# } else if (this.caretRow < this.realTextLines.length - 1) {
-					//# //System.out.println("right in not the last row");
-					//# this.caretRow++;								
-					//# if (isOnNewlineChar) {
-						//# this.caretPosition++;
-					//# }
-					//# this.originalRowText = this.realTextLines[ this.caretRow ];
-					//# if (characterInserted) {
-						//# if (this.isPassword) {
-							//# this.caretX = stringWidth("*");
-						//# } else {
-							//# this.caretX = stringWidth( String.valueOf( character ) );
-						//# }
-						//# //System.out.println(this + ".handleKeyPressed()/font6: caretX=" + this.caretX);
-						//# this.caretColumn = 1;
-					//# } else {
-						//# setCaretRow( this.originalRowText, 0 );
-					//# }
-					//# this.caretY += this.rowHeight;
-					//# this.internalY = this.caretY;
+					return true;
+				} else if (this.caretRow < this.realTextLines.length - 1) {
+					//System.out.println("right in not the last row");
+					this.caretRow++;								
+					if (isOnNewlineChar) {
+						this.caretPosition++;
+					}
+					this.originalRowText = this.realTextLines[ this.caretRow ];
+					if (characterInserted) {
+						if (this.isPassword) {
+							this.caretX = stringWidth("*");
+						} else {
+							this.caretX = stringWidth( String.valueOf( character ) );
+						}
+						//System.out.println(this + ".handleKeyPressed()/font6: caretX=" + this.caretX);
+						this.caretColumn = 1;
+					} else {
+						setCaretRow( this.originalRowText, 0 );
+					}
+					this.caretY += this.rowHeight;
+					this.internalY = this.caretY;
 					//#if tmp.updateDeleteCommand
-						//# updateDeleteCommand( this.text );
+						updateDeleteCommand( this.text );
 					//#endif
-					//# return true;
-				//# } else if (characterInserted) {
-					//# //System.out.println("right after character insertion");
-					//# // a character has been inserted at the last column of the last row:
-					//# if (this.isPassword) {
-						//# this.caretX += stringWidth("*");
-					//# } else {
-						//# this.caretX += this.caretWidth;
-					//# }
-					//# this.caretColumn++;
-					//# this.caretPosition++;
+					return true;
+				} else if (characterInserted) {
+					//System.out.println("right after character insertion");
+					// a character has been inserted at the last column of the last row:
+					if (this.isPassword) {
+						this.caretX += stringWidth("*");
+					} else {
+						this.caretX += this.caretWidth;
+					}
+					this.caretColumn++;
+					this.caretPosition++;
 					//#if tmp.updateDeleteCommand
-						//# updateDeleteCommand( this.text );
+						updateDeleteCommand( this.text );
 					//#endif
-					//# return true;
-				//# }
-			//# }
+					return true;
+				}
+			}
 		//#endif
 		
 		return false;
@@ -4016,38 +4016,38 @@ this.title = "Input";
 	
 			
 	//#if !polish.blackberry && tmp.directInput
-	//# /* (non-Javadoc)
-	 //# * @see de.enough.polish.ui.Item#handleKeyRepeated(int, int)
-	 //# */
-	//# protected boolean handleKeyRepeated(int keyCode, int gameAction) {
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Item#handleKeyRepeated(int, int)
+	 */
+	protected boolean handleKeyRepeated(int keyCode, int gameAction) {
 		//#debug
 		//# System.out.println("TextField.handleKeyRepeated( " + keyCode + ")");
-		//# if (keyCode >= Canvas.KEY_NUM0 
-				//# && keyCode <= Canvas.KEY_NUM9 ) 
-		//# {
-			//# // ignore repeat events when the current input mode is numbers:
-			//# if ( this.isNumeric || this.inputMode == MODE_NUMBERS ) {
-				//# if (keyCode == Canvas.KEY_NUM0 && this.inputMode == PHONENUMBER) {
-					//# if (this.caretPosition == 1 && this.text.charAt(0) == '0') {
-						//# String str = getString();
-						//# if (str.length() > 0 && str.charAt(0) == '0') {
-							//# str = str.substring(1);
-						//# }
-						//# setString( "+" + str );
-						//# return true;
-					//# }
-				//# }
-				//# return false;
-			//# }
-			//# int currentLength = (this.text == null ? 0 : this.text.length());
-			//# if ( !this.isUneditable && currentLength <= this.maxSize ) 
-			//# {	
-				//# // enter number character:
-				//# this.lastInputTime = System.currentTimeMillis();
-				//# char newCharacter = Integer.toString(keyCode - 48).charAt(0);
-				//# this.caretWidth = charWidth( newCharacter );
-				//# if (newCharacter != this.caretChar) {
-//# 					
+		if (keyCode >= Canvas.KEY_NUM0 
+				&& keyCode <= Canvas.KEY_NUM9 ) 
+		{
+			// ignore repeat events when the current input mode is numbers:
+			if ( this.isNumeric || this.inputMode == MODE_NUMBERS ) {
+				if (keyCode == Canvas.KEY_NUM0 && this.inputMode == PHONENUMBER) {
+					if (this.caretPosition == 1 && this.text.charAt(0) == '0') {
+						String str = getString();
+						if (str.length() > 0 && str.charAt(0) == '0') {
+							str = str.substring(1);
+						}
+						setString( "+" + str );
+						return true;
+					}
+				}
+				return false;
+			}
+			int currentLength = (this.text == null ? 0 : this.text.length());
+			if ( !this.isUneditable && currentLength <= this.maxSize ) 
+			{	
+				// enter number character:
+				this.lastInputTime = System.currentTimeMillis();
+				char newCharacter = Integer.toString(keyCode - 48).charAt(0);
+				this.caretWidth = charWidth( newCharacter );
+				if (newCharacter != this.caretChar) {
+					
 					//#if tmp.usePredictiveInput
 						//# if (this.predictiveInput)
 						//# {
@@ -4070,74 +4070,74 @@ this.title = "Input";
 						//# }
 						//# else
 					//#endif
-					//# {
-						//# this.caretChar = newCharacter;
-						//# insertCharacter( newCharacter, false, false );
-					//# }
-				//# }
-				//# return true;
-			//# }
-		//# }
+					{
+						this.caretChar = newCharacter;
+						insertCharacter( newCharacter, false, false );
+					}
+				}
+				return true;
+			}
+		}
 		//#ifdef polish.key.ClearKey:defined
 			//#= if ( (keyCode == ${polish.key.ClearKey}
 		//#else
-		//# if ( (keyCode == -8 
+		if ( (keyCode == -8 
 		//#endif
 		//#if polish.key.backspace:defined
 			//#= || keyCode == ${polish.key.backspace}
 		//#endif
-				//# ) && this.caretPosition > 0
-				//# && this.text != null
-		//# ) 
-		//# {
-			//# this.deleteKeyRepeatCount++;
-		//# }
-		//# return false;
-		//# //return super.handleKeyRepeated(keyCode, gameAction);
-	//# }
+				) && this.caretPosition > 0
+				&& this.text != null
+		) 
+		{
+			this.deleteKeyRepeatCount++;
+		}
+		return false;
+		//return super.handleKeyRepeated(keyCode, gameAction);
+	}
 	//#endif
 	
 	//#if !polish.blackberry && tmp.directInput
-	//# /* (non-Javadoc)
-	 //# * @see de.enough.polish.ui.Item#handleKeyReleased(int, int)
-	 //# */
-	//# protected boolean handleKeyReleased( int keyCode, int gameAction ) {
+	/* (non-Javadoc)
+	 * @see de.enough.polish.ui.Item#handleKeyReleased(int, int)
+	 */
+	protected boolean handleKeyReleased( int keyCode, int gameAction ) {
 		//#debug
 		//# System.out.println("handleKeyReleased  " + keyCode );
-		//# if (!this.enableDirectInput) {
-			//# return super.handleKeyReleased(keyCode, gameAction);
-		//# }
+		if (!this.enableDirectInput) {
+			return super.handleKeyReleased(keyCode, gameAction);
+		}
 		//#if tmp.useNativeTextBox && !(polish.Vendor == Samsung)
-			//# if(this.skipKeyReleasedEvent) {
-				//# this.skipKeyReleasedEvent = false;
-				//# return true;
-			//# }
+			if(this.skipKeyReleasedEvent) {
+				this.skipKeyReleasedEvent = false;
+				return true;
+			}
 		//#endif
-		//# this.isKeyDown = false;
-		//# this.deleteKeyRepeatCount = 0;
-//# 		
+		this.isKeyDown = false;
+		this.deleteKeyRepeatCount = 0;
+		
 		//#if tmp.usePredictiveInput
 			//# if (this.predictiveAccess.handleKeyReleased( keyCode, gameAction )) {
 				//# return true;
 			//# }
 		//#endif
-//# 
-		//# int clearKey =
+
+		int clearKey =
 			//#if polish.key.ClearKey:defined
 				//#= ${polish.key.ClearKey};
 			//#else
-				//# -8;
+				-8;
 			//#endif
-		//# boolean clearKeyPressed = (keyCode == clearKey);
-//# 		 
+		boolean clearKeyPressed = (keyCode == clearKey);
+		 
 		//#if polish.key.ChangeNumericalAlphaInputModeKey:defined
 			//#= if ((keyCode == KEY_CHANGE_MODE || keyCode == ${polish.key.ChangeNumericalAlphaInputModeKey}) && 
 			//#= !this.isNumeric && !this.isUneditable && 
 			//#= (!(KEY_CHANGE_MODE == Canvas.KEY_NUM0 && this.inputMode == MODE_NUMBERS) || keyCode == ${polish.key.ChangeNumericalAlphaInputModeKey}) )
 		//#else
-		//# if ( keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable )
+		if ( keyCode == KEY_CHANGE_MODE && !this.isNumeric && !this.isUneditable )
 		//#endif
-		//# {
+		{
 			//#if tmp.usePredictiveInput && !polish.key.ChangeNumericalAlphaInputModeKey:defined
 			//# if((System.currentTimeMillis() - this.lastTimePressed) > SWITCH_DELAY && TrieProvider.isPredictiveInstalled())
 			//# {
@@ -4158,38 +4158,38 @@ this.title = "Input";
 			//#if tmp.usePredictiveInput
 				//# this.lastTimePressed = -1;
 			//#endif
-			//# return handleKeyMode(keyCode, gameAction) || clearKeyPressed;
-		//# }
-//# 		
-//# 		
-		//# return this.isKeyPressedHandled || clearKeyPressed || super.handleKeyReleased( keyCode, gameAction );
-	//# }
+			return handleKeyMode(keyCode, gameAction) || clearKeyPressed;
+		}
+		
+		
+		return this.isKeyPressedHandled || clearKeyPressed || super.handleKeyReleased( keyCode, gameAction );
+	}
 	//#endif
 	
 	//#if polish.hasPointerEvents && (!tmp.forceDirectInput || polish.javaplatform >= Android/1.5)
-	/**
-	 * Handles the event when a pointer has been pressed at the specified position.
-	 * The default method translates the pointer-event into an artificial
-	 * pressing of the FIRE game-action, which is subsequently handled
-	 * bu the handleKeyPressed(-1, Canvas.FIRE) method.
-	 * This method needs should be overwritten only when the "polish.hasPointerEvents"
-	 * preprocessing symbol is defined: "//#ifdef polish.hasPointerEvents".
-	 *    
-	 * @param x the x position of the pointer pressing
-	 * @param y the y position of the pointer pressing
-	 * @return true when the pressing of the pointer was actually handled by this item.
-	 */
-	protected boolean handlePointerPressed( int x, int y ) {
-		if (isInItemArea(x, y)) {
-			 
+	//# /**
+	 //# * Handles the event when a pointer has been pressed at the specified position.
+	 //# * The default method translates the pointer-event into an artificial
+	 //# * pressing of the FIRE game-action, which is subsequently handled
+	 //# * bu the handleKeyPressed(-1, Canvas.FIRE) method.
+	 //# * This method needs should be overwritten only when the "polish.hasPointerEvents"
+	 //# * preprocessing symbol is defined: "//#ifdef polish.hasPointerEvents".
+	 //# *    
+	 //# * @param x the x position of the pointer pressing
+	 //# * @param y the y position of the pointer pressing
+	 //# * @return true when the pressing of the pointer was actually handled by this item.
+	 //# */
+	//# protected boolean handlePointerPressed( int x, int y ) {
+		//# if (isInItemArea(x, y)) {
+//# 			 
 			//#if polish.javaplatform >= Android/1.5
 				//# this.androidLastPointerPressedTime = System.currentTimeMillis();
 			//#elif !tmp.forceDirectInput
-				return notifyItemPressedStart();
+				//# return notifyItemPressedStart();
 			//#endif
-		}
-		return super.handlePointerPressed(x, y);
-	}
+		//# }
+		//# return super.handlePointerPressed(x, y);
+	//# }
 	//#endif
 	
 	//#if polish.hasPointerEvents
@@ -4252,46 +4252,46 @@ this.title = "Input";
 	
 	
 	//#ifdef tmp.directInput
-	//# /**
-	 //# * Removes the current character.
-	 //# * 
-	 //# * @return true when a character could be deleted.
-	 //# */
-	//# private synchronized boolean deleteCurrentChar() {
+	/**
+	 * Removes the current character.
+	 * 
+	 * @return true when a character could be deleted.
+	 */
+	private synchronized boolean deleteCurrentChar() {
 		//#debug
 		//# System.out.println("deleteCurrentChar: caretColumn=" + this.caretColumn + ", caretPosition=" + this.caretPosition + ", caretChar=" + this.caretChar );
-		//# String myText;
-		//# if (this.isPassword) {
-			//# myText = this.passwordText; 
-		//# } else {
-			//# myText = this.text;
-		//# }
-		//# int position = this.caretPosition;
-		//# if (this.caretChar != this.editingCaretChar) {
-			//# myText = myText.substring( 0, position )
-				//# + myText.substring( position + 1);
-			//# this.caretChar = this.editingCaretChar;
-			//# this.caretPosition = position;
-			//# setString( myText );
-			//# return true;
-		//# }
-		//# if (position > 0) {
-			//# position--;
-			//# myText = myText.substring( 0, position )
-				//# + myText.substring( position + 1);
-			//# this.caretPosition = position;
-			//# setString( myText );
+		String myText;
+		if (this.isPassword) {
+			myText = this.passwordText; 
+		} else {
+			myText = this.text;
+		}
+		int position = this.caretPosition;
+		if (this.caretChar != this.editingCaretChar) {
+			myText = myText.substring( 0, position )
+				+ myText.substring( position + 1);
+			this.caretChar = this.editingCaretChar;
+			this.caretPosition = position;
+			setString( myText );
+			return true;
+		}
+		if (position > 0) {
+			position--;
+			myText = myText.substring( 0, position )
+				+ myText.substring( position + 1);
+			this.caretPosition = position;
+			setString( myText );
 			//#if polish.css.textfield-show-length  && tmp.useInputInfo
 				//# if (this.showLength) {
 					//# updateInfo();
 				//# }
 			//#endif
-			//# notifyStateChanged();
-			//# return true;
-		//# } else {
-			//# return false;
-		//# }
-	//# }
+			notifyStateChanged();
+			return true;
+		} else {
+			return false;
+		}
+	}
 	//#endif
 
 	//#if tmp.useNativeTextBox
@@ -4437,7 +4437,7 @@ this.title = "Input";
 									//#ifdef polish.key.ClearKey:defined
 										//#= handleKeyClear(${polish.key.ClearKey},0);
 									//#else
-										//# handleKeyClear(-8,0);
+										handleKeyClear(-8,0);
 									//#endif
 							//#ifdef tmp.allowDirectInput
 								//# } else {
@@ -4447,9 +4447,9 @@ this.title = "Input";
 								//# }
 							//#endif
 						//#else
-							String myText = getString();
-							setString( myText.substring(0, myText.length() - 1));
-							notifyStateChanged();
+							//# String myText = getString();
+							//# setString( myText.substring(0, myText.length() - 1));
+							//# notifyStateChanged();
 						//#endif
 						return;
 					}
@@ -4478,8 +4478,8 @@ this.title = "Input";
 	}
 		
 	//#if (tmp.directInput && (polish.TextField.showInputInfo != false)) || polish.blackberry || polish.TextField.activateUneditableWithFire || polish.javaplatform >= Android/1.5
-	//# protected void defocus(Style originalStyle) {
-		//# super.defocus(originalStyle);
+	protected void defocus(Style originalStyle) {
+		super.defocus(originalStyle);
 		//#if polish.blackberry
 			//#if polish.Bugs.ItemStateListenerCalledTooEarly
 				//# String newText = this.editField.getText();
@@ -4499,21 +4499,21 @@ this.title = "Input";
 				//# DeviceControl.hideSoftKeyboard();
 			//#endif
 		//#elif polish.TextField.showInputInfo != false && !tmp.includeInputInfo
-			//# if (this.screen != null) {
-				//# this.screen.setInfo((Item)null);
-			//# }
+			if (this.screen != null) {
+				this.screen.setInfo((Item)null);
+			}
 		//#endif
 		//#if tmp.directInput
-			//# if (this.editingCaretChar != this.caretChar) {
-				//# commitCurrentCharacter();
-				//# notifyStateChanged();
-			//# }
+			if (this.editingCaretChar != this.caretChar) {
+				commitCurrentCharacter();
+				notifyStateChanged();
+			}
 		//#endif
 		//#if polish.javaplatform >= Android/1.5 && polish.TextField.hideSoftKeyboardOnDefocus
 				//# MidletBridge.instance.hideSoftKeyboard();
 		//#endif
-//# 
-	//# }
+
+	}
 	//#endif
 	
 	//#if tmp.directInput || !polish.TextField.suppressDeleteCommand 
@@ -4523,7 +4523,7 @@ this.title = "Input";
 				//# if (this.enableDirectInput) {
 			//#endif
 					//#if tmp.useInputInfo
-						//# updateInfo();
+						updateInfo();
 					//#endif
 					//#if polish.TextField.jumpToStartOnFocus
 						//#if !polish.blackberry
@@ -4534,7 +4534,7 @@ this.title = "Input";
 							//# }
 						//#endif
 					//#elif !polish.TextField.keepCaretPosition
-						//# setCaretPosition( getString().length() );
+						setCaretPosition( getString().length() );
 					//#endif
 			//#ifdef tmp.allowDirectInput
 				//# }
@@ -4595,18 +4595,18 @@ this.title = "Input";
 		this.inputMode = inputMode;
 		//#if tmp.directInput
 			//#if tmp.useInputInfo
-				//# if (this.isFocused) {
-					//# updateInfo();
-				//# }
+				if (this.isFocused) {
+					updateInfo();
+				}
 			//#endif
-			//# if (this.caretChar != this.editingCaretChar) {
-				//# commitCurrentCharacter();
-			//# }
-			//# if (inputMode == MODE_FIRST_UPPERCASE) {
-				//# this.nextCharUppercase = true;
-			//# } else {
-				//# this.nextCharUppercase = false;
-			//# }
+			if (this.caretChar != this.editingCaretChar) {
+				commitCurrentCharacter();
+			}
+			if (inputMode == MODE_FIRST_UPPERCASE) {
+				this.nextCharUppercase = true;
+			} else {
+				this.nextCharUppercase = false;
+			}
 		//#endif
 	}
 	
@@ -4657,23 +4657,23 @@ this.title = "Input";
 	}
 
 	//#if  (!polish.blackberry && tmp.directInput) || (polish.blackberry && polish.hasPointerEvents)
-		//# /* (non-Javadoc)
-		 //# * @see de.enough.polish.ui.StringItem#hideNotify()
-		 //# */
-		//# protected void hideNotify() {
+		/* (non-Javadoc)
+		 * @see de.enough.polish.ui.StringItem#hideNotify()
+		 */
+		protected void hideNotify() {
 			//#if !polish.blackberry
-				//# if (this.caretChar != this.editingCaretChar) {
-					//# commitCurrentCharacter();
-				//# }
+				if (this.caretChar != this.editingCaretChar) {
+					commitCurrentCharacter();
+				}
 			//#endif
-			//# super.hideNotify();
+			super.hideNotify();
 			//#if polish.blackberry && polish.hasPointerEvents
 				//# // 2009-11-11: hiding the softkeyboard is not really necessary as we have a finer grained control about this in BaseScreen.notifyDisplayChange()
 				//# //Display.getInstance().getVirtualKeyboard().setVisibility(net.rim.device.api.ui.VirtualKeyboard.HIDE);
 			//#elif polish.javaplatform >= Android/1.5
 				//# MidletBridge.instance.hideSoftKeyboard();
 			//#endif
-		//# }	
+		}	
 	//#endif
 		
 	//#if tmp.usePredictiveInput

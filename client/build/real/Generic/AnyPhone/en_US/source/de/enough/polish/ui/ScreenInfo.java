@@ -72,7 +72,7 @@ public class ScreenInfo {
 	
 	static {
 		//#style screeninfo, default
-		item = new IconItem( null, null , de.enough.polish.ui.StyleSheet.defaultStyle );
+		item = new IconItem( null, null , de.enough.polish.ui.StyleSheet.screeninfoStyle );
 	}
 
 	/**

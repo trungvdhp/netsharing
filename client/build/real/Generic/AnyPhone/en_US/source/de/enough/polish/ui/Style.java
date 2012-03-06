@@ -872,7 +872,7 @@ public class Style implements Externalizable
 		Style style = this;
 		Dimension value = null;
 		//#if polish.css.padding-vertical
-			//# value = (Dimension) style.getObjectProperty(-12);
+			value = (Dimension) style.getObjectProperty(-12);
 		//#endif
 		return getPadding( value, height );
 	}

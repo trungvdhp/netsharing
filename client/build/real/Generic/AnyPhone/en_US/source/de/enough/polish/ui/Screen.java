@@ -3170,7 +3170,7 @@ implements UiElement, Animatable
 			this.infoItem = null;
 		} else if (this.infoItem == null || !(this.infoItem instanceof StringItem)) {
 			//#style info, default
-			this.infoItem = new StringItem( null, infoText , de.enough.polish.ui.StyleSheet.defaultStyle );
+			this.infoItem = new StringItem( null, infoText , de.enough.polish.ui.StyleSheet.infoStyle );
 			this.infoItem.screen = this;
 		} else if (this.isInitialized){
 			StringItem info = ((StringItem)this.infoItem); 

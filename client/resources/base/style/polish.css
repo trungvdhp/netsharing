@@ -29,6 +29,55 @@
   * This allows you to change the design later onwards without ending up with
   * color definitions like "lightGreen: red;".
   */
+
+label {
+	font-color: inputColor;
+	font-size: small;
+	layout: newline-after;
+}
+
+.input {
+	margin: 3;
+	padding: 3;
+	padding-left: 5;
+	padding-vertical: 1;
+	width: 100%;
+	layout: left | expand;
+	text-wrap: false;
+	complete-background: inputComplete;
+	complete-background-padding: 3;
+	background {
+		type: round-rect;
+		color: #FFF;
+	}
+	label-style: inputLabel;
+	
+}
+
+.inputLabel {
+	font-color: labelColor;
+}
+
+.frmLogin {
+	background-color: screenBackgroundColor;
+}
+	
+.input:hover {
+	complete-background: inputFocusedBg;
+}
+
+screeninfo {
+	margin-top: 2;
+	margin-left: 5;
+	margin-right: 5;
+}
+
+info {
+	layout: right;
+	/* margin-right: 10; */
+	background-color: argb( 170, 255, 255, 255 );
+}
+
 colors {
 	fontColor: #ccc;
 	focusedFontColor: #000;
@@ -36,9 +85,12 @@ colors {
 	focusedBgColor:  #ee4;
 	borderColor: fontColor;
 	focusedBorderColor: focusedFontColor;
-	
-	screenBackgroundColor: #333;	
+	screenBackgroundColor: #F0F5F8;
+	inputColor: #E1EBF2;
+	inputFocusedColor: #F6F4D0;
+	labelColor: #105289;
 }
+
 
 /** 
   * When you use the same background several times,
@@ -46,6 +98,7 @@ colors {
   * In this case only one instance of the background
   * is used, which reduces the memory footprint.
   */
+  
 backgrounds {
 	/* sample:
 	screenBackground {
@@ -55,6 +108,15 @@ backgrounds {
 		top: menu;
 	}
 	*/
+	inputComplete {
+		type: round-rect;
+		color: #E1EBF2;
+	}
+	inputFocusedBg {
+		type: round-rect;
+		color: #F6F4D0;
+	}
+	
 }
 
 /** 
@@ -64,12 +126,11 @@ backgrounds {
   * is used, which reduces the memory footprint.
   */
 borders {
-	/* sample:
-	focusedBorder {
+	/*focusedBorder {
 		type: round-rect;
 		color: focusedBorderColor;
-	}
-	*/
+	}*/
+	
 }
 
 
