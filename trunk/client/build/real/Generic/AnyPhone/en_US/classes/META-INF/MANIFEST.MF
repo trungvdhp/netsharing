@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+MIDlet-Name: NetShare
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Kid-Centre
+MIDlet-Description: Share news by group
+MIDlet-Info-URL: http://hanghaicnt.net
+MIDlet-1: BlankApp,,app.App
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
+Polish-Version: 2.2.1 (2011-05-27)

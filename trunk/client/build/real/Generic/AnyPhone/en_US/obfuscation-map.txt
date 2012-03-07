@@ -164,8 +164,6 @@ de.enough.polish.ui.ChoiceGroup -> at:
     boolean isPointerReleaseShouldTriggerKeyRelease -> g
     de.enough.polish.ui.ChoiceItem[] buildChoiceItems(java.lang.String[],javax.microedition.lcdui.Image[],int,de.enough.polish.ui.Style) -> a
     de.enough.polish.ui.ChoiceItem getItem(int) -> a
-    int append(java.lang.String,javax.microedition.lcdui.Image) -> a
-    int append(java.lang.String,javax.microedition.lcdui.Image,de.enough.polish.ui.Style) -> a
     int append(de.enough.polish.ui.ChoiceItem) -> a
     int append(de.enough.polish.ui.ChoiceItem,de.enough.polish.ui.Style) -> a
     void setSelectedIndex(int,boolean) -> b
@@ -521,7 +519,6 @@ de.enough.polish.ui.Displayable -> k:
 de.enough.polish.ui.FocusListener -> b:
     void onFocusChanged(de.enough.polish.ui.Container,de.enough.polish.ui.Item,int) -> a
 de.enough.polish.ui.Form -> ao:
-    int append(de.enough.polish.ui.Item) -> a
     int append(de.enough.polish.ui.Item,de.enough.polish.ui.Style) -> a
 de.enough.polish.ui.Gauge -> ag:
     int ANIMATION_MODE_BACKANDFORTH -> a
@@ -1226,6 +1223,8 @@ de.enough.polish.ui.backgrounds.BorderedRoundRectBackground -> u:
     int arcHeight -> d
     int borderColor -> e
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
+    void read(java.io.DataInputStream) -> a
+    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.BorderedSimpleBackground -> x:
     int color -> b
     de.enough.polish.ui.Color colorObj -> a
@@ -1233,16 +1232,22 @@ de.enough.polish.ui.backgrounds.BorderedSimpleBackground -> x:
     de.enough.polish.ui.Color borderColorObj -> b
     boolean isInitialized -> a
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
+    void read(java.io.DataInputStream) -> a
+    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.RoundRectBackground -> ax:
     int color -> b
     int arcWidth -> c
     int arcHeight -> d
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
+    void read(java.io.DataInputStream) -> a
+    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.SimpleBackground -> bc:
     int color -> b
     de.enough.polish.ui.Color colorObj -> a
     boolean isInitialized -> a
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
+    void read(java.io.DataInputStream) -> a
+    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.TranslucentSimpleBackground -> bk:
     int argbColor -> b
     int[] buffer -> a
@@ -1251,6 +1256,8 @@ de.enough.polish.ui.backgrounds.TranslucentSimpleBackground -> bk:
     boolean needsFullBuffer -> a
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
     void releaseResources() -> a
+    void read(java.io.DataInputStream) -> a
+    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.borders.RoundRectBorder -> cd:
     int color -> e
     int arcWidth -> f
@@ -1410,5 +1417,8 @@ view.MainMenuList -> w:
 view.frmLogin -> aw:
     de.enough.polish.ui.TextField txtUsername -> a
     de.enough.polish.ui.TextField txtPassword -> b
-    de.enough.polish.ui.ChoiceGroup cgRemembn -> a
+    de.enough.polish.ui.Command cmdLogin -> a
+    de.enough.polish.ui.Command cmdExit -> b
+    de.enough.polish.ui.Command cmdRegister -> c
+    de.enough.polish.ui.Command cmdOptions -> d
     void commandAction(de.enough.polish.ui.Command,de.enough.polish.ui.Item) -> a

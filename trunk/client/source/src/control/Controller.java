@@ -129,8 +129,8 @@ implements ApplicationInitializer, CommandListener
 				// ignore
 			}
 		}
-		this.display.setCurrent((Displayable) new frmLogin("Login"));
-		//this.display.setCurrent( this.screenMainMenu );
+		//this.display.setCurrent((Displayable) new frmLogin("Login"));
+		this.display.setCurrent( this.screenMainMenu );
 	}
 
 	private MainMenuList createMainMenu() {
