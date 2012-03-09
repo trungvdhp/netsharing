@@ -105,6 +105,7 @@ public final class StyleSheet {
 	public static Style browserStyle;
 	public static Style rssdescriptionalertStyle;
 	public static Style screeninfoStyle;
+	public static Style userformStyle;
 	public static Style browsertextStyle;
 	public static Style menuStyle;
 	public static Style browserchoicegroupexclusiveStyle;
@@ -112,24 +113,24 @@ public final class StyleSheet {
 	public static Style browserradioStyle;
 	public static Style browsertextcodeStyle;
 	public static Style rightcommandStyle;
-	public static Style frmloginStyle;
+	public static Style checkboxStyle;
 	public static Style browserchoicegroupmultipleStyle;
 	public static Style browsercheckboxStyle;
 	public static Style labelStyle;
-	public static Style inputlabelStyle;
+	public static Style textfieldlabelStyle;
 	public static Style menuitemfocusedStyle;
 	public static Style itemmainmenuentryfocusedStyle;
 	public static Style browserlinkfocStyle;
-	public static Style inputfocusedStyle;
 	public static Style browserinputfocStyle;
+	public static Style textfieldfocusedStyle;
 	public static Style browserchoicegrouppopupfocusedStyle;
 	public static Style browserchoicegrouppopupStyle;
 	public static Style browserinputStyle;
 	public static Style menuitemStyle;
 	public static Style browserlinkStyle;
-	public static Style inputStyle;
+	public static Style textfieldStyle;
 	public static Style itemmainmenuentryStyle;
-	protected static final Hashtable stylesByName = new Hashtable(38);
+	protected static final Hashtable stylesByName = new Hashtable(39);
 static { // init styles:
 	initStyles0();
 }
@@ -245,6 +246,13 @@ protected static final void initStyles0(){
 		new short[]{ -2, -3, -4},
 		new Object[]{ new Dimension(5, false), new Dimension(5, false), new Dimension(2, false)}
 	);
+	userformStyle = new Style (
+		"userform", 
+		Item.LAYOUT_DEFAULT,	// default layout
+		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0xF0F5F8, false)),
+		null, 	// no border
+		null, null	// no additional attributes have been defined
+	);
 	browsertextStyle = new Style (
 		"browsertext", 
 		Item.LAYOUT_DEFAULT,	// default layout
@@ -300,10 +308,10 @@ protected static final void initStyles0(){
 		new short[]{ 32713, -10, -9, -14, -17},
 		new Object[]{ new Dimension(0, false), new Dimension(0, false), new Dimension(3, false), new Integer(Font.STYLE_BOLD), new Color( 0xcccccc, false)}
 	);
-	frmloginStyle = new Style (
-		"frmlogin", 
+	checkboxStyle = new Style (
+		"checkbox", 
 		Item.LAYOUT_DEFAULT,	// default layout
-		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0xF0F5F8, false)),
+		null,	// no background
 		null, 	// no border
 		null, null	// no additional attributes have been defined
 	);
@@ -328,11 +336,11 @@ protected static final void initStyles0(){
 		Item.LAYOUT_NEWLINE_AFTER,
 		null,	// no background
 		null, 	// no border
-		new short[]{ -17, -15},
-		new Object[]{ new Color( 0xE1EBF2, false), new Integer( Font.SIZE_SMALL )}
+		new short[]{ -15},
+		new Object[]{ new Integer( Font.SIZE_SMALL )}
 	);
-	inputlabelStyle = new Style (
-		"inputlabel", 
+	textfieldlabelStyle = new Style (
+		"textfieldlabel", 
 		Item.LAYOUT_DEFAULT,	// default layout
 		null,	// no background
 		null, 	// no border
@@ -363,14 +371,6 @@ protected static final void initStyles0(){
 		new short[]{ 209, -10, -8, -14, -17},
 		new Object[]{ Style.FALSE, new Dimension(1, false), new Dimension(1, false), new Integer(Font.STYLE_BOLD), new Color( 0xFF0000, false)}
 	);
-	inputfocusedStyle = new Style (
-		"inputfocused", 
-		Item.LAYOUT_LEFT|Item.LAYOUT_EXPAND,
-		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0xFFFFFF,8, 8),
-		null, 	// no border
-		new short[]{ 79, 305, 32713, -12, -7, -6, 226, 150},
-		new Object[]{ StyleSheet.inputFocusedBgBackground, new Dimension(3, false), new Dimension(3, false), new Dimension(1, false), new Dimension(5, false), new Dimension(3, false), new Dimension( 100, true ), Style.FALSE}
-	);
 	browserinputfocStyle = new Style (
 		"browserinputfoc", 
 		Item.LAYOUT_EXPAND|Item.LAYOUT_LEFT,
@@ -378,6 +378,14 @@ protected static final void initStyles0(){
 		new de.enough.polish.ui.borders.RoundRectBorder( 0x142850,2, 10, 10),
 		new short[]{ -6, 209},
 		new Object[]{ new Dimension(1, false), Style.FALSE}
+	);
+	textfieldfocusedStyle = new Style (
+		"textfieldfocused", 
+		Item.LAYOUT_LEFT|Item.LAYOUT_EXPAND,
+		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0xFFFFFF,8, 8),
+		null, 	// no border
+		new short[]{ 79, 305, 32713, -12, -7, -6, 226, 150},
+		new Object[]{ StyleSheet.inputFocusedBgBackground, new Dimension(3, false), new Dimension(3, false), new Dimension(1, false), new Dimension(5, false), new Dimension(3, false), new Dimension( 100, true ), Style.FALSE}
 	);
 	browserchoicegrouppopupfocusedStyle = new Style (
 		"browserchoicegrouppopupfocused", 
@@ -419,13 +427,13 @@ protected static final void initStyles0(){
 		new short[]{ 209, -10, -8, -14, -17, 1},
 		new Object[]{ Style.FALSE, new Dimension(1, false), new Dimension(1, false), new Integer(Font.STYLE_BOLD), new Color( 0x0000FF, false), StyleSheet.browserlinkfocStyle}
 	);
-	inputStyle = new Style (
-		"input", 
+	textfieldStyle = new Style (
+		"textfield", 
 		Item.LAYOUT_LEFT|Item.LAYOUT_EXPAND,
 		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0xFFFFFF,8, 8),
 		null, 	// no border
 		new short[]{ 32713, -12, -7, -6, 226, 150, 79, 305, 3, 1},
-		new Object[]{ new Dimension(3, false), new Dimension(1, false), new Dimension(5, false), new Dimension(3, false), new Dimension( 100, true ), Style.FALSE, StyleSheet.inputCompleteBackground, new Dimension(3, false), StyleSheet.inputlabelStyle, StyleSheet.inputfocusedStyle}
+		new Object[]{ new Dimension(3, false), new Dimension(1, false), new Dimension(5, false), new Dimension(3, false), new Dimension( 100, true ), Style.FALSE, StyleSheet.inputCompleteBackground, new Dimension(3, false), StyleSheet.textfieldlabelStyle, StyleSheet.textfieldfocusedStyle}
 	);
 	itemmainmenuentryStyle = new Style (
 		"itemmainmenuentry", 
@@ -450,6 +458,7 @@ protected static final void initStyles0(){
 	StyleSheet.stylesByName.put( "browser", StyleSheet.browserStyle );
 	StyleSheet.stylesByName.put( "rssdescriptionalert", StyleSheet.rssdescriptionalertStyle );
 	StyleSheet.stylesByName.put( "screeninfo", StyleSheet.screeninfoStyle );
+	StyleSheet.stylesByName.put( "userform", StyleSheet.userformStyle );
 	StyleSheet.stylesByName.put( "browsertext", StyleSheet.browsertextStyle );
 	StyleSheet.stylesByName.put( "menu", StyleSheet.menuStyle );
 	StyleSheet.stylesByName.put( "browserchoicegroupexclusive", StyleSheet.browserchoicegroupexclusiveStyle );
@@ -458,22 +467,22 @@ protected static final void initStyles0(){
 	StyleSheet.stylesByName.put( "default", StyleSheet.defaultStyle );
 	StyleSheet.stylesByName.put( "browsertextcode", StyleSheet.browsertextcodeStyle );
 	StyleSheet.stylesByName.put( "rightcommand", StyleSheet.rightcommandStyle );
-	StyleSheet.stylesByName.put( "frmlogin", StyleSheet.frmloginStyle );
+	StyleSheet.stylesByName.put( "checkbox", StyleSheet.checkboxStyle );
 	StyleSheet.stylesByName.put( "browserchoicegroupmultiple", StyleSheet.browserchoicegroupmultipleStyle );
 	StyleSheet.stylesByName.put( "browsercheckbox", StyleSheet.browsercheckboxStyle );
 	StyleSheet.stylesByName.put( "label", StyleSheet.labelStyle );
-	StyleSheet.stylesByName.put( "inputlabel", StyleSheet.inputlabelStyle );
+	StyleSheet.stylesByName.put( "textfieldlabel", StyleSheet.textfieldlabelStyle );
 	StyleSheet.stylesByName.put( "menuitemfocused", StyleSheet.menuitemfocusedStyle );
 	StyleSheet.stylesByName.put( "itemmainmenuentryfocused", StyleSheet.itemmainmenuentryfocusedStyle );
 	StyleSheet.stylesByName.put( "browserlinkfoc", StyleSheet.browserlinkfocStyle );
-	StyleSheet.stylesByName.put( "inputfocused", StyleSheet.inputfocusedStyle );
 	StyleSheet.stylesByName.put( "browserinputfoc", StyleSheet.browserinputfocStyle );
+	StyleSheet.stylesByName.put( "textfieldfocused", StyleSheet.textfieldfocusedStyle );
 	StyleSheet.stylesByName.put( "browserchoicegrouppopupfocused", StyleSheet.browserchoicegrouppopupfocusedStyle );
 	StyleSheet.stylesByName.put( "browserchoicegrouppopup", StyleSheet.browserchoicegrouppopupStyle );
 	StyleSheet.stylesByName.put( "browserinput", StyleSheet.browserinputStyle );
 	StyleSheet.stylesByName.put( "menuitem", StyleSheet.menuitemStyle );
 	StyleSheet.stylesByName.put( "browserlink", StyleSheet.browserlinkStyle );
-	StyleSheet.stylesByName.put( "input", StyleSheet.inputStyle );
+	StyleSheet.stylesByName.put( "textfield", StyleSheet.textfieldStyle );
 	StyleSheet.stylesByName.put( "itemmainmenuentry", StyleSheet.itemmainmenuentryStyle );
 }
 	public static Style focusedStyle = new Style("focused", 0, new de.enough.polish.ui.backgrounds.SimpleBackground(0), null, new short[]{-17}, new Object[]{new Color(0xffffff, false)} );	// the focused-style is not defined.
