@@ -26,21 +26,20 @@
 package control;
 
 import java.io.IOException;
-
 import javax.microedition.lcdui.Image;
 
 import view.MainMenuList;
-import view.frmLogin;
-
+import view.UserForm;
 import model.Configuration;
-
 import app.App;
 
 
 import de.enough.polish.io.RmsStorage;
+import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.CommandListener;
 import de.enough.polish.ui.Display;
+import de.enough.polish.ui.TextField;
 import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.SimpleScreenHistory;
 import de.enough.polish.ui.splash2.ApplicationInitializer;
@@ -61,6 +60,10 @@ implements ApplicationInitializer, CommandListener
 	private Display display;
 	private Configuration configuration;
 	private RmsStorage storage;
+	
+	private TextField txtUsername = new TextField("Tên đăng nhập: ","",TextField.ANY,1);
+	private TextField txtPassword = new TextField("Mật khẩu: ","",TextField.PASSWORD,1);
+	private ChoiceGroup cgRemember = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 	
 	private Command cmdExit = new Command("Exit", Command.EXIT, 10);
 	private Command cmdBack = new Command("Back", Command.BACK, 2);
@@ -116,7 +119,7 @@ implements ApplicationInitializer, CommandListener
 	 * Initializes this application in a background thread that is called from within the splash screen.
 	 */
 	public void initApp() {
-		long initStartTime = System.currentTimeMillis();
+		/*long initStartTime = System.currentTimeMillis();
 		this.storage = new RmsStorage();
 		this.configuration = configurationLoad();
 		// create main menu:
@@ -129,8 +132,11 @@ implements ApplicationInitializer, CommandListener
 				// ignore
 			}
 		}
-		this.display.setCurrent((Displayable) new frmLogin("Login"));
-		//this.display.setCurrent( this.screenMainMenu );
+		this.display.setCurrent( this.screenMainMenu );*/
+		UserForm frmLogin=new UserForm("Đăng nhập");
+		frmLogin.addTextField(txtUsername);
+		frmLogin.addTextField(txtPassword);
+		this.display.setCurrent(frmLogin);
 	}
 
 	private MainMenuList createMainMenu() {

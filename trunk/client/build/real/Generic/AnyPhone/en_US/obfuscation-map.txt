@@ -9,6 +9,9 @@ control.Controller -> an:
     de.enough.polish.ui.Display display -> a
     model.Configuration configuration -> a
     de.enough.polish.io.RmsStorage storage -> a
+    de.enough.polish.ui.TextField txtUsername -> a
+    de.enough.polish.ui.TextField txtPassword -> b
+    de.enough.polish.ui.ChoiceGroup cgRemember -> a
     de.enough.polish.ui.Command cmdExit -> a
     de.enough.polish.ui.Command cmdBack -> b
     view.MainMenuList screenMainMenu -> a
@@ -17,14 +20,11 @@ control.Controller -> an:
     void appPause() -> b
     void appContinue() -> c
     void initApp() -> d
-    view.MainMenuList createMainMenu() -> a
-    model.Configuration configurationLoad() -> a
     boolean configurationSave() -> a
     void commandAction(de.enough.polish.ui.Command,de.enough.polish.ui.Displayable) -> a
     boolean handleCommandMainMenu() -> b
-de.enough.polish.io.Externalizable -> bb:
+de.enough.polish.io.Externalizable -> ba:
     void write(java.io.DataOutputStream) -> a
-    void read(java.io.DataInputStream) -> a
 de.enough.polish.io.RmsStorage -> n:
     javax.microedition.rms.RecordStore masterRecordStore -> a
     de.enough.polish.util.HashMap masterRecordSetIdsByName -> a
@@ -38,11 +38,9 @@ de.enough.polish.io.RmsStorage -> n:
     void save(java.lang.Object,java.lang.String) -> a
     void saveData(java.lang.String,byte[]) -> a
     void saveData(java.lang.String,java.lang.String,byte[]) -> a
-    java.lang.Object read(java.lang.String) -> a
     void ensureOpen() -> a
 de.enough.polish.io.Serializer -> i:
     void serialize(java.lang.Object,java.io.DataOutputStream) -> a
-    java.lang.Object deserialize(java.io.DataInputStream) -> a
 de.enough.polish.midp.ui.NativeCommandListener -> ar:
     de.enough.polish.ui.CommandListener listener -> a
     de.enough.polish.ui.Displayable displayable -> a
@@ -71,7 +69,6 @@ de.enough.polish.ui.Alert -> af:
     de.enough.polish.ui.Style contentStyle -> b
     void addCommand(de.enough.polish.ui.Command) -> a
     void removeCommand(de.enough.polish.ui.Command) -> b
-    void setCommandListener(de.enough.polish.ui.CommandListener) -> a
     void createItem(java.lang.String,javax.microedition.lcdui.Image,de.enough.polish.ui.Style) -> a
     void setString(java.lang.String) -> a
     void setString(java.lang.String,de.enough.polish.ui.Style) -> a
@@ -97,7 +94,6 @@ de.enough.polish.ui.Background -> r:
     void releaseResources() -> a
     void hideNotify() -> b
     void showNotify() -> c
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.Border -> br:
     int borderWidthTop -> a
@@ -109,9 +105,8 @@ de.enough.polish.ui.Border -> br:
     boolean animate() -> a
     void hideNotify() -> a
     void showNotify() -> b
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
-de.enough.polish.ui.Canvas -> az:
+de.enough.polish.ui.Canvas -> ay:
     de.enough.polish.ui.CommandListener _commandListener -> a
     boolean _isShown -> f
     de.enough.polish.util.IdentityArrayList _commands -> a
@@ -146,7 +141,6 @@ de.enough.polish.ui.Canvas -> az:
     boolean isShown() -> d
     int getWidth() -> g
     int getHeight() -> h
-    void setCommandListener(de.enough.polish.ui.CommandListener) -> a
     de.enough.polish.ui.CommandListener getCommandListener() -> a
     void addCommand(de.enough.polish.ui.Command) -> a
     void removeCommand(de.enough.polish.ui.Command) -> b
@@ -225,7 +219,6 @@ de.enough.polish.ui.Color -> cn:
     int getColor() -> a
     java.lang.String toString() -> toString
     boolean equals(java.lang.Object) -> equals
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.Command -> ak:
     java.lang.String longLabel -> a
@@ -421,7 +414,6 @@ de.enough.polish.ui.ContainerView -> co:
     boolean isVirtualContainer() -> c
     void startScroll(int,int,int) -> a
     de.enough.polish.ui.Item getChildAt(int,int) -> b
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.CycleListener -> s:
     boolean onCycle(de.enough.polish.ui.Item,int) -> a
@@ -433,7 +425,6 @@ de.enough.polish.ui.Dimension -> dm:
     java.lang.String valueAsString -> a
     int getValue(int) -> a
     boolean isPercent() -> a
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
     void resolve() -> a
     boolean parseNumberValue(java.lang.String) -> a
@@ -497,7 +488,7 @@ de.enough.polish.ui.Display -> bf:
     void setInputMethod(int) -> a
     int access$002(de.enough.polish.ui.Display,int) -> a
     boolean access$102(de.enough.polish.ui.Display,boolean) -> a
-de.enough.polish.ui.Display$1 -> ay:
+de.enough.polish.ui.Display$1 -> aw:
     de.enough.polish.ui.Display this$0 -> a
     void run() -> run
 de.enough.polish.ui.Display$2 -> av:
@@ -575,7 +566,7 @@ de.enough.polish.ui.IconItem -> ac:
     void setImageAlign(int) -> b
     void defocus(de.enough.polish.ui.Style) -> b
     de.enough.polish.ui.Style focus(de.enough.polish.ui.Style,int) -> a
-de.enough.polish.ui.Item -> ba:
+de.enough.polish.ui.Item -> az:
     de.enough.polish.util.ArrayList COMMANDS -> a
     int layout -> k
     de.enough.polish.ui.ItemCommandListener itemCommandListener -> a
@@ -762,15 +753,12 @@ de.enough.polish.ui.ItemView -> dy:
     void paintBorder(de.enough.polish.ui.Border,int,int,int,int,javax.microedition.lcdui.Graphics) -> a
     void setContentWidth(int) -> a
     void onScreenSizeChanged(int,int) -> a
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.List -> aq:
     de.enough.polish.ui.Command SELECT_COMMAND -> a
     de.enough.polish.ui.Command selectCommand -> b
     int listType -> r
     de.enough.polish.ui.ChoiceGroup choiceGroup -> a
-    int append(java.lang.String,javax.microedition.lcdui.Image,de.enough.polish.ui.Style) -> a
-    int append(de.enough.polish.ui.ChoiceItem) -> a
     void removeCommand(de.enough.polish.ui.Command) -> b
 de.enough.polish.ui.MenuBar -> e:
     de.enough.polish.util.IdentityArrayList commandsList -> a
@@ -939,7 +927,6 @@ de.enough.polish.ui.Screen -> am:
     boolean handleKeyRepeated(int,int) -> b
     boolean handleKeyReleased(int,int) -> c
     void notifyScreenStateChanged() -> e
-    void setCommandListener(de.enough.polish.ui.CommandListener) -> a
     de.enough.polish.ui.CommandListener getCommandListener() -> a
     void addCommand(de.enough.polish.ui.Command) -> a
     void addCommand(de.enough.polish.ui.Command,de.enough.polish.ui.Style) -> a
@@ -982,7 +969,7 @@ de.enough.polish.ui.Screen$ForwardCommandListener -> aa:
 de.enough.polish.ui.ScreenInitializerListener -> p:
     void notifyScreenInitialized(de.enough.polish.ui.Screen) -> a
     void adjustContentArea(de.enough.polish.ui.Screen) -> b
-de.enough.polish.ui.ScreenStateListener -> be:
+de.enough.polish.ui.ScreenStateListener -> bd:
     void screenStateChanged(de.enough.polish.ui.Screen) -> a
 de.enough.polish.ui.SimpleScreenHistory -> ah:
     de.enough.polish.util.ArrayList history -> a
@@ -1054,7 +1041,6 @@ de.enough.polish.ui.Style -> en:
     int getPaddingBottom(int) -> h
     int getPaddingHorizontal(int) -> i
     int getPaddingVertical(int) -> j
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
     java.lang.String toString() -> toString
 de.enough.polish.ui.StyleSheet -> z:
@@ -1077,32 +1063,33 @@ de.enough.polish.ui.StyleSheet -> z:
     de.enough.polish.ui.Style browserStyle -> l
     de.enough.polish.ui.Style rssdescriptionalertStyle -> m
     de.enough.polish.ui.Style screeninfoStyle -> n
-    de.enough.polish.ui.Style browsertextStyle -> o
-    de.enough.polish.ui.Style menuStyle -> p
-    de.enough.polish.ui.Style browserchoicegroupexclusiveStyle -> q
-    de.enough.polish.ui.Style screenmainmenuStyle -> r
-    de.enough.polish.ui.Style browserradioStyle -> s
-    de.enough.polish.ui.Style browsertextcodeStyle -> t
-    de.enough.polish.ui.Style rightcommandStyle -> u
-    de.enough.polish.ui.Style frmloginStyle -> v
-    de.enough.polish.ui.Style browserchoicegroupmultipleStyle -> w
-    de.enough.polish.ui.Style browsercheckboxStyle -> x
-    de.enough.polish.ui.Style labelStyle -> y
-    de.enough.polish.ui.Style inputlabelStyle -> z
-    de.enough.polish.ui.Style menuitemfocusedStyle -> A
-    de.enough.polish.ui.Style itemmainmenuentryfocusedStyle -> B
-    de.enough.polish.ui.Style browserlinkfocStyle -> C
-    de.enough.polish.ui.Style inputfocusedStyle -> D
+    de.enough.polish.ui.Style userformStyle -> o
+    de.enough.polish.ui.Style browsertextStyle -> p
+    de.enough.polish.ui.Style menuStyle -> q
+    de.enough.polish.ui.Style browserchoicegroupexclusiveStyle -> r
+    de.enough.polish.ui.Style screenmainmenuStyle -> s
+    de.enough.polish.ui.Style browserradioStyle -> t
+    de.enough.polish.ui.Style browsertextcodeStyle -> u
+    de.enough.polish.ui.Style rightcommandStyle -> v
+    de.enough.polish.ui.Style checkboxStyle -> w
+    de.enough.polish.ui.Style browserchoicegroupmultipleStyle -> x
+    de.enough.polish.ui.Style browsercheckboxStyle -> y
+    de.enough.polish.ui.Style labelStyle -> z
+    de.enough.polish.ui.Style textfieldlabelStyle -> A
+    de.enough.polish.ui.Style menuitemfocusedStyle -> B
+    de.enough.polish.ui.Style itemmainmenuentryfocusedStyle -> C
+    de.enough.polish.ui.Style browserlinkfocStyle -> D
     de.enough.polish.ui.Style browserinputfocStyle -> E
-    de.enough.polish.ui.Style browserchoicegrouppopupfocusedStyle -> F
-    de.enough.polish.ui.Style browserchoicegrouppopupStyle -> G
-    de.enough.polish.ui.Style browserinputStyle -> H
-    de.enough.polish.ui.Style menuitemStyle -> I
-    de.enough.polish.ui.Style browserlinkStyle -> J
-    de.enough.polish.ui.Style inputStyle -> K
-    de.enough.polish.ui.Style itemmainmenuentryStyle -> L
+    de.enough.polish.ui.Style textfieldfocusedStyle -> F
+    de.enough.polish.ui.Style browserchoicegrouppopupfocusedStyle -> G
+    de.enough.polish.ui.Style browserchoicegrouppopupStyle -> H
+    de.enough.polish.ui.Style browserinputStyle -> I
+    de.enough.polish.ui.Style menuitemStyle -> J
+    de.enough.polish.ui.Style browserlinkStyle -> K
+    de.enough.polish.ui.Style textfieldStyle -> L
+    de.enough.polish.ui.Style itemmainmenuentryStyle -> M
     java.util.Hashtable stylesByName -> b
-    de.enough.polish.ui.Style focusedStyle -> M
+    de.enough.polish.ui.Style focusedStyle -> N
     de.enough.polish.ui.Screen currentScreen -> a
     de.enough.polish.ui.Display display -> a
     javax.microedition.midlet.MIDlet midlet -> a
@@ -1223,8 +1210,6 @@ de.enough.polish.ui.backgrounds.BorderedRoundRectBackground -> u:
     int arcHeight -> d
     int borderColor -> e
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
-    void read(java.io.DataInputStream) -> a
-    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.BorderedSimpleBackground -> x:
     int color -> b
     de.enough.polish.ui.Color colorObj -> a
@@ -1232,22 +1217,16 @@ de.enough.polish.ui.backgrounds.BorderedSimpleBackground -> x:
     de.enough.polish.ui.Color borderColorObj -> b
     boolean isInitialized -> a
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
-    void read(java.io.DataInputStream) -> a
-    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.RoundRectBackground -> ax:
     int color -> b
     int arcWidth -> c
     int arcHeight -> d
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
-    void read(java.io.DataInputStream) -> a
-    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.SimpleBackground -> bc:
     int color -> b
     de.enough.polish.ui.Color colorObj -> a
     boolean isInitialized -> a
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
-    void read(java.io.DataInputStream) -> a
-    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.backgrounds.TranslucentSimpleBackground -> bk:
     int argbColor -> b
     int[] buffer -> a
@@ -1256,14 +1235,11 @@ de.enough.polish.ui.backgrounds.TranslucentSimpleBackground -> bk:
     boolean needsFullBuffer -> a
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
     void releaseResources() -> a
-    void read(java.io.DataInputStream) -> a
-    void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.borders.RoundRectBorder -> cd:
     int color -> e
     int arcWidth -> f
     int arcHeight -> g
     void paint(int,int,int,int,javax.microedition.lcdui.Graphics) -> a
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.ui.splash2.ApplicationInitializer -> as:
     void initApp() -> d
@@ -1298,7 +1274,6 @@ de.enough.polish.util.ArrayList -> fj:
     java.lang.Object[] getInternalArray() -> a
     void addAll(de.enough.polish.util.ArrayList) -> a
     void addAll(java.lang.Object[],int,int) -> a
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.util.DeviceControl -> al:
     java.lang.Object lightsLock -> a
@@ -1325,7 +1300,7 @@ de.enough.polish.util.DrawUtil -> v:
     int getComplementaryColor(int) -> a
     void drawRgb(int[],int,int,int,int,boolean,javax.microedition.lcdui.Graphics) -> a
     void drawRgb(int[],int,int,int,int,boolean,int,int,int,int,javax.microedition.lcdui.Graphics) -> a
-de.enough.polish.util.HashMap -> bd:
+de.enough.polish.util.HashMap -> bb:
     int loadFactor -> b
     de.enough.polish.util.HashMap$Element[] buckets -> a
     boolean isPowerOfTwo -> a
@@ -1363,7 +1338,6 @@ de.enough.polish.util.IdentityArrayList -> fm:
     java.lang.Object[] toArray(java.lang.Object[]) -> a
     void increaseCapacity() -> b
     java.lang.Object[] getInternalArray() -> a
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.util.IntList -> fn:
     int[] storedObjects -> a
@@ -1378,7 +1352,6 @@ de.enough.polish.util.IntList -> fn:
     java.lang.String toString() -> toString
     void increaseCapacity() -> b
     int[] getInternalArray() -> a
-    void read(java.io.DataInputStream) -> a
     void write(java.io.DataOutputStream) -> a
 de.enough.polish.util.TextUtil -> m:
     java.lang.String[] split(java.lang.String,char) -> a
@@ -1405,20 +1378,11 @@ de.enough.polish.util.WrappedText -> fv:
     int getMaxLineWidth() -> b
     void removeLine(int) -> a
     void write(java.io.DataOutputStream) -> a
-    void read(java.io.DataInputStream) -> a
 model.Configuration -> fy:
     boolean isDirty -> a
     java.lang.String userName -> a
     boolean isDirty() -> a
     void write(java.io.DataOutputStream) -> a
-    void read(java.io.DataInputStream) -> a
 view.MainMenuList -> w:
-    void addEntry(java.lang.String) -> a
-view.frmLogin -> aw:
-    de.enough.polish.ui.TextField txtUsername -> a
-    de.enough.polish.ui.TextField txtPassword -> b
-    de.enough.polish.ui.Command cmdLogin -> a
-    de.enough.polish.ui.Command cmdExit -> b
-    de.enough.polish.ui.Command cmdRegister -> c
-    de.enough.polish.ui.Command cmdOptions -> d
-    void commandAction(de.enough.polish.ui.Command,de.enough.polish.ui.Item) -> a
+view.UserForm -> be:
+    void addTextField(de.enough.polish.ui.TextField) -> a
