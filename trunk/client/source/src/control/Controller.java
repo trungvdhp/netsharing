@@ -31,14 +31,18 @@ import javax.microedition.lcdui.Image;
 import view.MainMenuList;
 import view.UserForm;
 import model.Configuration;
+import model.User;
 import app.App;
 
 
 import de.enough.polish.io.RmsStorage;
+import de.enough.polish.ui.Alert;
+import de.enough.polish.ui.AlertType;
 import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.CommandListener;
 import de.enough.polish.ui.Display;
+import de.enough.polish.ui.Form;
 import de.enough.polish.ui.TextField;
 import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.SimpleScreenHistory;
@@ -61,16 +65,18 @@ implements ApplicationInitializer, CommandListener
 	private Configuration configuration;
 	private RmsStorage storage;
 	
-	private TextField txtUsername = new TextField("Tên đăng nhập: ","",TextField.ANY,1);
-	private TextField txtPassword = new TextField("Mật khẩu: ","",TextField.PASSWORD,1);
+	private TextField txtUsername = new TextField("Tên đăng nhập: ","", 50,TextField.ANY);
+	private TextField txtPassword = new TextField("Mật khẩu: ","",50, TextField.PASSWORD);
 	private ChoiceGroup cgRemember = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 	
+	private Command cmdLogin = new Command("Đăng nhập",Command.SCREEN,1);
+	private Command cmdRegister = new Command("Đăng ký", Command.SCREEN,1);
 	private Command cmdExit = new Command(Locale.get("cmd.exit"), Command.EXIT, 10);
 	private Command cmdBack = new Command(Locale.get("cmd.back"), Command.BACK, 2);
 	
 	private MainMenuList screenMainMenu;
 	private SimpleScreenHistory screenHistory;
-	
+	private Form frmCurrent;
 	
 
 	/**
@@ -119,11 +125,11 @@ implements ApplicationInitializer, CommandListener
 	 * Initializes this application in a background thread that is called from within the splash screen.
 	 */
 	public void initApp() {
-		/*long initStartTime = System.currentTimeMillis();
+		long initStartTime = System.currentTimeMillis();
 		this.storage = new RmsStorage();
 		this.configuration = configurationLoad();
 		// create main menu:
-		this.screenMainMenu = createMainMenu();
+		/*this.screenMainMenu = createMainMenu();
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - initStartTime < 2000) { // show the splash at least for 2000 ms / 2 seconds:
 			try {
@@ -131,15 +137,24 @@ implements ApplicationInitializer, CommandListener
 			} catch (InterruptedException e) {
 				// ignore
 			}
-		}
-		this.display.setCurrent( this.screenMainMenu );*/
+		}*/
+		this.display.setCurrent( this.screenMainMenu );
 		UserForm frmLogin=new UserForm("Đăng nhập");
 		frmLogin.addTextField(txtUsername);
 		frmLogin.addTextField(txtPassword);
+		//#style checkBoxItem
+		cgRemember.append("Ghi nhớ mật khẩu", null);
+		frmLogin.addCheckBox(cgRemember);
+		
+		frmLogin.addMenu(cmdLogin);
+		frmLogin.addMenu(cmdRegister);
+		frmLogin.addMenu(cmdExit);
+		frmLogin.setCommandListener(this);
+		this.frmCurrent = frmLogin;
 		this.display.setCurrent(frmLogin);
 	}
 
-	private MainMenuList createMainMenu() {
+	/*private MainMenuList createMainMenu() {
 		MainMenuList list = new MainMenuList();
 		list.setCommandListener(this);
 		list.addCommand(this.cmdExit);
@@ -147,7 +162,7 @@ implements ApplicationInitializer, CommandListener
 		list.addEntry("entry2");
 		list.addEntry("entry3");
 		return list;
-	}
+	}*/
 
 	/**
 	 * Loads the configuration of this app.
@@ -183,7 +198,8 @@ implements ApplicationInitializer, CommandListener
 	 * (non-Javadoc)
 	 * @see de.enough.polish.ui.CommandListener#commandAction(de.enough.polish.ui.Command, de.enough.polish.ui.Displayable)
 	 */
-	public void commandAction(Command cmd, Displayable disp) {
+	public void commandAction(Command cmd, Displayable disp) 
+	{
 		if (cmd == this.cmdExit) {
 			if (this.configuration.isDirty()) {
 				configurationSave();
@@ -199,7 +215,22 @@ implements ApplicationInitializer, CommandListener
 			} else {
 				this.display.setCurrent(this.screenMainMenu);
 			}
+		} else if(cmd == this.cmdLogin) {
+			String username = txtUsername.getString();
+			String password = txtPassword.getString();
+			User user=new User(username,password);
+			if(user.login())
+			{
+				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.code+"'",null,AlertType.INFO);
+				this.display.setCurrent(alert, frmCurrent);
+			}
+			else
+			{
+				Alert alert= new Alert("Thông báo","Đăng nhập thất bại",null,AlertType.INFO);
+				this.display.setCurrent(alert, frmCurrent);
+			}
 		}
+		
 		
 	}
 

@@ -118,7 +118,7 @@
 					<variable name="polish.MenuBar.useExtendedMenuBar" value="true" />
 					<variable name="polish.TextField.useDirectInput" value="true" />
 					<!-- Sample configuration options for J2ME Polish
-					
+					<variable name="polish.css.allowAllAttributes" value="true" />
 					<variable name="polish.TextField.supportSymbolsEntry" value="true" />
 					<variable name="polish.useScrollBar" value="true" />
 					-->
@@ -147,12 +147,12 @@
 					</localization>
 				</resources>
 				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
-				<obfuscator name="ProGuard" unless="test or polish.blackberry">
+				<!--obfuscator name="ProGuard" unless="test or polish.blackberry"-->
 					<!--
 					You can set additional parameters here, e.g.:
 					<parameter name="optimize" value="false" />
 					-->
-				</obfuscator>
+				<!--/obfuscator-->
 				<!-- log settings: only use debug setting when the test-property is true -->
 				<debug if="test or log" verbose="true" level="error">
 					<filter pattern="de.enough.polish.example.*" level="debug" />

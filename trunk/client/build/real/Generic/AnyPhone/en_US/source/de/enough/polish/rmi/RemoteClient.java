@@ -207,9 +207,9 @@ public class RemoteClient  {
 	{
 		out.writeInt( RMI_VERSION );
 		//#if polish.obfuscate
-			out.writeBoolean( true );
+			//# out.writeBoolean( true );
 		//#else
-			//# out.writeBoolean( false );
+			out.writeBoolean( false );
 		//#endif
 		out.writeUTF( name );
 		out.writeLong( primitivesFlag );
