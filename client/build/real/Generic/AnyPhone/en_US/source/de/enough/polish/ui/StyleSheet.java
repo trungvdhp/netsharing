@@ -84,10 +84,6 @@ public final class StyleSheet {
 	
 	// do not change the following line!
 //$$IncludeStyleSheetDefinitionHere$$//
-	public final static Background inputFocusedBgBackground = 
-		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0xF6F4D0,8, 8);
-	public final static Background inputCompleteBackground = 
-		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0xE1EBF2,8, 8);
 	public final static Background defaultBackground = null;
 	public final static Border defaultBorder = null;
 	public static Style defaultStyle;
@@ -110,10 +106,10 @@ public final class StyleSheet {
 	public static Style menuStyle;
 	public static Style browserchoicegroupexclusiveStyle;
 	public static Style screenmainmenuStyle;
+	public static Style checkboxitemStyle;
 	public static Style browserradioStyle;
-	public static Style browsertextcodeStyle;
 	public static Style rightcommandStyle;
-	public static Style checkboxStyle;
+	public static Style browsertextcodeStyle;
 	public static Style browserchoicegroupmultipleStyle;
 	public static Style browsercheckboxStyle;
 	public static Style labelStyle;
@@ -122,6 +118,7 @@ public final class StyleSheet {
 	public static Style itemmainmenuentryfocusedStyle;
 	public static Style browserlinkfocStyle;
 	public static Style browserinputfocStyle;
+	public static Style checkboxfocusedStyle;
 	public static Style textfieldfocusedStyle;
 	public static Style browserchoicegrouppopupfocusedStyle;
 	public static Style browserchoicegrouppopupStyle;
@@ -130,7 +127,8 @@ public final class StyleSheet {
 	public static Style browserlinkStyle;
 	public static Style textfieldStyle;
 	public static Style itemmainmenuentryStyle;
-	protected static final Hashtable stylesByName = new Hashtable(39);
+	public static Style checkboxStyle;
+	protected static final Hashtable stylesByName = new Hashtable(41);
 static { // init styles:
 	initStyles0();
 }
@@ -146,10 +144,10 @@ protected static final void initStyles0(){
 	menu1Style = new Style (
 		"menu1", 
 		Item.LAYOUT_RIGHT,
-		new de.enough.polish.ui.backgrounds.BorderedSimpleBackground( new Color( 0x96ffff00, false), new Color( 0x222222, false), 2),
+		new de.enough.polish.ui.backgrounds.BorderedSimpleBackground( new Color( 0x96ffff00, false), new Color( 0x008aff, false), 1),
 		null, 	// no border
-		new short[]{ -5, -2, -3, 58, -6},
-		new Object[]{ new Dimension(4, false), new Dimension(2, false), new Dimension(4, false), new Dimension( 60, true ), new Dimension(2, false)}
+		new short[]{ -5, -2, -3, -6, 58},
+		new Object[]{ new Dimension(4, false), new Dimension(0, false), new Dimension(4, false), new Dimension(2, false), new Dimension( 50, true )}
 	);
 	browsertextbolditalicStyle = new Style (
 		"browsertextbolditalic", 
@@ -170,7 +168,7 @@ protected static final void initStyles0(){
 	menubarStyle = new Style (
 		"menubar", 
 		Item.LAYOUT_DEFAULT,	// default layout
-		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0x222222, false)),
+		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0x00c8fa, false)),
 		null, 	// no border
 		new short[]{ -6, -9},
 		new Object[]{ new Dimension(2, false), new Dimension(3, false)}
@@ -193,10 +191,10 @@ protected static final void initStyles0(){
 	titleStyle = new Style (
 		"title", 
 		Item.LAYOUT_CENTER|Item.LAYOUT_EXPAND,
-		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0x222222, false)),
+		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0x00c8fa, false)),
 		null,	// border:none was specified
 		new short[]{ -6, -14, -17, -15},
-		new Object[]{ new Dimension(2, false), new Integer(Font.STYLE_BOLD), new Color( 0xcccccc, false), new Integer( Font.SIZE_LARGE )}
+		new Object[]{ new Dimension(2, false), new Integer(Font.STYLE_BOLD), new Color( 0xFFFFFF, false), new Integer( Font.SIZE_LARGE )}
 	);
 	browseroptionStyle = new Style (
 		"browseroption", 
@@ -212,7 +210,7 @@ protected static final void initStyles0(){
 		null,	// no background
 		null, 	// no border
 		new short[]{ 32713, -10, -9, -14, -17},
-		new Object[]{ new Dimension(0, false), new Dimension(0, false), new Dimension(3, false), new Integer(Font.STYLE_BOLD), new Color( 0xcccccc, false)}
+		new Object[]{ new Dimension(0, false), new Dimension(0, false), new Dimension(3, false), new Integer(Font.STYLE_BOLD), new Color( 0xFFFFFF, false)}
 	);
 	browseroptionitemStyle = new Style (
 		"browseroptionitem", 
@@ -264,10 +262,10 @@ protected static final void initStyles0(){
 	menuStyle = new Style (
 		"menu", 
 		Item.LAYOUT_DEFAULT,	// default layout
-		new de.enough.polish.ui.backgrounds.BorderedRoundRectBackground( 0xeeee44,8, 8, 0x222222, 2),
+		new de.enough.polish.ui.backgrounds.BorderedRoundRectBackground( 0xF0F5F8,8, 8, 0x008aff, 1),
 		null, 	// no border
-		new short[]{ -2, -3, 58, -6},
-		new Object[]{ new Dimension(2, false), new Dimension(2, false), new Dimension( 60, true ), new Dimension(2, false)}
+		new short[]{ -2, -3, -6, 58},
+		new Object[]{ new Dimension(0, false), new Dimension(2, false), new Dimension(2, false), new Dimension( 50, true )}
 	);
 	browserchoicegroupexclusiveStyle = new Style (
 		"browserchoicegroupexclusive", 
@@ -284,6 +282,13 @@ protected static final void initStyles0(){
 		null, 	// no border
 		null, null	// no additional attributes have been defined
 	);
+	checkboxitemStyle = new Style (
+		"checkboxitem", 
+		Item.LAYOUT_DEFAULT,	// default layout
+		null,	// no background
+		null, 	// no border
+		null, null	// no additional attributes have been defined
+	);
 	browserradioStyle = new Style (
 		"browserradio", 
 		Item.LAYOUT_DEFAULT,	// default layout
@@ -292,6 +297,14 @@ protected static final void initStyles0(){
 		new short[]{ 209},
 		new Object[]{ Style.FALSE}
 	);
+	rightcommandStyle = new Style (
+		"rightcommand", 
+		Item.LAYOUT_RIGHT,
+		null,	// no background
+		null, 	// no border
+		new short[]{ 32713, -10, -9, -14, -17},
+		new Object[]{ new Dimension(0, false), new Dimension(0, false), new Dimension(3, false), new Integer(Font.STYLE_BOLD), new Color( 0xFFFFFF, false)}
+	);
 	browsertextcodeStyle = new Style (
 		"browsertextcode", 
 		Item.LAYOUT_DEFAULT,	// default layout
@@ -299,21 +312,6 @@ protected static final void initStyles0(){
 		null, 	// no border
 		new short[]{ 209, -16},
 		new Object[]{ Style.FALSE, new Integer( Font.FACE_MONOSPACE )}
-	);
-	rightcommandStyle = new Style (
-		"rightcommand", 
-		Item.LAYOUT_RIGHT,
-		null,	// no background
-		null, 	// no border
-		new short[]{ 32713, -10, -9, -14, -17},
-		new Object[]{ new Dimension(0, false), new Dimension(0, false), new Dimension(3, false), new Integer(Font.STYLE_BOLD), new Color( 0xcccccc, false)}
-	);
-	checkboxStyle = new Style (
-		"checkbox", 
-		Item.LAYOUT_DEFAULT,	// default layout
-		null,	// no background
-		null, 	// no border
-		null, null	// no additional attributes have been defined
 	);
 	browserchoicegroupmultipleStyle = new Style (
 		"browserchoicegroupmultiple", 
@@ -341,19 +339,19 @@ protected static final void initStyles0(){
 	);
 	textfieldlabelStyle = new Style (
 		"textfieldlabel", 
-		Item.LAYOUT_DEFAULT,	// default layout
+		Item.LAYOUT_NEWLINE_AFTER,
 		null,	// no background
 		null, 	// no border
-		new short[]{ -17},
-		new Object[]{ new Color( 0x105289, false)}
+		new short[]{ -2, -17},
+		new Object[]{ new Dimension(5, false), new Color( 0x000000, false)}
 	);
 	menuitemfocusedStyle = new Style (
 		"menuitemfocused", 
 		Item.LAYOUT_LEFT|Item.LAYOUT_EXPAND,
-		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0x222222, false)),
+		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0xb4e4ff, false)),
 		null, 	// no border
-		new short[]{ -14, -17, -15, -4, -7, -6, 149, 148, 147},
-		new Object[]{ new Integer(Font.STYLE_BOLD), new Color( 0x000000, false), new Integer( Font.SIZE_MEDIUM ), new Dimension(2, false), new Dimension(5, false), new Dimension(2, false), new Integer(10), new Integer(8), new Color( 0x0000FF, false)}
+		new short[]{ -14, -17, -4, -7, -6, 149, 148, 147},
+		new Object[]{ new Integer(Font.STYLE_BOLD), new Color( 0x000000, false), new Dimension(2, false), new Dimension(5, false), new Dimension(2, false), new Integer(10), new Integer(8), new Color( 0x0000FF, false)}
 	);
 	itemmainmenuentryfocusedStyle = new Style (
 		"itemmainmenuentryfocused", 
@@ -379,13 +377,21 @@ protected static final void initStyles0(){
 		new short[]{ -6, 209},
 		new Object[]{ new Dimension(1, false), Style.FALSE}
 	);
+	checkboxfocusedStyle = new Style (
+		"checkboxfocused", 
+		Item.LAYOUT_DEFAULT,	// default layout
+		null,	// no background
+		null, 	// no border
+		new short[]{ -7, 32713, 226},
+		new Object[]{ new Dimension(5, false), new Dimension(3, false), new Dimension( 98, true )}
+	);
 	textfieldfocusedStyle = new Style (
 		"textfieldfocused", 
 		Item.LAYOUT_LEFT|Item.LAYOUT_EXPAND,
-		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0xFFFFFF,8, 8),
-		null, 	// no border
-		new short[]{ 79, 305, 32713, -12, -7, -6, 226, 150},
-		new Object[]{ StyleSheet.inputFocusedBgBackground, new Dimension(3, false), new Dimension(3, false), new Dimension(1, false), new Dimension(5, false), new Dimension(3, false), new Dimension( 100, true ), Style.FALSE}
+		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0x00c8fa, false)),
+		new de.enough.polish.ui.borders.SimpleBorder( 0x0087fa, 1),
+		new short[]{ -17, 150, -2, -3},
+		new Object[]{ new Color( 0xFFFFFF, false), Style.FALSE, new Dimension(5, false), new Dimension(5, false)}
 	);
 	browserchoicegrouppopupfocusedStyle = new Style (
 		"browserchoicegrouppopupfocused", 
@@ -416,8 +422,8 @@ protected static final void initStyles0(){
 		Item.LAYOUT_LEFT,
 		null,	// no background
 		null, 	// no border
-		new short[]{ -14, -17, -15, -4, -7, -6, 149, 148, 147, 1},
-		new Object[]{ new Integer(Font.STYLE_BOLD), new Color( 0xcccccc, false), new Integer( Font.SIZE_MEDIUM ), new Dimension(2, false), new Dimension(5, false), new Dimension(2, false), new Integer(10), new Integer(8), new Color( 0x0000FF, false), StyleSheet.menuitemfocusedStyle}
+		new short[]{ -14, -17, -4, -7, -6, 149, 148, 147, 1},
+		new Object[]{ new Integer(Font.STYLE_BOLD), new Color( 0x000000, false), new Dimension(2, false), new Dimension(5, false), new Dimension(2, false), new Integer(10), new Integer(8), new Color( 0x0000FF, false), StyleSheet.menuitemfocusedStyle}
 	);
 	browserlinkStyle = new Style (
 		"browserlink", 
@@ -430,10 +436,10 @@ protected static final void initStyles0(){
 	textfieldStyle = new Style (
 		"textfield", 
 		Item.LAYOUT_LEFT|Item.LAYOUT_EXPAND,
-		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0xFFFFFF,8, 8),
-		null, 	// no border
-		new short[]{ 32713, -12, -7, -6, 226, 150, 79, 305, 3, 1},
-		new Object[]{ new Dimension(3, false), new Dimension(1, false), new Dimension(5, false), new Dimension(3, false), new Dimension( 100, true ), Style.FALSE, StyleSheet.inputCompleteBackground, new Dimension(3, false), StyleSheet.textfieldlabelStyle, StyleSheet.textfieldfocusedStyle}
+		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0xFFFFFF, false)),
+		new de.enough.polish.ui.borders.SimpleBorder( 0x8699a9, 1),
+		new short[]{ 150, -2, -3, -17, 3, 1},
+		new Object[]{ Style.FALSE, new Dimension(5, false), new Dimension(5, false), new Color( 0x000000, false), StyleSheet.textfieldlabelStyle, StyleSheet.textfieldfocusedStyle}
 	);
 	itemmainmenuentryStyle = new Style (
 		"itemmainmenuentry", 
@@ -442,6 +448,14 @@ protected static final void initStyles0(){
 		null, 	// no border
 		new short[]{ -2, -3, -17, 1},
 		new Object[]{ new Dimension( 5, true ), new Dimension( 5, true ), new Color( 0xcccccc, false), StyleSheet.itemmainmenuentryfocusedStyle}
+	);
+	checkboxStyle = new Style (
+		"checkbox", 
+		Item.LAYOUT_DEFAULT,	// default layout
+		null,	// no background
+		null, 	// no border
+		new short[]{ -7, 32713, 226, 1},
+		new Object[]{ new Dimension(5, false), new Dimension(3, false), new Dimension( 98, true ), StyleSheet.checkboxfocusedStyle}
 	);
 
 	//register referenced and dynamic styles:
@@ -463,11 +477,11 @@ protected static final void initStyles0(){
 	StyleSheet.stylesByName.put( "menu", StyleSheet.menuStyle );
 	StyleSheet.stylesByName.put( "browserchoicegroupexclusive", StyleSheet.browserchoicegroupexclusiveStyle );
 	StyleSheet.stylesByName.put( "screenmainmenu", StyleSheet.screenmainmenuStyle );
+	StyleSheet.stylesByName.put( "checkboxitem", StyleSheet.checkboxitemStyle );
 	StyleSheet.stylesByName.put( "browserradio", StyleSheet.browserradioStyle );
 	StyleSheet.stylesByName.put( "default", StyleSheet.defaultStyle );
-	StyleSheet.stylesByName.put( "browsertextcode", StyleSheet.browsertextcodeStyle );
 	StyleSheet.stylesByName.put( "rightcommand", StyleSheet.rightcommandStyle );
-	StyleSheet.stylesByName.put( "checkbox", StyleSheet.checkboxStyle );
+	StyleSheet.stylesByName.put( "browsertextcode", StyleSheet.browsertextcodeStyle );
 	StyleSheet.stylesByName.put( "browserchoicegroupmultiple", StyleSheet.browserchoicegroupmultipleStyle );
 	StyleSheet.stylesByName.put( "browsercheckbox", StyleSheet.browsercheckboxStyle );
 	StyleSheet.stylesByName.put( "label", StyleSheet.labelStyle );
@@ -476,6 +490,7 @@ protected static final void initStyles0(){
 	StyleSheet.stylesByName.put( "itemmainmenuentryfocused", StyleSheet.itemmainmenuentryfocusedStyle );
 	StyleSheet.stylesByName.put( "browserlinkfoc", StyleSheet.browserlinkfocStyle );
 	StyleSheet.stylesByName.put( "browserinputfoc", StyleSheet.browserinputfocStyle );
+	StyleSheet.stylesByName.put( "checkboxfocused", StyleSheet.checkboxfocusedStyle );
 	StyleSheet.stylesByName.put( "textfieldfocused", StyleSheet.textfieldfocusedStyle );
 	StyleSheet.stylesByName.put( "browserchoicegrouppopupfocused", StyleSheet.browserchoicegrouppopupfocusedStyle );
 	StyleSheet.stylesByName.put( "browserchoicegrouppopup", StyleSheet.browserchoicegrouppopupStyle );
@@ -484,6 +499,7 @@ protected static final void initStyles0(){
 	StyleSheet.stylesByName.put( "browserlink", StyleSheet.browserlinkStyle );
 	StyleSheet.stylesByName.put( "textfield", StyleSheet.textfieldStyle );
 	StyleSheet.stylesByName.put( "itemmainmenuentry", StyleSheet.itemmainmenuentryStyle );
+	StyleSheet.stylesByName.put( "checkbox", StyleSheet.checkboxStyle );
 }
 	public static Style focusedStyle = new Style("focused", 0, new de.enough.polish.ui.backgrounds.SimpleBackground(0), null, new short[]{-17}, new Object[]{new Color(0xffffff, false)} );	// the focused-style is not defined.
 	/** Access to the currently shown J2ME Polish screen, if any */

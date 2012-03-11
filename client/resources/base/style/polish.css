@@ -33,17 +33,13 @@
  /*******************   UserForm   **************************/
 
 .textField {
-	margin: 3;
-	padding: 3;
-	padding-left: 5;
-	padding-vertical: 1;
-	width: 100%;
 	layout: left | expand;
 	text-wrap: false;
-	complete-background: inputComplete;
-	complete-background-padding: 3;
+	border-color: #8699a9;
+	margin-left: 5;
+	margin-right:5;
+	font-color:#000;
 	background {
-		type: round-rect;
 		color: #FFF;
 	}
 	label-style: textFieldLabel;
@@ -51,7 +47,9 @@
 }
 
 .textFieldLabel {
-	font-color: labelColor;
+	margin-left:5;
+	font-color: #000;
+	layout: newline-after;
 }
 
 .userForm {
@@ -59,11 +57,22 @@
 }
 	
 .textField:hover {
-	complete-background: inputFocusedBg;
+	font-color:#FFF;
+	border-color: #0087fa;
+	background {
+		color: #00c8fa;
+	}
 }
 
 .checkBox {
+	padding-left: 5;
+	margin:3;
+	width: 98%;
 	
+}
+.checkBoxItem {
+}
+.checkBox:hover {
 }
 
 
@@ -93,9 +102,6 @@ colors {
 	borderColor: fontColor;
 	focusedBorderColor: focusedFontColor;
 	screenBackgroundColor: #F0F5F8;
-	inputColor: #E1EBF2;
-	inputFocusedColor: #F6F4D0;
-	labelColor: #105289;
 }
 
 
@@ -115,15 +121,6 @@ backgrounds {
 		top: menu;
 	}
 	*/
-	inputComplete {
-		type: round-rect;
-		color: #E1EBF2;
-	}
-	inputFocusedBg {
-		type: round-rect;
-		color: #F6F4D0;
-	}
-	
 }
 
 /** 
@@ -150,8 +147,8 @@ title {
 	padding: 2px;
 	font-size: large;
 	font-style: bold;
-	font-color: fontColor;
-	background-color: bgColor;
+	font-color: #FFF;
+	background-color: #00c8fa;
 	border: none;
 	layout: horizontal-center | horizontal-expand;
 }
@@ -189,19 +186,18 @@ menubar
 {
 	padding-top: 3px;
 	padding: 2px;
-	background-color: bgColor;
+	background-color: #00c8fa;
 }
 
 menu {
-	margin-left: 2px;
+	margin-left: 0;
 	margin-right: 2px;
-	min-width: 60%;
 	padding: 2px;
+	min-width:50%;
 	background {
 		type: round-rect;
-		color: focusedBgColor;
-		border-width: 2;
-		border-color: bgColor;
+		color: #F0F5F8;
+		border-color: #008aff;
 	}
 }
 
@@ -226,8 +222,7 @@ menuItem {
 	padding: 2px;
 	padding-left: 5px;
 	font {
-		color: fontColor;
-		size: medium;
+		color: #000;
 		style: bold;
 	}
 	layout: left;
@@ -249,8 +244,8 @@ menuItem {
 }
 
 .menuItem:hover {
-	background-color: bgColor;
-	font-color: focusedFontColor;
+	background-color: #b4e4ff;
+	font-color: #000;
 	layout: left | horizontal-expand;
 }
 
@@ -259,7 +254,7 @@ leftcommand
 	margin: 0px; /* default */
 	padding-top: 3px;
 	padding-bottom: 0px;
-	font-color: fontColor;
+	font-color: #FFF;
 	font-style: bold;
 	layout: left;
 }

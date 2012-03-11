@@ -21,4 +21,8 @@ public class UserForm extends Form
 		//#style checkBox
 		append(choice);
 	}
+	public void addMenu(Command cmd)
+	{
+		addCommand(cmd);
+	}
 }

@@ -795,13 +795,13 @@ public abstract class Item implements UiElement, Animatable
 		//# protected boolean includeLabel;
 	//#endif
 	//#if polish.css.complete-background
-		protected Background completeBackground;
+		//# protected Background completeBackground;
 	//#endif
 	//#if polish.css.complete-border
 		//# protected Border completeBorder;
 	//#endif
 	//#if polish.css.complete-background || polish.css.complete-border
-		protected Dimension completeBackgroundPadding;
+		//# protected Dimension completeBackgroundPadding;
 	//#endif
 	/** The vertical offset for the background, can be used for smoother scrolling, for example */ 
 	protected int backgroundYOffset;
@@ -1245,16 +1245,16 @@ public abstract class Item implements UiElement, Animatable
 		//#endif
 
 		//#if polish.css.complete-background
-			Background bg = (Background) style.getObjectProperty(79);
-			if (this.isShown && this.completeBackground != bg) {
-				if (this.completeBackground != null) {
-					this.completeBackground.hideNotify();
-				}
-				if (bg != null) {
-					bg.showNotify();
-				}
-			}
-			this.completeBackground = bg;
+			//# Background bg = (Background) style.getObjectProperty(79);
+			//# if (this.isShown && this.completeBackground != bg) {
+				//# if (this.completeBackground != null) {
+					//# this.completeBackground.hideNotify();
+				//# }
+				//# if (bg != null) {
+					//# bg.showNotify();
+				//# }
+			//# }
+			//# this.completeBackground = bg;
 		//#endif
 		//#if polish.css.complete-border
 			//# Border brd = (Border) style.getObjectProperty(304);
@@ -1477,11 +1477,11 @@ public abstract class Item implements UiElement, Animatable
 				//# }
 			//#endif
 			//#if polish.css.padding-vertical
-				value = (Dimension) style.getObjectProperty(-12);
-				if (value != null) {
-					this.paddingVertical = value.getValue(this.availableWidth);
-//					initializationRequired = true;
-				}
+				//# value = (Dimension) style.getObjectProperty(-12);
+				//# if (value != null) {
+					//# this.paddingVertical = value.getValue(this.availableWidth);
+//# //					initializationRequired = true;
+				//# }
 			//#endif
 //			if (initializationRequired) {
 //				if (this.parent != null) {
@@ -1624,10 +1624,10 @@ public abstract class Item implements UiElement, Animatable
 
 		//#if polish.css.complete-background || polish.css.complete-border 
 			//#if polish.css.complete-background-padding
-				Dimension completeBackgroundPaddingDim = (Dimension) style.getObjectProperty(305);
-				if (completeBackgroundPaddingDim != null) {
-					this.completeBackgroundPadding = completeBackgroundPaddingDim;
-				}
+				//# Dimension completeBackgroundPaddingDim = (Dimension) style.getObjectProperty(305);
+				//# if (completeBackgroundPaddingDim != null) {
+					//# this.completeBackgroundPadding = completeBackgroundPaddingDim;
+				//# }
 			//#endif
 		//#endif
 	
@@ -2747,15 +2747,15 @@ public abstract class Item implements UiElement, Animatable
 			//# }
 		//#endif
 		//#if polish.css.complete-background || polish.css.complete-border
-			int cbPadding = this.completeBackground == null ? 0 : this.completeBackgroundPadding.getValue(this.availContentWidth);
-			int width = this.itemWidth - this.marginLeft - this.marginRight + (cbPadding << 1);
-			int height = this.itemHeight - this.marginTop - this.marginBottom + (cbPadding << 1);
-			int bX = x + this.marginLeft - cbPadding;
-			int bY = y + this.marginTop + this.backgroundYOffset - cbPadding;
+			//# int cbPadding = this.completeBackground == null ? 0 : this.completeBackgroundPadding.getValue(this.availContentWidth);
+			//# int width = this.itemWidth - this.marginLeft - this.marginRight + (cbPadding << 1);
+			//# int height = this.itemHeight - this.marginTop - this.marginBottom + (cbPadding << 1);
+			//# int bX = x + this.marginLeft - cbPadding;
+			//# int bY = y + this.marginTop + this.backgroundYOffset - cbPadding;
 			//#if polish.css.complete-background
-				if (this.completeBackground != null) {
-					this.completeBackground.paint(bX, bY, width, height, g);
-				}
+				//# if (this.completeBackground != null) {
+					//# this.completeBackground.paint(bX, bY, width, height, g);
+				//# }
 			//#endif
 			//#if polish.css.complete-border
 				//# if (this.completeBorder!= null) {
@@ -4632,23 +4632,23 @@ public abstract class Item implements UiElement, Animatable
 	 */
 	public void addRelativeToBackgroundRegion( Background animatedBackground, Border animatedBorder,  ClippingRegion repaintRegion, int x, int y, int width, int height) {
 		//#if polish.css.complete-background || polish.css.complete-border
-			boolean addAbsolute = false;
+			//# boolean addAbsolute = false;
 			//#if polish.css.complete-background
-				addAbsolute = (this.completeBackground != null && animatedBackground == this.completeBackground);
+				//# addAbsolute = (this.completeBackground != null && animatedBackground == this.completeBackground);
 			//#endif
 			//#if polish.css.complete-border
 				//# addAbsolute |= (this.completeBorder != null && animatedBorder == this.completeBorder);
 			//#endif
-			if (addAbsolute) {
-				//System.out.println("adding absolute repaint: bgX=" + getBackgroundX() + ", bgY=" + getBackgroundY() + ", itemHeight-bgHeight=" + (this.itemHeight - this.backgroundHeight) + ", itemWidth-bgWidth=" + (this.itemWidth - this.backgroundWidth));
-				int padding = this.completeBackgroundPadding.getValue(this.availContentWidth);
-				repaintRegion.addRegion( 
-					getAbsoluteX() + x - 1 - padding, 
-					getAbsoluteY() + y - 1 - padding,
-					width + 2 + (padding << 1),
-					height + 2 + (this.itemHeight - this.backgroundHeight) + (padding << 1)
-					);
-			} else {
+			//# if (addAbsolute) {
+				//# //System.out.println("adding absolute repaint: bgX=" + getBackgroundX() + ", bgY=" + getBackgroundY() + ", itemHeight-bgHeight=" + (this.itemHeight - this.backgroundHeight) + ", itemWidth-bgWidth=" + (this.itemWidth - this.backgroundWidth));
+				//# int padding = this.completeBackgroundPadding.getValue(this.availContentWidth);
+				//# repaintRegion.addRegion( 
+					//# getAbsoluteX() + x - 1 - padding, 
+					//# getAbsoluteY() + y - 1 - padding,
+					//# width + 2 + (padding << 1),
+					//# height + 2 + (this.itemHeight - this.backgroundHeight) + (padding << 1)
+					//# );
+			//# } else {
 		//#endif
 				repaintRegion.addRegion( 
 					getAbsoluteX() + getBackgroundX() + x - 1, 
@@ -4657,7 +4657,7 @@ public abstract class Item implements UiElement, Animatable
 					height + 2
 					);
 		//#if polish.css.complete-background || polish.css.complete-border
-			}
+			//# }
 		//#endif
 	}
 
@@ -4683,9 +4683,9 @@ public abstract class Item implements UiElement, Animatable
 			this.border.animate( this.screen, this, currentTime, repaintRegion );
 		}
 		//#if polish.css.complete-background
-			if (this.completeBackground != null) {
-				this.completeBackground.animate( this.screen, this, currentTime, repaintRegion );
-			}
+			//# if (this.completeBackground != null) {
+				//# this.completeBackground.animate( this.screen, this, currentTime, repaintRegion );
+			//# }
 		//#endif
 		//#if polish.css.complete-border
 			//# if (this.completeBorder != null) {
@@ -5009,9 +5009,9 @@ public abstract class Item implements UiElement, Animatable
 			//# }
 		//#endif
 		//#if polish.css.complete-background
-			if (this.completeBackground != null) {
-				this.completeBackground.showNotify();
-			}
+			//# if (this.completeBackground != null) {
+				//# this.completeBackground.showNotify();
+			//# }
 		//#endif
 		//#if polish.css.complete-border
 			//# if (this.completeBorder != null) {
@@ -5059,9 +5059,9 @@ public abstract class Item implements UiElement, Animatable
 			//# }
 		//#endif
 		//#if polish.css.complete-background
-			if (this.completeBackground != null) {
-				this.completeBackground.hideNotify();
-			}
+			//# if (this.completeBackground != null) {
+				//# this.completeBackground.hideNotify();
+			//# }
 		//#endif
 		//#if polish.css.complete-border
 			//# if (this.completeBorder != null) {

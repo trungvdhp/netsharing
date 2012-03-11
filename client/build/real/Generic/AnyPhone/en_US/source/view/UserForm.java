@@ -21,4 +21,8 @@ public class UserForm extends Form
 		//#style checkBox
 		append(choice, de.enough.polish.ui.StyleSheet.checkboxStyle );
 	}
+	public void addMenu(Command cmd)
+	{
+		addCommand(cmd);
+	}
 }
