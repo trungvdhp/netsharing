@@ -56,7 +56,8 @@ public class Configuration implements Externalizable {
 	/**
 	 * Just an example for a field.
 	 */
-	private String userName;
+	private String keys[] = {"username","password","remember"};
+	private String values[] = {"","",""};
 	
 	/**
 	 * Creates a new standard configuration.
@@ -86,17 +87,27 @@ public class Configuration implements Externalizable {
 	 * Example: user name retrieval
 	 * @return the user name
 	 */
-	public String getUserName() {
-		return this.userName;
+	public String get(String name) {
+		
+		for(int i=0;i<name.length();i++)
+		{
+			if(name.equals(keys[i])) return values[i];
+		}
+		return "";
 	}
 	
 	/**
 	 * Example: sets the user name
 	 * @param name the user name
 	 */
-	public void setUserName( String name ) {
-		this.isDirty = true;
-		this.userName = name;
+	public void set( String name,String value ) {
+		for(int i=0;i<name.length();i++)
+		{
+			if(name.equals(keys[i])){
+				values[i]=value;
+				break;
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -104,11 +115,8 @@ public class Configuration implements Externalizable {
 	 */
 	public void write(DataOutputStream out) throws IOException {
 		out.writeInt( VERSION );
-		boolean notNull = (this.userName != null);
-		out.writeBoolean( notNull );
-		if (notNull) {
-			out.writeUTF(this.userName);
-		}
+		for(int i=0;i<values.length;i++)
+			out.writeUTF(values[i]);
 	}
 	
 	/* (non-Javadoc)
@@ -119,10 +127,9 @@ public class Configuration implements Externalizable {
 		if (version > VERSION) {
 			throw new IOException("for invalid version " + version);
 		}
-		boolean notNull = in.readBoolean();
-		if (notNull) {
-			this.userName = in.readUTF();
-		}
+		
+		for(int i=0;i<values.length;i++)
+			values[i]=in.readUTF();
 	}
 
 

@@ -6,9 +6,11 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
 public class Html {
-	
+	private String sessionId;
+	private String path="http://localhost/VM_Server/SVM.php";
 	public String SendRequest(String url,String[] args,String[] values) throws Exception
 	{
+		url=path+url;
 		HttpConnection connection = (HttpConnection) Connector.open(url);
 		connection.setRequestMethod(HttpConnection.POST);
 		//connection.setRequestProperty("User-Agent", "Nokia6300/2.0 (04.20) Profile/MIDP-2.0 Configuration/CLDC-1.1 UNTRUSTED/1.0");

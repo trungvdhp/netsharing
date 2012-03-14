@@ -1,9 +1,10 @@
 package model;
 
 public class User {
-	public String code;
+	public String userId;
 	public String username;
 	private String password;
+	Html html=new Html();
 	public User(String username,String password)
 	{
 		this.username=username;
@@ -13,14 +14,13 @@ public class User {
 	{
 		try
 		{
-			Html html=new Html();
-			String data=html.SendRequest("http://hanghaicnt.net/VM_Server/SVM.php",
+			String data=html.SendRequest("",
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangNhap",username,password}
 					);
-			if(data.equalsIgnoreCase("") || data.equalsIgnoreCase("false"))
+			userId=data;
+			if(data.indexOf("TKTD")<0)
 				return false;
-			code=data;
 			return true;
 		}
 		catch(Exception ex)
@@ -28,5 +28,42 @@ public class User {
 			//return "";
 			return false;
 		}
+	}
+	public Group createGroup(String groupName)
+	{
+		try
+		{
+			String groupId=html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan", "xTenNhom"},
+					new String[] {"TaoNhom", userId, groupName}
+					);
+			if(groupId.equalsIgnoreCase("false")) return null;
+			return new Group(groupId);
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+		
+	}
+	public Topic createTopic(String topicTitle,String topicContent)
+	{
+		try
+		{
+			String topicId=html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung"},
+					new String[] {"TaoBaiViet", userId, topicTitle,topicContent}
+					);
+			if(topicId.equalsIgnoreCase("false")) return null;
+			return new Topic(topicId);
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	public void writeComment(Topic topic,String comment)
+	{
+		
 	}
 }

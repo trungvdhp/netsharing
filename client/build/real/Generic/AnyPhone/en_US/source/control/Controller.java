@@ -125,7 +125,7 @@ implements ApplicationInitializer, CommandListener
 	 * Initializes this application in a background thread that is called from within the splash screen.
 	 */
 	public void initApp() {
-		long initStartTime = System.currentTimeMillis();
+		//long initStartTime = System.currentTimeMillis();
 		this.storage = new RmsStorage();
 		this.configuration = configurationLoad();
 		// create main menu:
@@ -150,19 +150,21 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.addMenu(cmdRegister);
 		frmLogin.addMenu(cmdExit);
 		frmLogin.setCommandListener(this);
+		
 		this.frmCurrent = frmLogin;
 		this.display.setCurrent(frmLogin);
 	}
-
-	/*private MainMenuList createMainMenu() {
+	private MainMenuList createMainMenu() {
 		MainMenuList list = new MainMenuList();
 		list.setCommandListener(this);
 		list.addCommand(this.cmdExit);
-		list.addEntry("entry1");
-		list.addEntry("entry2");
-		list.addEntry("entry3");
+		list.addEntry("Thông báo");
+		list.addEntry("Tin mới");
+		list.addEntry("Hộp thư");
+		list.addEntry("Yêu cầu");
+		list.addEntry("Cấu hình");
 		return list;
-	}*/
+	}
 
 	/**
 	 * Loads the configuration of this app.
@@ -221,12 +223,13 @@ implements ApplicationInitializer, CommandListener
 			User user=new User(username,password);
 			if(user.login())
 			{
-				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.code+"'",null,AlertType.INFO);
-				Alert.setCurrent( this.display, alert, frmCurrent );
+				this.screenMainMenu = createMainMenu();
+				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.userId+"'",null,AlertType.INFO);
+				Alert.setCurrent( this.display, alert, screenMainMenu );
 			}
 			else
 			{
-				Alert alert= new Alert("Thông báo","Đăng nhập thất bại",null,AlertType.INFO);
+				Alert alert= new Alert("Thông báo","Đăng nhập thất bại! Lỗi:\n"+user.userId,null,AlertType.INFO);
 				Alert.setCurrent( this.display, alert, frmCurrent );
 			}
 		}
