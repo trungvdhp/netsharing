@@ -1,7 +1,7 @@
 package model;
 
 public class User {
-	public String userId;
+	public String id;
 	public String username;
 	private String password;
 	Html html=new Html();
@@ -18,7 +18,7 @@ public class User {
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangNhap",username,password}
 					);
-			userId=data;
+			id=data;
 			if(data.indexOf("TKTD")<0)
 				return false;
 			return true;
@@ -35,7 +35,7 @@ public class User {
 		{
 			String groupId=html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xTenNhom"},
-					new String[] {"TaoNhom", userId, groupName}
+					new String[] {"TaoNhom", id, groupName}
 					);
 			if(groupId.equalsIgnoreCase("false")) return null;
 			return new Group(groupId);
@@ -52,7 +52,7 @@ public class User {
 		{
 			String topicId=html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung"},
-					new String[] {"TaoBaiViet", userId, topicTitle,topicContent}
+					new String[] {"TaoBaiViet", id, topicTitle,topicContent}
 					);
 			if(topicId.equalsIgnoreCase("false")) return null;
 			return new Topic(topicId);

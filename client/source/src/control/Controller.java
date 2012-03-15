@@ -224,12 +224,12 @@ implements ApplicationInitializer, CommandListener
 			if(user.login())
 			{
 				this.screenMainMenu = createMainMenu();
-				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.userId+"'",null,AlertType.INFO);
+				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.id+"'",null,AlertType.INFO);
 				this.display.setCurrent(alert, screenMainMenu);
 			}
 			else
 			{
-				Alert alert= new Alert("Thông báo","Đăng nhập thất bại! Lỗi:\n"+user.userId,null,AlertType.INFO);
+				Alert alert= new Alert("Thông báo","Đăng nhập thất bại! Lỗi:\n"+user.id,null,AlertType.INFO);
 				this.display.setCurrent(alert, frmCurrent);
 			}
 		}
