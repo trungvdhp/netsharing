@@ -4,11 +4,20 @@ public class User {
 	public String id;
 	public String username;
 	private String password;
+	public String firstName;
+	public String lastName;
 	Html html=new Html();
 	public User(String username,String password)
 	{
 		this.username=username;
 		this.password=password;
+	}
+	public User(String id,String username,String firstName,String lastName)
+	{
+		this.id = id;
+		this.username=username;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 	public boolean login()
 	{
@@ -46,7 +55,7 @@ public class User {
 		}
 		
 	}
-	public Topic createTopic(String topicTitle,String topicContent)
+	public Topic createTopic(Group group,String topicTitle,String topicContent)
 	{
 		try
 		{

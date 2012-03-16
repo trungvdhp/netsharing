@@ -11,7 +11,43 @@
 	(object Attribute
 	    tool       	"Java"
 	    name       	"IDE"
-	    value      	"Internal Editor"))
+	    value      	"Internal Editor")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagName1"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagText1"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagApply1"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagName2"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagText2"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagApply2"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagName3"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagText3"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagApply3"
+	    value      	""))
     quid       	"4F6148FD02B1"
     enforceClosureAutoLoad 	FALSE
     defaults   	(object defaults
@@ -192,11 +228,6 @@
 			quid       	"4F615F72025C"
 			concurrency 	"Sequential"
 			opExportControl 	"Public"
-			uid        	0)
-		    (object Operation "getNewTopics"
-			quid       	"4F615F5B0206"
-			concurrency 	"Sequential"
-			opExportControl 	"Public"
 			uid        	0))
 		class_attributes 	(list class_attribute_list
 		    (object ClassAttribute "id"
@@ -232,6 +263,11 @@
 			uid        	0)
 		    (object Operation "getDetails"
 			quid       	"4F614F2402C6"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "getNewTopics"
+			quid       	"4F636B37026D"
 			concurrency 	"Sequential"
 			opExportControl 	"Public"
 			uid        	0))
@@ -324,7 +360,7 @@
 			    fill_color 	13434879
 			    anchor     	2
 			    nlines     	16
-			    max_width  	363
+			    max_width  	368
 			    justify    	1)
 			width      	384
 			height     	886
@@ -346,10 +382,10 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@2
-			    location   	(1157, 97)
+			    location   	(1171, 122)
 			    fill_color 	13434879
 			    nlines     	1
-			    max_width  	328
+			    max_width  	300
 			    justify    	0
 			    label      	"Group")
 			icon_style 	"Icon"
@@ -358,7 +394,7 @@
 			quidu      	"4F61495101B5"
 			compartment 	(object Compartment
 			    Parent_View 	@2
-			    location   	(1157, 158)
+			    location   	(1171, 183)
 			    font       	(object Font
 				size       	10
 				face       	"Arial"
@@ -371,11 +407,11 @@
 			    icon_style 	"Icon"
 			    fill_color 	13434879
 			    anchor     	2
-			    nlines     	12
-			    max_width  	325
+			    nlines     	11
+			    max_width  	297
 			    justify    	1)
-			width      	346
-			height     	686
+			width      	318
+			height     	636
 			annotation 	8
 			autoResize 	TRUE)
 		    (object ClassView "Class" "Logical View::Topic" @3
@@ -394,7 +430,7 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@3
-			    location   	(1747, 781)
+			    location   	(1747, 756)
 			    fill_color 	13434879
 			    nlines     	1
 			    max_width  	350
@@ -406,7 +442,7 @@
 			quidu      	"4F6149560273"
 			compartment 	(object Compartment
 			    Parent_View 	@3
-			    location   	(1747, 842)
+			    location   	(1747, 817)
 			    font       	(object Font
 				size       	10
 				face       	"Arial"
@@ -419,11 +455,11 @@
 			    icon_style 	"Icon"
 			    fill_color 	13434879
 			    anchor     	2
-			    nlines     	12
+			    nlines     	13
 			    max_width  	347
 			    justify    	1)
 			width      	368
-			height     	686
+			height     	736
 			annotation 	8
 			autoResize 	TRUE)
 		    (object ClassView "Class" "Logical View::Comment" @4
@@ -468,7 +504,7 @@
 			    fill_color 	13434879
 			    anchor     	2
 			    nlines     	5
-			    max_width  	228
+			    max_width  	237
 			    justify    	1)
 			width      	248
 			height     	336
@@ -516,7 +552,7 @@
 			    fill_color 	13434879
 			    anchor     	2
 			    nlines     	5
-			    max_width  	256
+			    max_width  	265
 			    justify    	1)
 			width      	276
 			height     	336

@@ -88,6 +88,7 @@ public final class StyleSheet {
 	public final static Border defaultBorder = null;
 	public static Style defaultStyle;
 	//static and referenced styles:
+	public static Style userlistitemStyle;
 	public static Style menu1Style;
 	public static Style browsertextbolditalicStyle;
 	public static Style browsertextboldStyle;
@@ -97,15 +98,16 @@ public final class StyleSheet {
 	public static Style titleStyle;
 	public static Style browseroptionStyle;
 	public static Style leftcommandStyle;
-	public static Style browseroptionitemStyle;
 	public static Style browserStyle;
+	public static Style browseroptionitemStyle;
 	public static Style rssdescriptionalertStyle;
 	public static Style screeninfoStyle;
 	public static Style userformStyle;
-	public static Style browsertextStyle;
 	public static Style menuStyle;
+	public static Style browsertextStyle;
 	public static Style browserchoicegroupexclusiveStyle;
 	public static Style screenmainmenuStyle;
+	public static Style userlistStyle;
 	public static Style checkboxitemStyle;
 	public static Style browserradioStyle;
 	public static Style rightcommandStyle;
@@ -128,7 +130,7 @@ public final class StyleSheet {
 	public static Style textfieldStyle;
 	public static Style itemmainmenuentryStyle;
 	public static Style checkboxStyle;
-	protected static final Hashtable stylesByName = new Hashtable(41);
+	protected static final Hashtable stylesByName = new Hashtable(43);
 static { // init styles:
 	initStyles0();
 }
@@ -140,6 +142,13 @@ protected static final void initStyles0(){
 		defaultBorder, 
 		new short[]{ },
 		new Object[]{ }
+	);
+	userlistitemStyle = new Style (
+		"userlistitem", 
+		Item.LAYOUT_DEFAULT,	// default layout
+		null,	// no background
+		null, 	// no border
+		null, null	// no additional attributes have been defined
 	);
 	menu1Style = new Style (
 		"menu1", 
@@ -212,16 +221,16 @@ protected static final void initStyles0(){
 		new short[]{ 32713, -10, -9, -14, -17},
 		new Object[]{ new Dimension(0, false), new Dimension(0, false), new Dimension(3, false), new Integer(Font.STYLE_BOLD), new Color( 0xFFFFFF, false)}
 	);
-	browseroptionitemStyle = new Style (
-		"browseroptionitem", 
+	browserStyle = new Style (
+		"browser", 
 		Item.LAYOUT_DEFAULT,	// default layout
 		null,	// no background
 		null, 	// no border
 		new short[]{ 209},
 		new Object[]{ Style.FALSE}
 	);
-	browserStyle = new Style (
-		"browser", 
+	browseroptionitemStyle = new Style (
+		"browseroptionitem", 
 		Item.LAYOUT_DEFAULT,	// default layout
 		null,	// no background
 		null, 	// no border
@@ -251,14 +260,6 @@ protected static final void initStyles0(){
 		null, 	// no border
 		null, null	// no additional attributes have been defined
 	);
-	browsertextStyle = new Style (
-		"browsertext", 
-		Item.LAYOUT_DEFAULT,	// default layout
-		null,	// no background
-		null, 	// no border
-		new short[]{ 209},
-		new Object[]{ Style.FALSE}
-	);
 	menuStyle = new Style (
 		"menu", 
 		Item.LAYOUT_DEFAULT,	// default layout
@@ -266,6 +267,14 @@ protected static final void initStyles0(){
 		null, 	// no border
 		new short[]{ -2, -3, -6, 58},
 		new Object[]{ new Dimension(0, false), new Dimension(2, false), new Dimension(2, false), new Dimension( 50, true )}
+	);
+	browsertextStyle = new Style (
+		"browsertext", 
+		Item.LAYOUT_DEFAULT,	// default layout
+		null,	// no background
+		null, 	// no border
+		new short[]{ 209},
+		new Object[]{ Style.FALSE}
 	);
 	browserchoicegroupexclusiveStyle = new Style (
 		"browserchoicegroupexclusive", 
@@ -277,8 +286,16 @@ protected static final void initStyles0(){
 	);
 	screenmainmenuStyle = new Style (
 		"screenmainmenu", 
-		Item.LAYOUT_VCENTER,
+		Item.LAYOUT_EXPAND|Item.LAYOUT_CENTER|Item.LAYOUT_VCENTER,
 		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0xF0F5F8, false)),
+		null, 	// no border
+		new short[]{ 4},
+		new Object[]{ new Integer(3)}
+	);
+	userlistStyle = new Style (
+		"userlist", 
+		Item.LAYOUT_DEFAULT,	// default layout
+		null,	// no background
 		null, 	// no border
 		null, null	// no additional attributes have been defined
 	);
@@ -356,10 +373,10 @@ protected static final void initStyles0(){
 	itemmainmenuentryfocusedStyle = new Style (
 		"itemmainmenuentryfocused", 
 		Item.LAYOUT_EXPAND|Item.LAYOUT_CENTER,
-		new de.enough.polish.ui.backgrounds.SimpleBackground( new Color( 0xeeee44, false)),
+		new de.enough.polish.ui.backgrounds.RoundRectBackground( 0x00c8fa,8, 8),
 		null, 	// no border
-		new short[]{ -17, -2, -3},
-		new Object[]{ new Color( 0x000000, false), new Dimension( 5, true ), new Dimension( 5, true )}
+		new short[]{ -17, -15, -6, 6, 7},
+		new Object[]{ new Color( 0x000000, false), new Integer( Font.SIZE_SMALL ), new Dimension(5, false), "/glyphicons_%INDEX%.png", new Integer(2)}
 	);
 	browserlinkfocStyle = new Style (
 		"browserlinkfoc", 
@@ -446,8 +463,8 @@ protected static final void initStyles0(){
 		Item.LAYOUT_EXPAND|Item.LAYOUT_CENTER,
 		null,	// no background
 		null, 	// no border
-		new short[]{ -2, -3, -17, 1},
-		new Object[]{ new Dimension( 5, true ), new Dimension( 5, true ), new Color( 0xcccccc, false), StyleSheet.itemmainmenuentryfocusedStyle}
+		new short[]{ -6, 6, 7, -17, -15, 1},
+		new Object[]{ new Dimension(5, false), "/glyphicons_%INDEX%.png", new Integer(2), new Color( 0xcccccc, false), new Integer( Font.SIZE_SMALL ), StyleSheet.itemmainmenuentryfocusedStyle}
 	);
 	checkboxStyle = new Style (
 		"checkbox", 
@@ -459,6 +476,7 @@ protected static final void initStyles0(){
 	);
 
 	//register referenced and dynamic styles:
+	StyleSheet.stylesByName.put( "userlistitem", StyleSheet.userlistitemStyle );
 	StyleSheet.stylesByName.put( "menu1", StyleSheet.menu1Style );
 	StyleSheet.stylesByName.put( "browsertextbolditalic", StyleSheet.browsertextbolditalicStyle );
 	StyleSheet.stylesByName.put( "browsertextbold", StyleSheet.browsertextboldStyle );
@@ -468,15 +486,16 @@ protected static final void initStyles0(){
 	StyleSheet.stylesByName.put( "title", StyleSheet.titleStyle );
 	StyleSheet.stylesByName.put( "browseroption", StyleSheet.browseroptionStyle );
 	StyleSheet.stylesByName.put( "leftcommand", StyleSheet.leftcommandStyle );
-	StyleSheet.stylesByName.put( "browseroptionitem", StyleSheet.browseroptionitemStyle );
 	StyleSheet.stylesByName.put( "browser", StyleSheet.browserStyle );
+	StyleSheet.stylesByName.put( "browseroptionitem", StyleSheet.browseroptionitemStyle );
 	StyleSheet.stylesByName.put( "rssdescriptionalert", StyleSheet.rssdescriptionalertStyle );
 	StyleSheet.stylesByName.put( "screeninfo", StyleSheet.screeninfoStyle );
 	StyleSheet.stylesByName.put( "userform", StyleSheet.userformStyle );
-	StyleSheet.stylesByName.put( "browsertext", StyleSheet.browsertextStyle );
 	StyleSheet.stylesByName.put( "menu", StyleSheet.menuStyle );
+	StyleSheet.stylesByName.put( "browsertext", StyleSheet.browsertextStyle );
 	StyleSheet.stylesByName.put( "browserchoicegroupexclusive", StyleSheet.browserchoicegroupexclusiveStyle );
 	StyleSheet.stylesByName.put( "screenmainmenu", StyleSheet.screenmainmenuStyle );
+	StyleSheet.stylesByName.put( "userlist", StyleSheet.userlistStyle );
 	StyleSheet.stylesByName.put( "checkboxitem", StyleSheet.checkboxitemStyle );
 	StyleSheet.stylesByName.put( "browserradio", StyleSheet.browserradioStyle );
 	StyleSheet.stylesByName.put( "default", StyleSheet.defaultStyle );

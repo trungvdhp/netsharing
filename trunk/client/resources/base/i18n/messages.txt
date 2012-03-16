@@ -8,10 +8,10 @@
 ########################################################################################################
 
 # common commands:
-cmd.exit=Exit
-cmd.back=Back
+cmd.exit=Thoát
+cmd.back=Trở về
 
 ##############################
 # main menu list screen:
 ##############################
-main.title=J2ME Polish
+main.title=Net Sharing

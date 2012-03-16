@@ -1,14 +1,23 @@
 package model;
 
 public class User {
-	public String userId;
+	public String id;
 	public String username;
 	private String password;
+	public String firstName;
+	public String lastName;
 	Html html=new Html();
 	public User(String username,String password)
 	{
 		this.username=username;
 		this.password=password;
+	}
+	public User(String id,String username,String firstName,String lastName)
+	{
+		this.id = id;
+		this.username=username;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 	public boolean login()
 	{
@@ -18,7 +27,7 @@ public class User {
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangNhap",username,password}
 					);
-			userId=data;
+			id=data;
 			if(data.indexOf("TKTD")<0)
 				return false;
 			return true;
@@ -29,28 +38,40 @@ public class User {
 			return false;
 		}
 	}
-	public boolean createGroup(String groupName)
+	public Group createGroup(String groupName)
 	{
 		try
 		{
 			String groupId=html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xTenNhom"},
-					new String[] {"TaoNhom", userId, groupName}
+					new String[] {"TaoNhom", id, groupName}
 					);
-			if(groupId.equalsIgnoreCase("false")) return false;
-			return true;
+			if(groupId.equalsIgnoreCase("false")) return null;
+			return new Group(groupId);
 		}
 		catch(Exception ex)
 		{
-			return false;
+			return null;
 		}
 		
 	}
-	public void createTopic()
+	public Topic createTopic(Group group,String topicTitle,String topicContent)
 	{
-		
+		try
+		{
+			String topicId=html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung"},
+					new String[] {"TaoBaiViet", id, topicTitle,topicContent}
+					);
+			if(topicId.equalsIgnoreCase("false")) return null;
+			return new Topic(topicId);
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
 	}
-	public void writeComment()
+	public void writeComment(Topic topic,String comment)
 	{
 		
 	}
