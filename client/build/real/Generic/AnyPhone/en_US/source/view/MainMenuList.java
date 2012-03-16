@@ -42,7 +42,7 @@ public class MainMenuList extends List {
 	 */
 	public MainMenuList() {
 		//#style screenMainMenu
-		super( "J2ME Polish", List.IMPLICIT, de.enough.polish.ui.StyleSheet.screenmainmenuStyle );
+		super( "Net Sharing", List.IMPLICIT, de.enough.polish.ui.StyleSheet.screenmainmenuStyle );
 	}
 	
 	/**

@@ -388,18 +388,18 @@ public class IconItem extends StringItem
 		// if there are any...
 		
 		//#ifdef polish.css.icon-image-align
-			//# Integer align = style.getIntProperty(7);
-			//# if (align == null) {
-				//# // keep align setting
-			//# } else {
-				//# switch (align.intValue()) {
-					//# case 0: this.imageAlign = Graphics.LEFT; break; 
-					//# case 1: this.imageAlign = Graphics.RIGHT; break; 
-					//# case 2: this.imageAlign = Graphics.TOP; break; 
-					//# case 3: this.imageAlign = Graphics.BOTTOM; break; 
-					//# case 4: this.imageAlign = Graphics.HCENTER | Graphics.VCENTER; break; 
-				//# }
-			//# }
+			Integer align = style.getIntProperty(7);
+			if (align == null) {
+				// keep align setting
+			} else {
+				switch (align.intValue()) {
+					case 0: this.imageAlign = Graphics.LEFT; break; 
+					case 1: this.imageAlign = Graphics.RIGHT; break; 
+					case 2: this.imageAlign = Graphics.TOP; break; 
+					case 3: this.imageAlign = Graphics.BOTTOM; break; 
+					case 4: this.imageAlign = Graphics.HCENTER | Graphics.VCENTER; break; 
+				}
+			}
 		//#endif
 		//#ifdef polish.css.icon-image-align-next
 			//# Boolean alignExpandBool = style.getBooleanProperty(272);
@@ -408,39 +408,39 @@ public class IconItem extends StringItem
 			//# }
 		//#endif
 		//#ifdef polish.css.icon-image
-			//# String imageName = style.getProperty(6);
-			//# if (imageName != null) {
-				//# Item item = this;
-				//# Item container = this.parent;
-				//# while ((container != null) 
-						//# && !(container instanceof Container) 
-						//# && (container.parent != null)) 
-				//# {
-					//# item = container;
-					//# container = container.parent;
-				//# }
-				//# if (container instanceof Container) {
-					//# imageName = ((Container) container).parseIndexUrl( imageName, item );
-				//# }
+			String imageName = style.getProperty(6);
+			if (imageName != null) {
+				Item item = this;
+				Item container = this.parent;
+				while ((container != null) 
+						&& !(container instanceof Container) 
+						&& (container.parent != null)) 
+				{
+					item = container;
+					container = container.parent;
+				}
+				if (container instanceof Container) {
+					imageName = ((Container) container).parseIndexUrl( imageName, item );
+				}
 				//#if polish.debug.error
 					//# else if ( imageName.indexOf( "%INDEX%") != -1) {
 						//# throw new IllegalStateException("IconItem cannot resolve %INDEX% in url since parent is not a container: " + container + ", parent=" + this.parent);
 					//# }
 				//#endif
-				//# try {
-					//# Image img = StyleSheet.getImage(imageName, this, true);
-					//# if (img != null) {
-						//# this.image = img;
+				try {
+					Image img = StyleSheet.getImage(imageName, this, true);
+					if (img != null) {
+						this.image = img;
 						//#if polish.midp2 && polish.css.scale-factor
 							//# this.rgbData = null;
 							//# this.scaleData = null;
 						//#endif
-					//# }
-				//# } catch (IOException e) {
+					}
+				} catch (IOException e) {
 					//#debug error
 					//# System.out.println("unable to load image [" + imageName + "]" + e);
-				//# }
-			//# }
+				}
+			}
 		//#endif
 
 		//#if polish.midp2	

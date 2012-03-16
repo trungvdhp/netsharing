@@ -28,10 +28,8 @@ package control;
 import java.io.IOException;
 import javax.microedition.lcdui.Image;
 
-import view.MainMenuList;
-import view.UserForm;
-import model.Configuration;
-import model.User;
+import view.*;
+import model.*;
 import app.App;
 
 
@@ -107,6 +105,24 @@ implements ApplicationInitializer, CommandListener
 		
 	}
 
+	public void openTopicForm(Topic[] topics)
+	{
+		UserList topicForm=new UserList("Bài viết mới");
+		for(int i=0;i<topics.length;i++)
+		{
+			topicForm.addEntry(topics[i].title);
+		}
+		this.display.setCurrent(topicForm);
+	}
+	public void openGroupForm(Group[] groups)
+	{
+		UserList groupForm=new UserList("Nhóm tham gia");
+		for(int i=0;i<groups.length;i++)
+		{
+			groupForm.addEntry(groups[i].name);
+		}
+		this.display.setCurrent(groupForm);
+	}
 	/**
 	 * Lifecycle: pauses the application, e.g. when there is an incoming call.
 	 */
@@ -152,17 +168,26 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.setCommandListener(this);
 		
 		this.frmCurrent = frmLogin;
-		this.display.setCurrent(frmLogin);
+		//this.screenMainMenu = createMainMenu();
+		//this.display.setCurrent(screenMainMenu);
+		Group[] groups=new Group[5];
+		for(int i=0;i<5;i++)
+		{
+			groups[i]=new Group(i+"");
+			groups[i].name = "Group "+i;
+		}
+		openGroupForm(groups);
 	}
 	private MainMenuList createMainMenu() {
 		MainMenuList list = new MainMenuList();
 		list.setCommandListener(this);
 		list.addCommand(this.cmdExit);
-		list.addEntry("Thông báo");
+		//list.addEntry("Thông báo");
 		list.addEntry("Tin mới");
 		list.addEntry("Hộp thư");
 		list.addEntry("Yêu cầu");
 		list.addEntry("Cấu hình");
+		list.addEntry("Tìm kiếm");
 		return list;
 	}
 

@@ -8,7 +8,7 @@ public class Topic {
 	public String intro;
 	public String content;
 	public String createDate;
-	
+	private Html html=new Html();
 	public Topic(String topicId)
 	{
 		this.topicId=topicId;
@@ -28,7 +28,7 @@ public class Topic {
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"SoLuocBaiViet", topicId}
 					);
-			data = s.split(Constants.KyTuChiaTruongDL);
+			//data = s.split(Constants.KyTuChiaTruongDL);
 			this.title = data[0];
 			this.intro = data[1];
 			this.createDate = data[2];
@@ -64,7 +64,7 @@ public class Topic {
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"ChiTietBaiViet", topicId}
 					);
-			data = s.split(Constants.KyTuChiaTruongDL);
+			//data = s.split(Constants.KyTuChiaTruongDL);
 			this.title = data[0];
 			this.intro = data[1];
 			this.createDate = data[2];
@@ -75,5 +75,9 @@ public class Topic {
 		{
 			
 		}
+	}
+	public static void getNewTopics()
+	{
+		
 	}
 }

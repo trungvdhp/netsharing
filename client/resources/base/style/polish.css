@@ -78,6 +78,17 @@
 
 /***********************************************************************/
 
+/************************** UserList *********************************/
+.userList{
+	
+}
+
+.userListItem{
+	
+}
+
+/**********************************************************************/
+
 label {
 	font-size: small;
 	layout: newline-after;
@@ -156,18 +167,33 @@ title {
 /*********************   MAIN MENU   ******************************************************************************************************/
 .screenMainMenu {
 	background-color: screenBackgroundColor;
-	layout: vertical-center;
+	layout: horizontal-expand | horizontal-center | vertical-center;
+	columns: 3;
 }
 
 .itemMainMenuEntry {
-	margin-left: 5%;
-	margin-right: 5%;
+	/*margin-left: 5%;
+	margin-right: 5%;*/
+	/*width: 64px;*/
+	padding: 5px;
+	icon-image: url(glyphicons_%INDEX%.png);
+	icon-image-align: top;
 	font-color: fontColor;
+	font-size: small;
+	/*font-bitmap: tahoma-12.bmf;*/
 	layout: expand | center;
 }
 
 .itemMainMenuEntry:hover {
-	background-color: focusedBgColor;
+	background {
+		type: round-rect;
+		color: #00c8fa;
+		/*color-animation {
+			on:focus;
+			range: #FFF..#00c8fa;
+			duration: 1s;
+		}*/
+	}
 	font-color: focusedFontColor;	
 }
 
