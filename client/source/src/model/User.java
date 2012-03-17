@@ -23,7 +23,10 @@ public class User {
 	public String firstName;
 	public String lastName;
 	Html html=new Html();
-	
+	public User()
+	{
+		
+	}
 	public User(String username,String password)
 	{
 		this.username=username;
