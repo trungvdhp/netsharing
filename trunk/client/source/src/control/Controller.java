@@ -65,16 +65,18 @@ implements ApplicationInitializer, CommandListener
 	
 	private TextField txtUsername = new TextField("Tên đăng nhập: ","", 50,TextField.ANY);
 	private TextField txtPassword = new TextField("Mật khẩu: ","",50, TextField.PASSWORD);
+	private TextField txtConfirm = new TextField("Xác nhận mật khẩu: ","",50, TextField.PASSWORD);
 	private ChoiceGroup cgRemember = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 	
 	private Command cmdLogin = new Command("Đăng nhập",Command.SCREEN,1);
 	private Command cmdRegister = new Command("Đăng ký", Command.SCREEN,1);
 	private Command cmdExit = new Command(Locale.get("cmd.exit"), Command.EXIT, 10);
 	private Command cmdBack = new Command(Locale.get("cmd.back"), Command.BACK, 2);
+	private Command cmdSubmit = new Command("Hoàn tất",Command.SCREEN,1); 
 	
 	private MainMenuList screenMainMenu;
 	private SimpleScreenHistory screenHistory;
-	private Form frmCurrent;
+	private Form frmPrev;
 	
 
 	/**
@@ -114,6 +116,17 @@ implements ApplicationInitializer, CommandListener
 		}
 		this.display.setCurrent(topicForm);
 	}
+	public void openRegisterForm()
+	{
+		UserForm frmRegister = new UserForm("Đăng ký tài khoản");
+		frmRegister.addTextField(txtUsername);
+		frmRegister.addTextField(txtPassword);
+		frmRegister.addTextField(txtConfirm);
+		frmRegister.addMenu(cmdSubmit);
+		frmRegister.addMenu(cmdBack);
+		frmRegister.setCommandListener(this);
+		this.display.setCurrent(frmRegister);
+	}
 	public void openGroupForm(Group[] groups)
 	{
 		UserList groupForm=new UserList("Nhóm tham gia");
@@ -123,6 +136,7 @@ implements ApplicationInitializer, CommandListener
 		}
 		this.display.setCurrent(groupForm);
 	}
+	
 	/**
 	 * Lifecycle: pauses the application, e.g. when there is an incoming call.
 	 */
@@ -167,16 +181,16 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.addMenu(cmdExit);
 		frmLogin.setCommandListener(this);
 		
-		this.frmCurrent = frmLogin;
-		//this.screenMainMenu = createMainMenu();
-		//this.display.setCurrent(screenMainMenu);
-		Group[] groups=new Group[5];
+		this.frmPrev = frmLogin;
+		this.screenMainMenu = createMainMenu();
+		this.display.setCurrent(frmPrev);
+		/*Group[] groups=new Group[5];
 		for(int i=0;i<5;i++)
 		{
 			groups[i]=new Group(i+"");
 			groups[i].name = "Group "+i;
 		}
-		openGroupForm(groups);
+		openGroupForm(groups);*/
 	}
 	private MainMenuList createMainMenu() {
 		MainMenuList list = new MainMenuList();
@@ -255,9 +269,35 @@ implements ApplicationInitializer, CommandListener
 			else
 			{
 				Alert alert= new Alert("Thông báo","Đăng nhập thất bại! Lỗi:\n"+user.id,null,AlertType.INFO);
-				this.display.setCurrent(alert, frmCurrent);
+				this.display.setCurrent(alert, frmPrev);
 			}
+		} else if(cmd == this.cmdRegister)
+		{
+			openRegisterForm();
+		} else if(cmd == cmdSubmit)
+		{
+			if(txtPassword.getString().equals(txtConfirm.getString()))
+			{
+				User u = new User(txtUsername.getString(),txtPassword.getString());
+				if(u.register())
+				{
+					Alert a=new Alert("Thông báo","Bạn đã đăng ký thành công!",null,AlertType.INFO);
+					this.display.setCurrent(a,frmPrev);
+				}
+				else
+				{
+					Alert a=new Alert("Thông báo","Bạn đăng ký không thành công!",null,AlertType.INFO);
+					this.display.setCurrent(a,frmPrev);
+				}
+			}
+			else
+			{
+				Alert a=new Alert("Thông báo","Mật khẩu xác nhận không khớp!",null,AlertType.INFO);
+				this.display.setCurrent(a,frmPrev);
+			}
+			
 		}
+		
 		
 		
 	}
