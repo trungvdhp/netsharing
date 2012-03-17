@@ -1,6 +1,6 @@
 package model;
 import base.Constants;
-
+import util.UtilString;
 public class Topic {
 	public String topicId;
 	public String commentsCount;
@@ -9,6 +9,7 @@ public class Topic {
 	public String content;
 	public String createDate;
 	private Html html=new Html();
+
 	public Topic(String topicId)
 	{
 		this.topicId=topicId;
@@ -19,7 +20,7 @@ public class Topic {
 		createDate="";
 	}
 	
-	public void getSummary()
+	public boolean getSummary()
 	{
 		String data[] = new String[4];
 		try
@@ -28,34 +29,41 @@ public class Topic {
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"SoLuocBaiViet", topicId}
 					);
-			//data = s.split(Constants.KyTuChiaTruongDL);
+			if(s.equalsIgnoreCase("false"))
+				return false;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			this.title = data[0];
 			this.intro = data[1];
 			this.createDate = data[2];
 			this.commentsCount =data[3];
+			return true;
 		}
 		catch(Exception ex)
 		{
-			
+			return false;
 		}
 	}
 	
-	public void getContent()
+	public boolean getContent()
 	{
 		try
 		{
-			this.content = html.SendRequest("",
+			String s = html.SendRequest("",
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"NoiDungBaiViet", topicId}
 					);
+			if(s.equalsIgnoreCase("false"))
+				return false;
+			this.content = s;
+			return true;
 		}
 		catch(Exception ex)
 		{
-			
+			return false;
 		}
 	}
 	
-	public void getDetails()
+	public boolean getDetails()
 	{
 		String data[] = new String[5];
 		try
@@ -64,18 +72,22 @@ public class Topic {
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"ChiTietBaiViet", topicId}
 					);
-			//data = s.split(Constants.KyTuChiaTruongDL);
+			if(s.equalsIgnoreCase("false"))
+				return false;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			this.title = data[0];
 			this.intro = data[1];
 			this.createDate = data[2];
 			this.commentsCount =data[3];
 			this.content = data[4];
+			return true;
 		}
 		catch(Exception ex)
 		{
-			
+			return false;
 		}
 	}
+	
 	public static void getNewTopics()
 	{
 		
