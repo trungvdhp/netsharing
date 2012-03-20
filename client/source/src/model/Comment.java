@@ -28,6 +28,11 @@ public class Comment {
 		this.time = "";
 	}
 	
+	public Comment(String userId, String content)
+	{
+		this.userId = userId;
+		this.content = content;
+	}
 	public Comment(String id, String userId, String content)
 	{
 		this.commentId = id;
