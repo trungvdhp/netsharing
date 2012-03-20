@@ -1,10 +1,12 @@
 package model;
 
+import de.enough.polish.util.ArrayList;
+
 import util.UtilString;
 import base.Constants;
 
 public class User {
-	public String id;
+	public String userId;
 	public String username;
 	public String password;
 	public String hoDem;
@@ -23,10 +25,17 @@ public class User {
 	public String firstName;
 	public String lastName;
 	Html html=new Html();
+	Topic topic = new Topic();
+	Group group = new Group();
+	TopicGroup topicgroup = new TopicGroup();
+	Comment comment = new Comment();
+	ArrayList newtopics;
+	
 	public User()
 	{
 		
 	}
+	
 	public User(String username,String password)
 	{
 		this.username=username;
@@ -35,29 +44,29 @@ public class User {
 
 	public User(String id,String username,String firstName,String lastName)
 	{
-		this.id = id;
+		this.userId = id;
 		this.username=username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
 	
-	public User(String data[])
+	public User(ArrayList data)
 	{
-		this.id= data[0];
-		this.username = data[1];
-		this.password = data[2];
-		this.hoDem = data[3];
-		this.ten = data[4];
-		this.ngaySinh = data[5];
-		this.gioiTinh = data[6];
-		this.email = data[7];
-		this.dienThoai = data[8];
-		this.diaChi = data[9];
-		this.ngayTao = data[10];
-		this.ngayVaoTruong = data[11];
+		this.userId= data.get(0).toString();
+		this.username = data.get(1).toString();
+		this.password = data.get(2).toString();
+		this.hoDem = data.get(3).toString();
+		this.ten = data.get(4).toString();
+		this.ngaySinh = data.get(5).toString();
+		this.gioiTinh = data.get(6).toString();
+		this.email = data.get(7).toString();
+		this.dienThoai = data.get(8).toString();
+		this.diaChi = data.get(9).toString();
+		this.ngayTao = data.get(10).toString();
+		this.ngayVaoTruong = data.get(11).toString();
 	}
 	
-	public boolean login()
+	public boolean Login()
 	{
 		try
 		{
@@ -67,7 +76,7 @@ public class User {
 					);
 			if(data.indexOf("TKTD")<0)
 				return false;
-			id=data;
+			userId=data;
 			return true;
 		}
 		catch(Exception ex)
@@ -76,7 +85,12 @@ public class User {
 		}
 	}
 	
-	public boolean register()
+	public void Logout()
+	{
+		userId = "";
+	}
+	
+	public boolean Register()
 	{
 		try
 		{
@@ -94,28 +108,28 @@ public class User {
 		}
 	}
 	
-	public boolean getInfo()
+	public boolean GetInfo()
 	{
-		String data[] = new String[10];
+		ArrayList data = new ArrayList();		
 		try
 		{
 			String s = html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"ThongTinTaiKhoan", id}
+					new String[] {"ThongTinTaiKhoan", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
-			this.username = data[0];
-			this.hoDem = data[1];
-			this.ten = data[2];
-			this.ngaySinh =data[3];
-			this.email = data[4];
-			this.gioiTinh = data[5];
-			this.dienThoai = data[6];
-			this.anhDaiDien = data[7];
-			this.diaChi = data[8];
-			this.ngayVaoTruong = data[9];
+			this.username = data.get(0).toString();
+			this.hoDem = data.get(1).toString();
+			this.ten = data.get(2).toString();
+			this.ngaySinh =data.get(3).toString();
+			this.email = data.get(4).toString();
+			this.gioiTinh = data.get(5).toString();
+			this.dienThoai = data.get(6).toString();
+			this.anhDaiDien = data.get(7).toString();
+			this.diaChi = data.get(8).toString();
+			this.ngayVaoTruong = data.get(9).toString();
 			return true;
 		}
 		catch(Exception ex)
@@ -124,19 +138,49 @@ public class User {
 		}
 	}
 	
-	public boolean updateInfo()
+	public ArrayList GetNewTopics()
+	{
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"BaiVietMoi", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString(),
+						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
+				newtopics.add(t);
+				i += 7;
+			}
+			return newtopics;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	
+	public boolean Update()
 	{
 		try
 		{
 			String data=html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMatKhau","xHoDem","xTen","xNgaySinh","xGioiTinh",
 					"xEmail","xDienThoai","xDiaChi","xNgayTao","xNgayVaoTruong"},
-					new String[] {"CapNhatTaiKhoan",id,password,hoDem,ten,ngaySinh,gioiTinh,email,dienThoai,
+					new String[] {"CapNhatTaiKhoan",userId,password,hoDem,ten,ngaySinh,gioiTinh,email,dienThoai,
 					diaChi,ngayTao,ngayVaoTruong}
 					);
 			if(data.indexOf("false") >= 0)
 				return false;
-			id=data;
+			userId=data;
 			return true;
 		}
 		catch(Exception ex)		{
@@ -145,43 +189,48 @@ public class User {
 		}
 	}
 	
-	public Group createGroup(String groupName)
+	public Group CreateGroup(String groupName)
 	{
-		try
-		{
-			String groupId=html.SendRequest("",
-					new String[] {"CVM","xMaTaiKhoan", "xTenNhom"},
-					new String[] {"TaoNhom", id, groupName}
-					);
-			if(groupId.indexOf("false")>=0) return null;
-			return new Group(groupId);
-		}
-		catch(Exception ex)
-		{
-			return null;
-		}
-		
+		group = new Group("", groupName);
+		group.Create(userId);
+		return group;
 	}
 	
-	public Topic createTopic(Group group,String topicTitle,String topicContent)
+	public boolean UpdateGroup(String groupId, String groupName, String groupDescription, String groupRule)
 	{
-		try
-		{
-			String topicId=html.SendRequest("",
-					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung"},
-					new String[] {"TaoBaiViet", id, topicTitle,topicContent}
-					);
-			if(topicId.indexOf("false")>=0) return null;
-			return new Topic(topicId);
-		}
-		catch(Exception ex)
-		{
-			return null;
-		}
+		group = new Group(groupId, groupName, groupDescription, groupRule);
+		return group.Update();
 	}
 	
-	public void writeComment(Topic topic,String comment)
+	public boolean DeleteGroup(String groupId)
 	{
-		
+		group = new Group(groupId);
+		return group.Delete();
+	}
+	
+	public Topic CreateTopic(String topicTitle, String topicContent)
+	{
+		topic = new Topic(topicTitle, topicContent);
+		topic.Create(userId);
+		return topic;
+	}
+	
+	public boolean UpdateTopic(String topicId, String topicTitle, String topicContent)
+	{
+		topic = new Topic(topicId, topicTitle, topicContent);
+		return topic.Update();
+	}
+	
+	public boolean DeleteTopic(String topicId)
+	{
+		topic = new Topic(topicId);
+		return topic.Delete();
+	}
+	
+	public Comment CreateComment(String topicGroupId, String commentContent)
+	{
+		comment = new Comment("", userId, commentContent);
+		comment.Create(topicGroupId);
+		return comment;
 	}
 }

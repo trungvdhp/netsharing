@@ -1,17 +1,30 @@
 package util;
-
-/*import java.util.StringTokenizer;*/
+import de.enough.polish.util.Locale;
+import de.enough.polish.util.ArrayList;
+import java.util.Date;
+import base.Constants;
 public class UtilString {
-	public static String[] Split(String inputString, String delimeter)
+	public static ArrayList Split(String inputString, String delimeter)
 	{
-		/*StringTokenizer st = new StringTokenizer(inputString, delimeter);
-		int length = st.countTokens();
-		String rs[] = new String[length];
-		for(int i=0; i<length; ++i)
+		int beginIndex=0;
+		int endIndex;
+		int span = delimeter.length();
+		ArrayList rs = new ArrayList();
+		while((endIndex=inputString.indexOf(delimeter))>=0)
 		{
-			rs[i] = st.nextToken();
+			rs.add(inputString.substring(beginIndex, endIndex));
+			beginIndex = endIndex+span;
 		}
-		return rs;*/
-		return null;
+		return rs;
 	}
+	
+	 public static final String GetTimeString()
+	 {
+		 return Locale.formatDate(new Date(), Constants.dateFormat);
+	 }
+	 
+	 public static final String GetTimeString(Date date)
+	 {
+		 return Locale.formatDate(date, Constants.dateFormat);
+	 }
 }
