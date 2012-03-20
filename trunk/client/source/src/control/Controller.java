@@ -76,8 +76,9 @@ implements ApplicationInitializer, CommandListener
 	
 	private MainMenuList screenMainMenu;
 	private SimpleScreenHistory screenHistory;
-	private Form frmPrev;
-	
+	private UserForm frmLogin;
+	private UserForm frmRegister;
+	private User user;
 
 	/**
 	 * Creates a new controller.
@@ -116,9 +117,15 @@ implements ApplicationInitializer, CommandListener
 		}
 		this.display.setCurrent(topicForm);
 	}
+	public void showMessage(String content,Displayable disp,AlertType type)
+	{
+		//#style alertBox
+		Alert alert=new Alert("",content,null,type);
+		this.display.setCurrent(alert,disp);
+	}
 	public void openRegisterForm()
 	{
-		UserForm frmRegister = new UserForm("Đăng ký tài khoản");
+		frmRegister = new UserForm("Đăng ký tài khoản");
 		frmRegister.addTextField(txtUsername);
 		frmRegister.addTextField(txtPassword);
 		frmRegister.addTextField(txtConfirm);
@@ -168,8 +175,9 @@ implements ApplicationInitializer, CommandListener
 				// ignore
 			}
 		}*/
-		this.display.setCurrent( this.screenMainMenu );
-		UserForm frmLogin=new UserForm("Đăng nhập");
+		this.screenMainMenu = createMainMenu();
+		//this.display.setCurrent( this.screenMainMenu );
+		frmLogin=new UserForm("Đăng nhập");
 		frmLogin.addTextField(txtUsername);
 		frmLogin.addTextField(txtPassword);
 		//#style checkBoxItem
@@ -181,9 +189,8 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.addMenu(cmdExit);
 		frmLogin.setCommandListener(this);
 		
-		this.frmPrev = frmLogin;
-		this.screenMainMenu = createMainMenu();
-		this.display.setCurrent(frmPrev);
+		
+		this.display.setCurrent(frmLogin);
 		/*Group[] groups=new Group[5];
 		for(int i=0;i<5;i++)
 		{
@@ -196,12 +203,13 @@ implements ApplicationInitializer, CommandListener
 		MainMenuList list = new MainMenuList();
 		list.setCommandListener(this);
 		list.addCommand(this.cmdExit);
-		//list.addEntry("Thông báo");
 		list.addEntry("Tin mới");
-		list.addEntry("Hộp thư");
+		list.addEntry("Nhóm");
 		list.addEntry("Yêu cầu");
-		list.addEntry("Cấu hình");
 		list.addEntry("Tìm kiếm");
+		list.addEntry("Hộp thư");
+		list.addEntry("Cá nhân");
+		list.addEntry("Cài đặt");
 		return list;
 	}
 
@@ -262,14 +270,11 @@ implements ApplicationInitializer, CommandListener
 			User user=new User(username,password);
 			if(user.Login())
 			{
-				this.screenMainMenu = createMainMenu();
-				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.userId+"'",null,AlertType.INFO);
-				this.display.setCurrent(alert, screenMainMenu);
+				this.display.setCurrent(screenMainMenu);
 			}
 			else
 			{
-				Alert alert= new Alert("Thông báo","Đăng nhập thất bại! Lỗi:\n"+user.userId,null,AlertType.INFO);
-				this.display.setCurrent(alert, frmPrev);
+				showMessage("Đăng nhập thất bại! Lỗi: "+user.userId, frmLogin, AlertType.INFO);
 			}
 		} else if(cmd == this.cmdRegister)
 		{
@@ -278,22 +283,19 @@ implements ApplicationInitializer, CommandListener
 		{
 			if(txtPassword.getString().equals(txtConfirm.getString()))
 			{
-				User u = new User(txtUsername.getString(),txtPassword.getString());
-				if(u.Register())
+				user = new User(txtUsername.getString(),txtPassword.getString());
+				if(user.Register())
 				{
-					Alert a=new Alert("Thông báo","Bạn đã đăng ký thành công!",null,AlertType.INFO);
-					this.display.setCurrent(a,frmPrev);
+					showMessage("Bạn đã đăng ký thành công!", frmLogin, AlertType.INFO);
 				}
 				else
 				{
-					Alert a=new Alert("Thông báo","Bạn đăng ký không thành công!",null,AlertType.INFO);
-					this.display.setCurrent(a,frmPrev);
+					showMessage("Đăng ký không thành công!", frmRegister, AlertType.INFO);
 				}
 			}
 			else
 			{
-				Alert a=new Alert("Thông báo","Mật khẩu xác nhận không khớp!",null,AlertType.INFO);
-				this.display.setCurrent(a,frmPrev);
+				showMessage("Xác nhận mật khẩu không khớp", frmRegister, AlertType.INFO);
 			}
 			
 		}

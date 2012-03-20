@@ -74,8 +74,26 @@
 }
 .checkBox:hover {
 }
-
-
+.alertBox {
+	font-color: #BC2A4D;
+	repaint-previous-screen: true;
+	layout: horizontal-center | vcenter | horizontal-shrink | vertical-shrink;
+	title-style: alertBoxTitle;
+	padding: 5;
+	border {
+		type: round-rect;
+		color: #017ba9;
+	}
+	background {
+		type: round-rect;
+		color: screenBackgroundColor;
+	}
+}
+.alertBoxTitle {
+	layout: left;
+	font-size:small;
+	height: 0;
+}
 /***********************************************************************/
 
 /************************** UserList *********************************/
