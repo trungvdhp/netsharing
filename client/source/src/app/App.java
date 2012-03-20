@@ -53,6 +53,7 @@ import control.Controller;
  * </pre>
  * @author Richard Nkrumah
  */
+
 public class App 
 extends MIDlet
 {
