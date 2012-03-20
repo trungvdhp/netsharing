@@ -6,7 +6,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
 public class Html {
-	private String sessionId;
+	//private String sessionId;
 	private String path="http://localhost/VM_Server/SVM.php";
 	public String SendRequest(String url,String[] args,String[] values) throws Exception
 	{

@@ -25,7 +25,7 @@
  */
 package app;
 
-import java.io.IOException;
+/*import java.io.IOException;
 
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.ChoiceGroup;
@@ -37,7 +37,7 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.ImageItem;
 import javax.microedition.lcdui.StringItem;
-import javax.microedition.lcdui.TextField;
+import javax.microedition.lcdui.TextField;*/
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 

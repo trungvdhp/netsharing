@@ -260,15 +260,15 @@ implements ApplicationInitializer, CommandListener
 			String username = txtUsername.getString();
 			String password = txtPassword.getString();
 			User user=new User(username,password);
-			if(user.login())
+			if(user.Login())
 			{
 				this.screenMainMenu = createMainMenu();
-				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.id+"'",null,AlertType.INFO);
+				Alert alert= new Alert("Thông báo","Đăng nhập thành công, mã TK: '"+user.userId+"'",null,AlertType.INFO);
 				this.display.setCurrent(alert, screenMainMenu);
 			}
 			else
 			{
-				Alert alert= new Alert("Thông báo","Đăng nhập thất bại! Lỗi:\n"+user.id,null,AlertType.INFO);
+				Alert alert= new Alert("Thông báo","Đăng nhập thất bại! Lỗi:\n"+user.userId,null,AlertType.INFO);
 				this.display.setCurrent(alert, frmPrev);
 			}
 		} else if(cmd == this.cmdRegister)
@@ -279,7 +279,7 @@ implements ApplicationInitializer, CommandListener
 			if(txtPassword.getString().equals(txtConfirm.getString()))
 			{
 				User u = new User(txtUsername.getString(),txtPassword.getString());
-				if(u.register())
+				if(u.Register())
 				{
 					Alert a=new Alert("Thông báo","Bạn đã đăng ký thành công!",null,AlertType.INFO);
 					this.display.setCurrent(a,frmPrev);
