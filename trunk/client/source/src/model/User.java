@@ -9,27 +9,29 @@ public class User {
 	public String userId;
 	public String username;
 	public String password;
-	public String hoDem;
-	public String ten;
-	public String ngaySinh;
-	public String gioiTinh;
-	public String email;
-	public String dienThoai;
-	public String diaChi;
-	public String anhDaiDien;
-	public String ngayTao;
-	public String trangThai;
-	public String ngayVaoTruong;
-	public String maQuyen;
-	
 	public String firstName;
 	public String lastName;
+	public String birthday;
+	public String sex;
+	public String email;
+	public String phone;
+	public String address;
+	public String avatar;
+	public String createDate;
+	public String state;
+	public String startDay;
+	public String permission;
+	
 	Html html=new Html();
 	Topic topic = new Topic();
 	Group group = new Group();
 	TopicGroup topicgroup = new TopicGroup();
 	Comment comment = new Comment();
-	ArrayList newtopics;
+	Request request = new Request();
+	
+	ArrayList topics;
+	ArrayList groups;
+	ArrayList requests;
 	
 	public User()
 	{
@@ -55,17 +57,17 @@ public class User {
 		this.userId= data.get(0).toString();
 		this.username = data.get(1).toString();
 		this.password = data.get(2).toString();
-		this.hoDem = data.get(3).toString();
-		this.ten = data.get(4).toString();
-		this.ngaySinh = data.get(5).toString();
-		this.gioiTinh = data.get(6).toString();
+		this.firstName = data.get(3).toString();
+		this.lastName = data.get(4).toString();
+		this.birthday = data.get(5).toString();
+		this.sex = data.get(6).toString();
 		this.email = data.get(7).toString();
-		this.dienThoai = data.get(8).toString();
-		this.diaChi = data.get(9).toString();
-		this.ngayTao = data.get(10).toString();
-		this.ngayVaoTruong = data.get(11).toString();
+		this.phone = data.get(8).toString();
+		this.address = data.get(9).toString();
+		this.createDate = data.get(10).toString();
+		this.startDay = data.get(11).toString();
 	}
-	
+	//Đăng nhập
 	public boolean Login()
 	{
 		try
@@ -84,12 +86,12 @@ public class User {
 			return false;
 		}
 	}
-	
+	//Đăng xuất
 	public void Logout()
 	{
 		userId = "";
 	}
-	
+	//Đăng ký tài khoản
 	public boolean Register()
 	{
 		try
@@ -107,7 +109,7 @@ public class User {
 			return false;
 		}
 	}
-	
+	//Lấy thông tin tài khoản của bạn
 	public boolean GetInfo()
 	{
 		ArrayList data = new ArrayList();		
@@ -121,15 +123,15 @@ public class User {
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			this.username = data.get(0).toString();
-			this.hoDem = data.get(1).toString();
-			this.ten = data.get(2).toString();
-			this.ngaySinh =data.get(3).toString();
+			this.firstName = data.get(1).toString();
+			this.lastName = data.get(2).toString();
+			this.birthday =data.get(3).toString();
 			this.email = data.get(4).toString();
-			this.gioiTinh = data.get(5).toString();
-			this.dienThoai = data.get(6).toString();
-			this.anhDaiDien = data.get(7).toString();
-			this.diaChi = data.get(8).toString();
-			this.ngayVaoTruong = data.get(9).toString();
+			this.sex = data.get(5).toString();
+			this.phone = data.get(6).toString();
+			this.avatar = data.get(7).toString();
+			this.address = data.get(8).toString();
+			this.startDay = data.get(9).toString();
 			return true;
 		}
 		catch(Exception ex)
@@ -137,7 +139,7 @@ public class User {
 			return false;
 		}
 	}
-	
+	//Danh sách các bài viết mới
 	public ArrayList GetNewTopics()
 	{
 		ArrayList data = new ArrayList();		
@@ -156,18 +158,219 @@ public class User {
 			{
 				TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
-				newtopics.add(t);
-				i += 7;
+						data.get(i+4).toString(),data.get(i+5).toString(), 
+						data.get(i+6).toString(),data.get(i+7).toString(),data.get(i+8).toString());
+				topics.add(t);
+				i += 9;
 			}
-			return newtopics;
+			return topics;
 		}
 		catch(Exception ex)
 		{
 			return null;
 		}
 	}
-	
+	//Lấy danh sách các bài viết của bạn
+	public ArrayList GetMyTopics()
+	{
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"BaiVietCuaToi", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString(),
+						data.get(i+4).toString(),data.get(i+5).toString(), 
+						data.get(i+6).toString(),data.get(i+7).toString(),data.get(i+8).toString());
+				topics.add(t);
+				i += 9;
+			}
+			return topics;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các nhóm mà bạn là nhóm trưởng
+	public ArrayList GetOwnerGroups()
+	{
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"NhomBanLaTruongNhom", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Group t = new Group(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString(),
+						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
+				groups.add(t);
+				i += 7;
+			}
+			return groups;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các nhóm có bạn là thành viên
+	public ArrayList GetMemberGroups()
+	{
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"NhomBanLaThanhVien", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Group t = new Group(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString(),
+						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
+				groups.add(t);
+				i += 7;
+			}
+			return groups;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách tất cả các nhóm có bạn tham gia
+	public ArrayList GetMyGroups()
+	{
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"NhomBanThamGia", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Group t = new Group(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString(),
+						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
+				groups.add(t);
+				i += 7;
+			}
+			return groups;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các yêu cầu tham gia
+	public ArrayList GetJoinRequests()
+	{
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"DanhSachYeuCauThamGia", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Request t = new Request(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString(),
+						data.get(i+4).toString(),data.get(i+5).toString());
+				requests.add(t);
+				i += 6;
+			}
+			return requests;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các yêu cầu tham gia nhóm của bạn
+	public ArrayList GetMyJoinRequests()
+	{
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"DanhSachYeuCauThamGiaCuaBan", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Request t = new Request(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString(),
+						data.get(i+4).toString(),data.get(i+5).toString());
+				requests.add(t);
+				i += 6;
+			}
+			return requests;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Tạo yêu cầu tham gia nhóm
+	public Request CreateRequest(String groupId)
+	{
+		request = new Request(userId, groupId);
+		request.Create();
+		return request;
+	}
+	//Xác nhận yêu cầu tham gia nhóm
+	public boolean ConfirmRequest(String requestId)
+	{
+		request = new Request(requestId);
+		return request.Confirm();
+	}
+	//Xóa yêu cầu tham gia nhóm
+	public boolean DeleteRequest(String requestId)
+	{
+		request = new Request(requestId);
+		return request.Delete();
+	}
+	//Sửa thông tin tài khoản
 	public boolean Update()
 	{
 		try
@@ -175,8 +378,8 @@ public class User {
 			String data=html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMatKhau","xHoDem","xTen","xNgaySinh","xGioiTinh",
 					"xEmail","xDienThoai","xDiaChi","xNgayTao","xNgayVaoTruong"},
-					new String[] {"CapNhatTaiKhoan",userId,password,hoDem,ten,ngaySinh,gioiTinh,email,dienThoai,
-					diaChi,ngayTao,ngayVaoTruong}
+					new String[] {"CapNhatTaiKhoan",userId,password,firstName,lastName,birthday,sex,email,phone,
+					address,createDate,startDay}
 					);
 			if(data.indexOf("false") >= 0)
 				return false;
@@ -188,49 +391,61 @@ public class User {
 			return false;
 		}
 	}
-	
+	//Tạo nhóm
 	public Group CreateGroup(String groupName)
 	{
-		group = new Group("", groupName);
-		group.Create(userId);
+		group = new Group(userId, groupName);
+		group.Create();
 		return group;
 	}
-	
+	//Sửa nhóm
 	public boolean UpdateGroup(String groupId, String groupName, String groupDescription, String groupRule)
 	{
 		group = new Group(groupId, groupName, groupDescription, groupRule);
 		return group.Update();
 	}
-	
+	//Xóa nhóm
 	public boolean DeleteGroup(String groupId)
 	{
 		group = new Group(groupId);
 		return group.Delete();
 	}
-	
+	//Tạo bài viết
 	public Topic CreateTopic(String topicTitle, String topicContent)
 	{
 		topic = new Topic(topicTitle, topicContent);
 		topic.Create(userId);
 		return topic;
 	}
-	
+	//Sửa bài viết
 	public boolean UpdateTopic(String topicId, String topicTitle, String topicContent)
 	{
 		topic = new Topic(topicId, topicTitle, topicContent);
 		return topic.Update();
 	}
-	
+	//Xóa bài viết
 	public boolean DeleteTopic(String topicId)
 	{
 		topic = new Topic(topicId);
 		return topic.Delete();
 	}
-	
+	//Tạo bình luận
 	public Comment CreateComment(String topicGroupId, String commentContent)
 	{
-		comment = new Comment("", userId, commentContent);
+		comment = new Comment(userId, commentContent);
 		comment.Create(topicGroupId);
 		return comment;
+	}
+	//Tạo bình luận
+	public boolean UpdateComment(String commentId, String commentContent)
+	{
+		comment = new Comment(commentId, "", commentContent);
+		return comment.Update();
+	}
+	//Xóa bình luận
+	public boolean DeleteComment(String commentId, String commentContent)
+	{
+		comment = new Comment(commentId);
+		return comment.Delete();
 	}
 }

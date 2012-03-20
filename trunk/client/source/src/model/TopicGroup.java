@@ -31,12 +31,12 @@ public class TopicGroup {
 		this.topicGroupId = topicGroupId;
 	}
 	
-	public TopicGroup(String topicGroupId, String topicId, String groupId, String shareUserId, 
+	public TopicGroup(String topicGroupId, String topicId, String topicTitle, String groupId, String groupName, String shareUserId, 
 			String shareUserFullname, String shareDate, String commentsCount)
 	{
 		this.topicGroupId = topicGroupId;
-		this.topic = new Topic(topicId);
-		this.group = new Group(groupId);
+		this.topic = new Topic(topicId, topicTitle,"");
+		this.group = new Group(groupId, groupName,"","");
 		this.shareUserId = shareUserId;
 		this.shareUserFullname = shareUserFullname;
 		this.shareDate = shareDate;

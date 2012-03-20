@@ -139,7 +139,7 @@ implements ApplicationInitializer, CommandListener
 		UserList groupForm=new UserList("Nhóm tham gia");
 		for(int i=0;i<groups.length;i++)
 		{
-			groupForm.addEntry(groups[i].name);
+			groupForm.addEntry(groups[i].groupName);
 		}
 		this.display.setCurrent(groupForm);
 	}
