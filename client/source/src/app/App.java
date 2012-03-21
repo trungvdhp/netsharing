@@ -103,5 +103,5 @@ extends MIDlet
 		notifyDestroyed();
 	}
 
-
+	
 }
