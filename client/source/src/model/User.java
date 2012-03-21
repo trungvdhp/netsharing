@@ -429,6 +429,26 @@ public class User {
 		topic = new Topic(topicId);
 		return topic.Delete();
 	}
+	//Tạo và chia sẻ bài viết
+	public TopicGroup CreateAndShare(String topicTitle, String topicContent, String groupId)
+	{
+		topicgroup = new TopicGroup(userId, topicTitle, topicContent, groupId);
+		topicgroup.Create();
+		return topicgroup;
+	}
+	//Chia sẻ bài viết
+	public TopicGroup ShareTopic(String topicId, String groupId)
+	{
+		topicgroup = new TopicGroup(userId, topicId, groupId);
+		topicgroup.Share();
+		return topicgroup;
+	}
+	//Xóa chía sẻ bài viết
+	public boolean DeleteShareTopic(String topicGroupId)
+	{
+		topicgroup = new TopicGroup(topicGroupId);
+		return topicgroup.Delete();
+	}
 	//Tạo bình luận
 	public Comment CreateComment(String topicGroupId, String commentContent)
 	{
