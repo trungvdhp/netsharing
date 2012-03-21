@@ -31,6 +31,19 @@ public class TopicGroup {
 		this.topicGroupId = topicGroupId;
 	}
 	
+	public TopicGroup(String shareUserId, String topicId, String groupId)
+	{
+		this.shareUserId = shareUserId;
+		this.topic = new Topic(topicId);
+		this.group = new Group(groupId);
+	}
+	
+	public TopicGroup(String shareUserId, String topicTitle, String topicContent, String groupId)
+	{
+		this.shareUserId = shareUserId;
+		this.topic = new Topic(topicTitle, topicContent);
+		this.group = new Group(groupId);
+	}
 	public TopicGroup(String topicGroupId, String topicId, String topicTitle, String groupId, String groupName, String shareUserId, 
 			String shareUserFullname, String shareDate, String commentsCount)
 	{
@@ -68,6 +81,61 @@ public class TopicGroup {
 			}
 			return true;
 		} 
+		catch(Exception ex)
+		{
+			return false;
+		}
+	}
+	
+	public boolean Create()
+	{
+		try
+		{
+			String id=html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung","xMaNhom"},
+					new String[] {"TaoVaChiaSeBaiViet", shareUserId, topic.title, topic.content, group.groupId}
+					);
+			if(id.indexOf("false")>=0) return false;
+			topicGroupId = id;
+			shareDate = UtilString.GetTimeString();
+			return true;
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
+	}
+	
+	public boolean Share()
+	{
+		try
+		{
+			String id=html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan", "xMaBaiViet","xMaNhom"},
+					new String[] {"ChiaSeBaiViet", shareUserId, topic.topicId, group.groupId}
+					);
+			if(id.indexOf("false")>=0) return false;
+			topicGroupId = id;
+			shareDate = UtilString.GetTimeString();
+			return true;
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
+	}
+	
+	public boolean Delete()
+	{
+		try
+		{
+			String id=html.SendRequest("",
+					new String[] {"CVM", "xMaBaiVietNhom"},
+					new String[] {"XoaChiaSeBaiViet",topicGroupId}
+					);
+			if(id.indexOf("false")>=0) return false;
+			return true;
+		}
 		catch(Exception ex)
 		{
 			return false;
