@@ -27,4 +27,9 @@ public class UserForm extends Form
 	{
 		addCommand(cmd);
 	}
+	public void addTextBox(TextField text)
+	{
+		//#style textBox
+		append(text);
+	}
 }

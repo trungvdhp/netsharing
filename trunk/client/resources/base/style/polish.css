@@ -31,7 +31,9 @@
   */
   
  /*******************   UserForm   **************************/
-
+.textBox {
+	
+}
 .textField {
 	layout: left | expand;
 	text-wrap: false;

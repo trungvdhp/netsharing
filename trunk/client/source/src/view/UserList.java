@@ -1,5 +1,7 @@
 package view;
 
+import control.UserItem;
+import de.enough.polish.ui.ChoiceItem;
 import de.enough.polish.ui.List;
 
 public class UserList extends List{
@@ -14,5 +16,10 @@ public class UserList extends List{
 		//#style userListItem
 		this.append(item, null);
 		
+	}
+	public void addEntry(UserItem item,String type)
+	{
+		//
+		this.append(item);
 	}
 }
