@@ -32,7 +32,23 @@
   
  /*******************   UserForm   **************************/
 .textBox {
-	
+	layout: left | expand;
+	text-wrap: false;
+	border-color: #8699a9;
+	margin-left: 5;
+	margin-right:5;
+	font-color:#000;
+	min-height: 20%;
+	background {
+		color: #FFF;
+	}
+	label-style: textFieldLabel;
+}
+.textBox:hover{
+	border-color: #0087fa;
+	background {
+		color: #FFF;
+	}
 }
 .textField {
 	layout: left | expand;
@@ -248,10 +264,11 @@ menu {
 }
 
 /** Style for the first layer of subcommands: **/
+
 menu1 extends menu {
-	background-color: argb(150, 255, 255, 0 );
-	background-type: simple;
-      layout: right;
+	background-color:  #F0F5F8;
+	background-type: round-rect;
+      /*layout: right;*/
       margin-bottom: 4px;
       margin-right: 4px;
 }

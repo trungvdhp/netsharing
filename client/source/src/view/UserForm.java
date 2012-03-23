@@ -1,6 +1,5 @@
 package view;
 
-import control.UserItem;
 import de.enough.polish.ui.Form;
 import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.TextField;

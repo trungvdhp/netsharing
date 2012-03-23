@@ -49,6 +49,7 @@ import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextField;
 import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.SimpleScreenHistory;
+import de.enough.polish.ui.UiAccess;
 import de.enough.polish.ui.splash2.ApplicationInitializer;
 import de.enough.polish.ui.splash2.InitializerSplashScreen;
 import de.enough.polish.util.ArrayList;
@@ -77,7 +78,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtTopicContent = new TextField("Nội dung: ","", 50,TextField.ANY);
 	private TextField txtGroupName = new TextField("Tên nhóm: ","", 50,TextField.ANY);
 	private TextField txtDescription = new TextField("Mô tả: ","", 100,TextField.ANY);
-	private TextField txtGroupRule = new TextField("Luật tham gia: ","", 300,TextField.ANY);
+	private TextField txtGroupRule = new TextField("Quy tắc: ","", 300,TextField.ANY);
 	
 	private ChoiceGroup cgRemember = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 	
@@ -96,7 +97,8 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdShareTopic=new Command("Chia sẻ bài viết",Command.SCREEN,1);
 	private Command cmdUpdateGroup=new Command("Cập nhật thông tin",Command.SCREEN,1);
 	private Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
-	
+	private Command cmdGroupDetail=new Command("Chi tiết",Command.SCREEN,1);
+	private Command cmdGroup =new Command("Nhóm",Command.SCREEN,1);
 	
 	private MainMenuList screenMainMenu;
 	private SimpleScreenHistory screenHistory;
@@ -142,8 +144,16 @@ implements ApplicationInitializer, CommandListener
 		this.display.setCurrent( splash );
 		
 	}
-
 	public void openTopicForm(Topic[] topics)
+	{
+		UserList topicForm=new UserList("Bài viết mới");
+		for(int i=0;i<topics.length;i++)
+		{
+			topicForm.addEntry(topics[i].title);
+		}
+		this.display.setCurrent(topicForm);
+	}
+	public void openNewTopicForm(Topic[] topics)
 	{
 		UserList topicForm=new UserList("Bài viết mới");
 		for(int i=0;i<topics.length;i++)
@@ -172,9 +182,15 @@ implements ApplicationInitializer, CommandListener
 	public void openGroupForm(ArrayList groups)
 	{
 		frmGroup=new UserList("Nhóm tham gia");
-		frmGroup.addCommand(cmdUpdateGroup);
+		frmGroup.addCommand(cmdGroup);
+		UiAccess.addSubCommand(cmdGroupDetail, cmdGroup,frmGroup);
+		UiAccess.addSubCommand(cmdUpdateGroup, cmdGroup,frmGroup);
+		UiAccess.addSubCommand(cmdDeleteGroup, cmdGroup,frmGroup);
+		
+		//frmGroup.addCommand(cmdGroupDetail);
+		//frmGroup.addCommand(cmdUpdateGroup);
 		frmGroup.addCommand(cmdCreateGroup);
-		frmGroup.addCommand(cmdDeleteGroup);
+		//frmGroup.addCommand(cmdDeleteGroup);
 		frmGroup.addCommand(cmdMyGroup);
 		frmGroup.addCommand(cmdBack);
 		for(int i=0;i<groups.size();i++)
@@ -187,11 +203,12 @@ implements ApplicationInitializer, CommandListener
 	}
 	public void openGroupDetail(Group group)
 	{
-		Topic[] topics =(Topic[]) group.GetTopics().toArray();
+		ArrayList topics =group.GetTopics();
 		frmGroupDetail = new UserList(group.groupName);
-		for(int i=0;i<topics.length;i++)
+		for(int i=0;i<topics.size();i++)
 		{
-			UserItem topic=new UserItem(topics[i].title,topics[i]);
+			Topic t=(Topic)topics.get(i);
+			UserItem topic=new UserItem(t.title,t);
 			frmGroupDetail.addEntry(topic,"topic");
 		}
 		
@@ -422,6 +439,11 @@ implements ApplicationInitializer, CommandListener
 				UserItem t=(UserItem)frmJoinRequest.getCurrentItem();
 				openJoinRequestDetail((Request)t.data);
 			}
+			else if(disp==frmGroup)
+			{
+				UserItem item=(UserItem)frmGroup.getCurrentItem();
+				openGroupDetail((Group)item.data);
+			}
 		}
 		else if(cmd==cmdCreateGroup)
 		{
@@ -495,7 +517,7 @@ implements ApplicationInitializer, CommandListener
 		// TODO Auto-generated method stub
 		frmCreateTopic=new UserForm("Viết bài mới",null);
 		frmCreateTopic.addTextField(txtTopicTitle);
-		frmCreateTopic.addTextField(txtTopicContent);
+		frmCreateTopic.addTextBox(txtTopicContent);
 		frmCreateTopic.addCommand(cmdConfirm);
 		frmCreateTopic.addCommand(cmdBack);
 		frmCreateTopic.setCommandListener(this);

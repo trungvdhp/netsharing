@@ -1,8 +1,6 @@
 package control;
 
 
-import model.Topic;
-
 import de.enough.polish.ui.ChoiceItem;
 import de.enough.polish.ui.List;
 

@@ -8,6 +8,7 @@ public class Topic {
 	public String intro;
 	public String content;
 	public String createDate;
+	public User author;
 	private Html html=new Html();
 
 	public Topic()
@@ -43,7 +44,14 @@ public class Topic {
 		this.content = content;
 		this.createDate = createDate;
 	}
-	
+	public Topic(User user,String id,String title,String content,String createDate)
+	{
+		this.author=user;
+		this.topicId = id;
+		this.title = title;
+		this.content = content;
+		this.createDate = createDate;
+	}
 	public boolean GetSummary()
 	{
 		ArrayList data = new ArrayList();
