@@ -1,5 +1,8 @@
 package model;
 
+import control.MessageBox;
+import de.enough.polish.ui.Display;
+import de.enough.polish.ui.Displayable;
 import de.enough.polish.util.ArrayList;
 
 import util.UtilString;
@@ -262,9 +265,12 @@ public class User {
 		}
 	}
 	//Lấy danh sách tất cả các nhóm có bạn tham gia
-	public ArrayList GetMyGroups()
+	public ArrayList GetMyGroups(Display display, Displayable disp)
 	{
-		ArrayList data = new ArrayList();		
+		if(groups!=null) return groups;
+		groups=new ArrayList();
+		ArrayList data = new ArrayList();
+		
 		try
 		{
 			String s = html.SendRequest("",
@@ -276,6 +282,7 @@ public class User {
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			int len = data.size();
 			int i=0;
+			
 			while(i<len)
 			{
 				Group t = new Group(data.get(i).toString(),data.get(i+1).toString(),
@@ -288,6 +295,7 @@ public class User {
 		}
 		catch(Exception ex)
 		{
+			
 			return null;
 		}
 	}

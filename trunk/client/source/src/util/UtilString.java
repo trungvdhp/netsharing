@@ -10,7 +10,7 @@ public class UtilString {
 		int endIndex;
 		int span = delimeter.length();
 		ArrayList rs = new ArrayList();
-		while((endIndex=inputString.indexOf(delimeter))>=0)
+		while((endIndex=inputString.indexOf(delimeter,beginIndex))>=0)
 		{
 			rs.add(inputString.substring(beginIndex, endIndex));
 			beginIndex = endIndex+span;
