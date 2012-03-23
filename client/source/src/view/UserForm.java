@@ -1,5 +1,6 @@
 package view;
 
+import control.UserItem;
 import de.enough.polish.ui.Form;
 import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.TextField;
@@ -7,10 +8,11 @@ import de.enough.polish.ui.Command;
 
 public class UserForm extends Form
 {
-
-	public UserForm(String title) {
+	UserItem data;
+	public UserForm(String title,UserItem data) {
 		//#style userForm
 		super(title);
+		this.data=data;
 		// TODO Auto-generated constructor stub
 	}
 	public void addTextField(TextField text)
