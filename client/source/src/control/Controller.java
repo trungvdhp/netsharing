@@ -76,6 +76,8 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtTopicTitle = new TextField("Tiêu đề: ","", 50,TextField.ANY);
 	private TextField txtTopicContent = new TextField("Nội dung: ","", 50,TextField.ANY);
 	private TextField txtGroupName = new TextField("Tên nhóm: ","", 50,TextField.ANY);
+	private TextField txtDescription = new TextField("Mô tả: ","", 100,TextField.ANY);
+	private TextField txtGroupRule = new TextField("Luật tham gia: ","", 300,TextField.ANY);
 	
 	private ChoiceGroup cgRemember = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 	
@@ -83,7 +85,6 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdRegister = new Command("Đăng ký", Command.SCREEN,1);
 	private Command cmdExit = new Command(Locale.get("cmd.exit"), Command.EXIT, 10);
 	private Command cmdBack = new Command(Locale.get("cmd.back"), Command.BACK, 2);
-	private Command cmdSubmit = new Command("Hoàn tất",Command.SCREEN,1); 
 	private Command cmdCreateGroup=new Command("Tạo nhóm mới",Command.SCREEN,1);
 	private Command cmdCreateTopic=new Command("Đăng bài mới",Command.SCREEN,1);
 	private Command cmdDeleteTopic=new Command("Xóa bài viết",Command.SCREEN,1);
@@ -93,6 +94,10 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdReject=new Command("Từ chối",Command.SCREEN,1);
 	private Command cmdMyGroup=new Command("Nhóm của bạn",Command.SCREEN,1);
 	private Command cmdShareTopic=new Command("Chia sẻ bài viết",Command.SCREEN,1);
+	private Command cmdUpdateGroup=new Command("Cập nhật thông tin",Command.SCREEN,1);
+	private Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
+	
+	
 	private MainMenuList screenMainMenu;
 	private SimpleScreenHistory screenHistory;
 	private UserForm frmLogin;
@@ -106,6 +111,8 @@ implements ApplicationInitializer, CommandListener
 	private UserForm frmCreateTopic;
 	private UserList frmJoinRequest;
 	private UserForm frmJoinRequestDetail;
+	private Alert frmConfirmDelGroup;
+	private UserForm frmUpdateGroup;
 	
 
 	/**
@@ -157,7 +164,7 @@ implements ApplicationInitializer, CommandListener
 		frmRegister.addTextField(txtUsername);
 		frmRegister.addTextField(txtPassword);
 		frmRegister.addTextField(txtConfirm);
-		frmRegister.addMenu(cmdSubmit);
+		frmRegister.addMenu(cmdConfirm);
 		frmRegister.addMenu(cmdBack);
 		frmRegister.setCommandListener(this);
 		this.display.setCurrent(frmRegister);
@@ -165,6 +172,7 @@ implements ApplicationInitializer, CommandListener
 	public void openGroupForm(ArrayList groups)
 	{
 		frmGroup=new UserList("Nhóm tham gia");
+		frmGroup.addCommand(cmdUpdateGroup);
 		frmGroup.addCommand(cmdCreateGroup);
 		frmGroup.addCommand(cmdDeleteGroup);
 		frmGroup.addCommand(cmdMyGroup);
@@ -326,7 +334,7 @@ implements ApplicationInitializer, CommandListener
 		} else if(cmd == this.cmdRegister)
 		{
 			openRegisterForm();
-		} else if(cmd == cmdSubmit)
+		} else if(cmd == cmdConfirm)
 		{
 			if(disp==frmRegister){
 				if(txtPassword.getString().equals(txtConfirm.getString()))
@@ -353,6 +361,46 @@ implements ApplicationInitializer, CommandListener
 				
 				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString())!=null);
 				showMessage("Đã tạo topic", frmCreateTopic, AlertType.INFO);
+			}
+			else if(disp==frmCreateGroup)
+			{
+				Group g=user.CreateGroup(txtGroupName.getString());
+				
+				if(!g.groupId.equals(""))
+				{
+					txtGroupName.setString("");
+					showMessage("Tạo nhóm mới thành công!", frmCreateGroup, AlertType.INFO);
+				}
+				else
+				{
+					showMessage("Không thể tạo nhóm mới!", frmCreateGroup, AlertType.INFO);
+				}
+			}
+			else if(disp==frmConfirmDelGroup)
+			{
+				UserItem item=(UserItem)frmGroup.getCurrentItem();
+				Group g=(Group)item.data;
+				if(user.DeleteGroup(g.groupId))
+				{
+					showMessage("Nhóm đã được xóa!", frmGroup, AlertType.INFO);
+				}
+				else
+				{
+					showMessage("Không thể xóa nhóm!", frmGroup, AlertType.INFO);	
+				}
+					
+			}
+			else if(disp==frmUpdateGroup)
+			{
+				Group g=(Group)frmUpdateGroup.data;
+				if(user.UpdateGroup(g.groupId, txtGroupName.getString(), txtDescription.getString(), txtGroupRule.getString()))
+				{
+					showMessage("Cập nhật thành công!", frmGroup, AlertType.INFO );
+				}
+				else
+				{
+					showMessage("Cập nhật không thành công!", frmGroup, AlertType.ERROR);
+				}
 			}
 		}
 		else if(cmd==List.SELECT_COMMAND)
@@ -394,11 +442,39 @@ implements ApplicationInitializer, CommandListener
 		{
 			UserItem item=(UserItem)frmGroup.getCurrentItem();
 			Group g=(Group)item.data;
-			/*Alert a=new Alert("","Bạn chắc chắn muốn xóa nhóm "+g.groupName+" không?",null,AlertType.CONFIRMATION);
-			this.display.setCurrent(a,frmGroup);*/
-			user.DeleteGroup(g.groupId);
+			if(g.userId!=user.userId)
+			{
+				showMessage("Không thể xóa nhóm không phải do bạn tạo!", frmGroup, AlertType.INFO);
+				return;
+			}
+			frmConfirmDelGroup=MessageBox.Show("Bạn có chắc chắn muốn xóa nhóm "+g.groupName+" không?",AlertType.CONFIRMATION);
+			frmConfirmDelGroup.addCommand(cmdConfirm);
+			frmConfirmDelGroup.addCommand(cmdBack);
+			frmConfirmDelGroup.setCommandListener(this);
+			this.display.setCurrent(frmConfirmDelGroup);
+		}
+		else if(cmd==cmdUpdateGroup)
+		{
+			openUpdateGroupForm();
 			
 		}
+	}
+
+	private void openUpdateGroupForm() {
+		// TODO Auto-generated method stub
+		UserItem item=(UserItem)frmGroup.getCurrentItem();
+		Group g=(Group)item.data;
+		frmUpdateGroup = new UserForm(g.groupName,g);
+		txtGroupName.setString(g.groupName);
+		txtDescription.setString(g.description);
+		txtGroupRule.setString(g.rule);
+		frmUpdateGroup.addTextField(txtGroupName);
+		frmUpdateGroup.addTextField(txtDescription);
+		frmUpdateGroup.addTextBox(txtGroupRule);
+		frmUpdateGroup.addCommand(cmdConfirm);
+		frmUpdateGroup.addCommand(cmdBack);
+		frmUpdateGroup.setCommandListener(this);
+		this.display.setCurrent(frmUpdateGroup);
 	}
 
 	private void openJoinRequestDetail(Request request) {
@@ -429,6 +505,7 @@ implements ApplicationInitializer, CommandListener
 	private void openCreateGroupForm() {
 		// TODO Auto-generated method stub
 		frmCreateGroup = new UserForm("Tạo nhóm mới",null);
+		txtGroupName.setString("");
 		frmCreateGroup.addTextField(txtGroupName);
 		frmCreateGroup.addMenu(cmdConfirm);
 		frmCreateGroup.addMenu(cmdBack);
@@ -494,7 +571,7 @@ implements ApplicationInitializer, CommandListener
 		UserForm form=new UserForm("Tìm kiếm",null);
 		
 		form.addTextField(txtSearch);
-		form.addMenu(cmdSubmit);
+		form.addMenu(cmdConfirm);
 		form.addMenu(cmdBack);
 		this.display.setCurrent(form);
 		form.setCommandListener(this);

@@ -12,6 +12,12 @@ public class MessageBox {
 		Alert a=new Alert("",content,null,AlertType.INFO);
 		return a;
 	}
+	public static Alert Show(String content,AlertType alertType)
+	{
+		//#style alertBox
+		Alert a=new Alert("",content,null,AlertType.INFO);
+		return a;
+	}
 	public static void Show(String content,Display display,Displayable disp)
 	{
 		display.setCurrent(Show(content),disp);

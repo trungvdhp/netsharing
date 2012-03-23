@@ -267,7 +267,7 @@ public class User {
 	//Lấy danh sách tất cả các nhóm có bạn tham gia
 	public ArrayList GetMyGroups(Display display, Displayable disp)
 	{
-		if(groups!=null) return groups;
+		//if(groups!=null) return groups;
 		groups=new ArrayList();
 		ArrayList data = new ArrayList();
 		
