@@ -1552,8 +1552,8 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
                 $sql = "UPDATE nhom SET "; 
                 $sql .= "TenNhom = '".$TenNhom."', ";
                 $sql .= "MoTa = '".$Mota."', ";
-                $sql .= "QuyTac = '".$QuyTac."', ";
-                $sql .= " WHERE MaNhom = '".$MaNhom."'";
+                $sql .= "QuyTac = '".$QuyTac."' ";
+                $sql .= "WHERE MaNhom = '".$MaNhom."'";
                 $result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 				echo ($result != null) ? $true : $false;
         } else
