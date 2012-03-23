@@ -176,12 +176,13 @@ public class Group {
 	
 	public ArrayList GetTopics()
 	{
+		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
 			String s = html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"DanhSachBaiVietNhom", userId}
+					new String[] {Constants.Case,"xMaNhom"},
+					new String[] {"DanhSachBaiVietNhom", groupId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
