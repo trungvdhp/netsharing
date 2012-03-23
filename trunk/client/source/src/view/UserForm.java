@@ -8,8 +8,8 @@ import de.enough.polish.ui.Command;
 
 public class UserForm extends Form
 {
-	UserItem data;
-	public UserForm(String title,UserItem data) {
+	public Object data;
+	public UserForm(String title,Object data) {
 		//#style userForm
 		super(title);
 		this.data=data;

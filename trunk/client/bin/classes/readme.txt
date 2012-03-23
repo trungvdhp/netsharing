@@ -1,1 +1,0 @@
-Place your Java source code files in this directory.
