@@ -1542,45 +1542,22 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 		break;
 	}
 	
-	case "CapNhatNhom": {
+	case "SuaNhom": {
+		$MaNhom = $_REQUEST["xMaNhom"];
         $TenNhom = $_REQUEST["xTenNhom"];
-        $GioiThieu = $_REQUEST["xGioiThieu"];
-        $QuyTac = $_REQUEST["xQuyTac"];
-        $AnhDaiDien = $_REQUEST["xAnhDaiDien"];
-        $LoaiNhom = $_REQUEST["xLoaiNhom"];
-        $MaNhom = $_REQUEST["xMaNhom"];
+        $MoTa = $_REQUEST["xMoTa"];
+        $QuyTac = $_REQUEST["xLuat"];
         if ($TenNhom != "" && $MaNhom != "") {
             
                 $sql = "UPDATE nhom SET "; 
                 $sql .= "TenNhom = '".$TenNhom."', ";
-                $sql .= "MoTa = '".$GioiThieu."', ";
+                $sql .= "MoTa = '".$Mota."', ";
                 $sql .= "QuyTac = '".$QuyTac."', ";
-                $sql .= "LoaiNhom = ".$LoaiNhom.", ";
-                if ($AnhDaiDien != "") {
-                    // $AnhDaiDien đã có random
-                	$AnhDaiDien = $ThuMucAnhGocAvatar . $AnhDaiDien;
-                    $sql .= "AnhDaiDien = '".$AnhDaiDien."', ";
-                }
-                $sql = substr($sql, 0, strlen($sql)-2);
                 $sql .= " WHERE MaNhom = '".$MaNhom."'";
                 $result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
-                if ($result != null) {
-                	if ($AnhDaiDien != "") {
-                		$image = new SimpleImage();
-                		$image->load($AnhDaiDien);
-	                	if ($image->getWidth() > $WidthAvatar) {
-							$image->resizeToWidth($WidthAvatar);
-							// Tạo đường dẫn tới Mobile
-							$NewLink = $AvatarMobile . $image->getImageName($AnhDaiDien);
-							$image->save($NewLink);	
-						}
-                	}
-                    echo $true;
-                }
-                else
-                    echo $false . "1";
+				echo ($result != null) ? $true : $false;
         } else
-            echo $false . "2";
+            echo $false;
         break;
     }
     
