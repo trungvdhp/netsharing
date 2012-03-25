@@ -8,8 +8,7 @@ public class Comment {
 	public String userFullname;
 	public String content;
 	public String time;
-	
-	private Html html = new Html();
+	public User user=new User();
 	public Comment()
 	{
 		this.commentId = "";
@@ -18,7 +17,13 @@ public class Comment {
 		this.content = "";
 		this.time = "";
 	}
-	
+	public Comment(String commendId,String userName,String content,String time)
+	{
+		this.commentId=commendId;
+		this.user.username = userName;
+		this.content = content;
+		this.time=time;
+	}
 	public Comment(String id)
 	{
 		this.commentId = id;
@@ -39,13 +44,13 @@ public class Comment {
 		this.userId = userId;
 		this.content = content;
 	}
-	public Comment(String id, String userId, String username, String content)
+	/*public Comment(String id, String userId, String username, String content)
 	{
 		this.commentId = id;
 		this.userId = userId;
 		this.userFullname = username;
 		this.content = content;
-	}
+	}*/
 	
 	public Comment(String id, String userId, String username, String content, String time)
 	{
@@ -60,7 +65,7 @@ public class Comment {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xMaBaiVietNhom", "xNoiDung"},
 					new String[] {"TaoBinhLuan",userId,topicGroupId,content}
 					);
@@ -79,7 +84,7 @@ public class Comment {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaBinhLuan", "xNoiDung"},
 					new String[] {"SuaBinhLuan", commentId, content}
 					);
@@ -97,7 +102,7 @@ public class Comment {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaBinhLuan"},
 					new String[] {"XoaBinhLuan", commentId}
 					);

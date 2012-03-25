@@ -9,16 +9,6 @@ public class Topic {
 	public String content;
 	public String createDate;
 	public User author;
-	private Html html=new Html();
-
-	public Topic()
-	{
-		this.topicId = "";
-		this.intro = "";
-		this.title="";
-		this.content = "";
-		this.createDate="";
-	}
 	public Topic(String topicId)
 	{
 		this.topicId=topicId;
@@ -44,9 +34,9 @@ public class Topic {
 		this.content = content;
 		this.createDate = createDate;
 	}
-	public Topic(User user,String id,String title,String content,String createDate)
+	public Topic(User author,String id,String title,String content,String createDate)
 	{
-		this.author=user;
+		this.author=author;
 		this.topicId = id;
 		this.title = title;
 		this.content = content;
@@ -57,7 +47,7 @@ public class Topic {
 		ArrayList data = new ArrayList();
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"SoLuocBaiViet", topicId}
 					);
@@ -79,7 +69,7 @@ public class Topic {
 	{
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"NoiDungBaiViet", topicId}
 					);
@@ -99,7 +89,7 @@ public class Topic {
 		ArrayList data = new ArrayList();
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaBaiViet"},
 					new String[] {"ChiTietBaiViet", topicId}
 					);
@@ -121,7 +111,7 @@ public class Topic {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung"},
 					new String[] {"TaoBaiViet",userId,title,content}
 					);
@@ -140,7 +130,7 @@ public class Topic {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaBaiViet", "xTieuDe", "xNoiDung"},
 					new String[] {"SuaBaiViet", topicId, title, content}
 					);
@@ -158,7 +148,7 @@ public class Topic {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaBaiViet"},
 					new String[] {"XoaBaiViet",topicId}
 					);

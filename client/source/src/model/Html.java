@@ -7,8 +7,8 @@ import javax.microedition.io.HttpConnection;
 
 public class Html {
 	//private String sessionId;
-	private String path="http://localhost/VM_Server/SVM.php";
-	public String SendRequest(String url,String[] args,String[] values) throws Exception
+	private static String path="http://localhost/VM_Server/SVM.php";
+	public static String SendRequest(String url,String[] args,String[] values) throws Exception
 	{
 		url=path+url;
 		HttpConnection connection = (HttpConnection) Connector.open(url);
@@ -31,7 +31,7 @@ public class Html {
 		is.read(data);
 		return new String(data);
 	}
-	public String SendRequest(String url) throws Exception
+	public static String SendRequest(String url) throws Exception
 	{
 		return SendRequest(url,new String[]{},new String[]{});
 	}

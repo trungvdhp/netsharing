@@ -10,7 +10,6 @@ public class Request {
 	public String userId;
 	public String userFullname;
 	public String requestDate;
-	Html html = new Html();
 	public Request()
 	{
 		this.requestId = "";
@@ -45,7 +44,7 @@ public class Request {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMaNhom"},
 					new String[] {"TaoYeuCau",userId, groupId}
 					);
@@ -64,7 +63,7 @@ public class Request {
 	{
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaYeuCau"},
 					new String[] {"XacNhanYeuCauThamGia", requestId}
 					);
@@ -82,7 +81,7 @@ public class Request {
 	{
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaYeuCau"},
 					new String[] {"XoaYeuCauThamGia", requestId}
 					);

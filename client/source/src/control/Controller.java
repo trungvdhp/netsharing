@@ -28,9 +28,6 @@ package control;
 import java.io.IOException;
 import javax.microedition.lcdui.Image;
 
-import base.Constants;
-
-import util.UtilString;
 import view.*;
 import model.*;
 import app.App;
@@ -43,7 +40,6 @@ import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.CommandListener;
 import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Form;
 import de.enough.polish.ui.List;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextField;
@@ -96,7 +92,7 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdMyGroup=new Command("Nhóm của bạn",Command.SCREEN,1);
 	private Command cmdShareTopic=new Command("Chia sẻ bài viết",Command.SCREEN,1);
 	private Command cmdUpdateGroup=new Command("Cập nhật thông tin",Command.SCREEN,1);
-	private Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
+	 Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
 	private Command cmdGroupDetail=new Command("Chi tiết",Command.SCREEN,1);
 	private Command cmdGroup =new Command("Nhóm",Command.SCREEN,1);
 	
@@ -193,6 +189,7 @@ implements ApplicationInitializer, CommandListener
 		//frmGroup.addCommand(cmdDeleteGroup);
 		frmGroup.addCommand(cmdMyGroup);
 		frmGroup.addCommand(cmdBack);
+		//showMessage("openGroupForm",screenMainMenu,AlertType.INFO);
 		for(int i=0;i<groups.size();i++)
 		{
 			Group group=(Group)groups.get(i);
@@ -203,12 +200,13 @@ implements ApplicationInitializer, CommandListener
 	}
 	public void openGroupDetail(Group group)
 	{
-		ArrayList topics =group.GetTopics();
+		
 		frmGroupDetail = new UserList(group.groupName);
+		ArrayList topics =group.GetTopics(display,frmGroup);
 		for(int i=0;i<topics.size();i++)
 		{
-			Topic t=(Topic)topics.get(i);
-			UserItem topic=new UserItem(t.title,t);
+			TopicGroup t=(TopicGroup)topics.get(i);
+			UserItem topic=new UserItem(t.topic.title,t);
 			frmGroupDetail.addEntry(topic,"topic");
 		}
 		
@@ -245,7 +243,9 @@ implements ApplicationInitializer, CommandListener
 		this.screenMainMenu = createMainMenu();
 		this.display.setCurrent( this.screenMainMenu );
 		user = new User("34061","000000");
+		//showMessage("A", screenMainMenu, AlertType.INFO);		
 		user.Login();
+
 		/*frmLogin=new UserForm("Đăng nhập");
 		frmLogin.addTextField(txtUsername);
 		frmLogin.addTextField(txtPassword);
@@ -374,7 +374,6 @@ implements ApplicationInitializer, CommandListener
 			
 			else if(disp==frmCreateTopic)
 			{
-				Topic t;
 				
 				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString())!=null);
 				showMessage("Đã tạo topic", frmCreateTopic, AlertType.INFO);
@@ -429,10 +428,19 @@ implements ApplicationInitializer, CommandListener
 				UserItem g=(UserItem)frmGroup.getCurrentItem();
 				openGroupDetail((Group)g.data);
 			}
-			else if(disp==frmGroupDetail||disp==frmNewTopic)
+			else if(disp==frmGroupDetail)
 			{
-				UserItem t=(UserItem)frmNewTopic.getCurrentItem();
-				openTopicDetailForm((Topic)t.data);
+				
+				UserItem item=(UserItem)frmGroupDetail.getCurrentItem();
+				TopicGroup t=(TopicGroup)item.data;
+				//showMessage("A", screenMainMenu, AlertType.INFO);
+				openTopicDetailForm(t);
+			}
+			else if(disp==frmNewTopic)
+			{
+				UserItem item=(UserItem)frmNewTopic.getCurrentItem();
+				TopicGroup t=(TopicGroup)item.data;
+				openTopicDetailForm(t);
 			}
 			else if(disp==frmJoinRequest)
 			{
@@ -556,6 +564,7 @@ implements ApplicationInitializer, CommandListener
 			openNewTopicForm(newTopics);
 			break;
 		case 1:
+			
 			ArrayList group=user.GetMyGroups(display,screenMainMenu);
 			openGroupForm(group);
 			break;
@@ -626,13 +635,17 @@ implements ApplicationInitializer, CommandListener
 		frmNewTopic.setCommandListener(this);
 		this.display.setCurrent(frmNewTopic);
 	}
-	private void openTopicDetailForm(Topic topic)
+	private void openTopicDetailForm(TopicGroup t)
 	{
-		frmTopicDetail = new UserForm(topic.title,new UserItem("",topic));
-		String body = "Ngày tạo: "+topic.createDate+"\n";
-		body+=topic.content;
-		frmTopicDetail.append(new StringItem(topic.title, body));
+		
+		frmTopicDetail = new UserForm(t.topic.title,t);
+		String body="";
+		body+="Ngày chia sẻ: "+t.shareDate+"\n"+
+				t.topic.content+"\n"+
+				t.commentsCount+" bình luận\n";
+		frmTopicDetail.append(new StringItem("Đăng bởi: "+t.topic.author.username, body));
 		frmTopicDetail.addCommand(cmdBack);
 		frmTopicDetail.setCommandListener(this);
+		this.display.setCurrent(frmTopicDetail);
 	}
 }

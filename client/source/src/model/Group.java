@@ -1,6 +1,8 @@
 package model;
 
 import util.UtilString;
+import de.enough.polish.ui.Display;
+import de.enough.polish.ui.Displayable;
 import de.enough.polish.util.ArrayList;
 import base.Constants;
 
@@ -18,8 +20,6 @@ public class Group {
 	public ArrayList topics;
 	public ArrayList members;
 	public ArrayList requests;
-	
-	private Html html=new Html();
 	
 	public Group()
 	{
@@ -70,7 +70,7 @@ public class Group {
 		ArrayList data = new ArrayList();
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaNhom"},
 					new String[] {"MoTaNhom", groupId}
 					);
@@ -92,7 +92,7 @@ public class Group {
 		ArrayList data = new ArrayList();
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaNhom"},
 					new String[] {"ChiTietNhom", groupId}
 					);
@@ -120,7 +120,7 @@ public class Group {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"DanhSachThanhVienNhom", userId}
 					);
@@ -149,7 +149,7 @@ public class Group {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"DanhSachYeuCauThamGiaNhom", userId}
 					);
@@ -174,30 +174,36 @@ public class Group {
 		}
 	}
 	
-	public ArrayList GetTopics()
+	public ArrayList GetTopics(Display display,Displayable disp)
 	{
 		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaNhom"},
-					new String[] {"DanhSachBaiVietNhom", groupId}
+					new String[] {"DanhSachBaiVietTheoNhom", groupId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			int len = data.size();
 			int i=0;
+			
 			while(i<len)
 			{
-				TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString(), 
-						data.get(i+6).toString(),data.get(i+7).toString(),data.get(i+8).toString());
+				TopicGroup t=new TopicGroup(
+						data.get(i).toString(), 
+						new Topic(new User(data.get(i+5).toString(),""),
+								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
+						new User(data.get(i+7).toString(), ""),
+						data.get(i+6).toString(),
+						data.get(i+8).toString() );
+				
 				topics.add(t);
 				i += 9;
 			}
+			
 			return topics;
 		}
 		catch(Exception ex)
@@ -209,7 +215,7 @@ public class Group {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xTenNhom"},
 					new String[] {"TaoNhom",userId, groupName}
 					);
@@ -228,7 +234,7 @@ public class Group {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaNhom", "xTenNhom", "xMoTa","xLuat"},
 					new String[] {"SuaNhom", groupId, groupName, description, rule}
 					);
@@ -246,7 +252,7 @@ public class Group {
 	{
 		try
 		{
-			String id=html.SendRequest("",
+			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaNhom"},
 					new String[] {"XoaNhom", groupId}
 					);
