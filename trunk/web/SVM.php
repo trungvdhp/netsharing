@@ -24,6 +24,13 @@ $ChiTietAnh = "chitietanh/";
 $AlbumChiaSe = "albumchiase/";
 $WidthPhoto = 48;
 $WidthAvatar = 40;
+function get_user_info($user_id)
+{
+	$sql = "SELECT * FROM taikhoan WHERE mataikhoan = '".$user_id."'";
+	$result = mysql_query($sql);
+	$row=mysql_fetch_array($result);
+	return $row;
+}
 
 do{
 $re = false;
@@ -413,14 +420,14 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 					WHERE MaBaiViet_Nhom = '".$MaBaiViet_Nhom."' ORDER BY MaBinhLuan DESC";
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			while ($row = mysql_fetch_array($result)) {
-				$image = new SimpleImage();
-            	$AnhDaiDien = $image->checkImage($AvatarMobile, $row["AnhDaiDien"]);
+				//$image = new SimpleImage();
+            	//$AnhDaiDien = $image->checkImage($AvatarMobile, $row["AnhDaiDien"]);
             	
 				echo $row["NoiDung"] . $KyTuChiaTruongDL
 					. $row["TaiKhoan"] . $KyTuChiaTruongDL
-					. $row["NgayTao"] . $KyTuChiaTruongDL
-					. $row["Ten"] . $KyTuChiaTruongDL
-					. $AnhDaiDien . $KyTuChiaBanGhi;
+					. $row["NgayTao"] . $KyTuChiaTruongDL;
+					//. $row["Ten"] . $KyTuChiaTruongDL
+					//. $AnhDaiDien . $KyTuChiaBanGhi;
 			} 
 		}else 
 			echo $false;
@@ -451,8 +458,8 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 						. SimpleImage::MySubString($rowTaiKhoan_BaiViet_Nhom["NoiDung"], 50) . $KyTuChiaTruongDL
 						. $rowTaiKhoan_BaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
 						. $rowTaiKhoan_BaiViet_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
-						. $rowTaiKhoan_BaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
-						. $rowTaiKhoan_BaiViet_Nhom["Ten"] . $KyTuChiaTruongDL
+						//. $rowTaiKhoan_BaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
+						//. $rowTaiKhoan_BaiViet_Nhom["Ten"] . $KyTuChiaTruongDL
                         . $AnhDaiDien . $KyTuChiaTruongDL
 						. $rowTaiKhoan_BaiViet_Nhom["MaNhom"] . $KyTuChiaTruongDL
 						. $rowTaiKhoan_BaiViet_Nhom["TenNhom"] . $KyTuChiaTruongDL
@@ -941,7 +948,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 	case "DanhSachBaiVietTheoNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		if ($MaNhom != "") {
-			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom, bv.NoiDung, bv.TieuDe, bvn.NgayChiaSe, tk.TaiKhoan, tk.AnhDaiDien, HoDem, Ten 
+			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.TaiKhoan,bvn.TaiKhoan AS TaiKhoanChiaSe
 							FROM baiviet_nhom bvn 
 								INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet
 								INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan  
@@ -957,16 +964,21 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 					
     				$image = new SimpleImage();
             		$AnhDaiDien = $image->checkImage($AvatarMobile, $rowBaiViet_Nhom["AnhDaiDien"]);
-                    
+                    //8 truong
 					echo $rowBaiViet_Nhom["MaBaiViet_Nhom"] . $KyTuChiaTruongDL
-						. SimpleImage::MySubString($rowBaiViet_Nhom["TieuDe"], 20) . $KyTuChiaTruongDL
-						. SimpleImage::MySubString($rowBaiViet_Nhom["NoiDung"], 50) . $KyTuChiaTruongDL
-						. $rowBaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
+						//. SimpleImage::MySubString($rowBaiViet_Nhom["TieuDe"], 20) . $KyTuChiaTruongDL
+						//. SimpleImage::MySubString($rowBaiViet_Nhom["NoiDung"], 50) . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaBaiViet"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["NoiDung"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["NgayTao"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
-						. $rowBaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
-						. $rowBaiViet_Nhom["Ten"] . $KyTuChiaTruongDL
-                        . $AnhDaiDien . $KyTuChiaTruongDL
-						. $countBinhLuanBaiViet . $KyTuChiaBanGhi
+						. $rowBaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["TaiKhoanChiaSe"] . $KyTuChiaTruongDL
+						//. $rowBaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
+						//. $rowBaiViet_Nhom["Ten"] . $KyTuChiaTruongDL
+                        //. $AnhDaiDien . $KyTuChiaTruongDL
+						. $countBinhLuanBaiViet . $KyTuChiaTruongDL
 						;
 				}
 			} else 
@@ -1545,15 +1557,16 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 	case "SuaNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
         $TenNhom = $_REQUEST["xTenNhom"];
-        $MoTa = $_REQUEST["xMoTa"];
+        $MoTa = $_REQUEST['xMoTa'];
         $QuyTac = $_REQUEST["xLuat"];
         if ($TenNhom != "" && $MaNhom != "") {
             
                 $sql = "UPDATE nhom SET "; 
                 $sql .= "TenNhom = '".$TenNhom."', ";
-                $sql .= "MoTa = '".$Mota."', ";
+                $sql .= "MoTa = '".$MoTa."', ";
                 $sql .= "QuyTac = '".$QuyTac."' ";
-                $sql .= "WHERE MaNhom = '".$MaNhom."'";
+                $sql .= " WHERE MaNhom = '".$MaNhom."'";
+				//echo $sql;
                 $result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 				echo ($result != null) ? $true : $false;
         } else
