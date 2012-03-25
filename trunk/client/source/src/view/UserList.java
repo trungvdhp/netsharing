@@ -1,7 +1,6 @@
 package view;
 
 import control.UserItem;
-import de.enough.polish.ui.ChoiceItem;
 import de.enough.polish.ui.List;
 
 public class UserList extends List{

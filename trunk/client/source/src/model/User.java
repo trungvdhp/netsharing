@@ -25,12 +25,11 @@ public class User {
 	public String startDay;
 	public String permission;
 	
-	Html html=new Html();
-	Topic topic = new Topic();
-	Group group = new Group();
-	TopicGroup topicgroup = new TopicGroup();
-	Comment comment = new Comment();
-	Request request = new Request();
+	Topic topic;// = new Topic();
+	Group group;// = new Group();
+	TopicGroup topicgroup;// = new TopicGroup();
+	Comment comment;// = new Comment();
+	Request request;// = new Request();
 	
 	ArrayList topics;
 	ArrayList groups;
@@ -75,7 +74,7 @@ public class User {
 	{
 		try
 		{
-			String data=html.SendRequest("",
+			String data=Html.SendRequest("",
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangNhap",username,password}
 					);
@@ -99,7 +98,7 @@ public class User {
 	{
 		try
 		{
-			String data=html.SendRequest("",
+			String data=Html.SendRequest("",
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangKyTaiKhoan",username,password}
 					);
@@ -118,7 +117,7 @@ public class User {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"ThongTinTaiKhoan", userId}
 					);
@@ -148,7 +147,7 @@ public class User {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"BaiVietMoi", userId}
 					);
@@ -159,11 +158,11 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
+				/*TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString(),
 						data.get(i+4).toString(),data.get(i+5).toString(), 
 						data.get(i+6).toString(),data.get(i+7).toString(),data.get(i+8).toString());
-				topics.add(t);
+				topics.add(t);*/
 				i += 9;
 			}
 			return topics;
@@ -179,7 +178,7 @@ public class User {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"BaiVietCuaToi", userId}
 					);
@@ -190,11 +189,11 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
+				/*TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString(),
 						data.get(i+4).toString(),data.get(i+5).toString(), 
 						data.get(i+6).toString(),data.get(i+7).toString(),data.get(i+8).toString());
-				topics.add(t);
+				topics.add(t);*/
 				i += 9;
 			}
 			return topics;
@@ -210,7 +209,7 @@ public class User {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"NhomBanLaTruongNhom", userId}
 					);
@@ -240,7 +239,7 @@ public class User {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"NhomBanLaThanhVien", userId}
 					);
@@ -267,18 +266,21 @@ public class User {
 	//Lấy danh sách tất cả các nhóm có bạn tham gia
 	public ArrayList GetMyGroups(Display display, Displayable disp)
 	{
+		MessageBox.Show("SS", display, disp);
 		//if(groups!=null) return groups;
 		groups=new ArrayList();
 		ArrayList data = new ArrayList();
 		
 		try
 		{
-			String s = html.SendRequest("",
+			
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"NhomBanThamGia", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
+			
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			int len = data.size();
 			int i=0;
@@ -305,7 +307,7 @@ public class User {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"DanhSachYeuCauThamGia", userId}
 					);
@@ -335,7 +337,7 @@ public class User {
 		ArrayList data = new ArrayList();		
 		try
 		{
-			String s = html.SendRequest("",
+			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"DanhSachYeuCauThamGiaCuaBan", userId}
 					);
@@ -383,7 +385,7 @@ public class User {
 	{
 		try
 		{
-			String data=html.SendRequest("",
+			String data=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMatKhau","xHoDem","xTen","xNgaySinh","xGioiTinh",
 					"xEmail","xDienThoai","xDiaChi","xNgayTao","xNgayVaoTruong"},
 					new String[] {"CapNhatTaiKhoan",userId,password,firstName,lastName,birthday,sex,email,phone,
@@ -437,7 +439,7 @@ public class User {
 		topic = new Topic(topicId);
 		return topic.Delete();
 	}
-	//Tạo và chia sẻ bài viết
+	/*//Tạo và chia sẻ bài viết
 	public TopicGroup CreateAndShare(String topicTitle, String topicContent, String groupId)
 	{
 		topicgroup = new TopicGroup(userId, topicTitle, topicContent, groupId);
@@ -450,12 +452,11 @@ public class User {
 		topicgroup = new TopicGroup(userId, topicId, groupId);
 		topicgroup.Share();
 		return topicgroup;
-	}
+	}*/
 	//Xóa chía sẻ bài viết
 	public boolean DeleteShareTopic(String topicGroupId)
 	{
-		topicgroup = new TopicGroup(topicGroupId);
-		return topicgroup.Delete();
+		return TopicGroup.Delete(new TopicGroup(topicGroupId));
 	}
 	//Tạo bình luận
 	public Comment CreateComment(String topicGroupId, String commentContent)
