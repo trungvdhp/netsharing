@@ -430,7 +430,7 @@ implements ApplicationInitializer, CommandListener
 				handleCommandMainMenu();
 			else if(disp==frmGroup)
 			{
-				UserItem item=(UserItem)frmGroup.getCurrentItem(display,screenMainMenu);
+				UserItem item=(UserItem)frmGroup.getCurrentItem();
 				openGroupDetail((Group)item.data);
 			}
 			else if(disp==frmGroupDetail)
