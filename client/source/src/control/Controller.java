@@ -495,6 +495,11 @@ implements ApplicationInitializer, CommandListener
 		// TODO Auto-generated method stub
 		UserItem item=(UserItem)frmGroup.getCurrentItem();
 		Group g=(Group)item.data;
+		if(g.leader.userId!=user.userId)
+		{
+			showMessage("Không thể sửa nhóm không phải do bạn tạo!", frmGroup, AlertType.INFO);
+			return;
+		}
 		frmUpdateGroup = new UserForm(g.groupName,g);
 		txtGroupName.setString(g.groupName);
 		txtDescription.setString(g.description);
