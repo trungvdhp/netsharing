@@ -7,7 +7,7 @@ import javax.microedition.io.HttpConnection;
 
 public class Html {
 	//private String sessionId;
-	private static String path="http://localhost/VM_Server/SVM.php";
+	private static String path="http://hanghaicnt.net/VM_Server/SVM.php";
 	public static String SendRequest(String url,String[] args,String[] values) throws Exception
 	{
 		url=path+url;

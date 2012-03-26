@@ -25,12 +25,6 @@ public class User {
 	public String startDay;
 	public String permission;
 	
-	Topic topic;// = new Topic();
-	Group group;// = new Group();
-	TopicGroup topicgroup;// = new TopicGroup();
-	Comment comment;// = new Comment();
-	Request request;// = new Request();
-	
 	ArrayList topics;
 	ArrayList groups;
 	ArrayList requests;
@@ -220,9 +214,7 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Group t = new Group(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
+				Group t = null;
 				groups.add(t);
 				i += 7;
 			}
@@ -250,9 +242,8 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Group t = new Group(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
+				Group t=null;
+				
 				groups.add(t);
 				i += 7;
 			}
@@ -266,7 +257,7 @@ public class User {
 	//Lấy danh sách tất cả các nhóm có bạn tham gia
 	public ArrayList GetMyGroups(Display display, Displayable disp)
 	{
-		MessageBox.Show("SS", display, disp);
+		//MessageBox.Show("SS", display, disp);
 		//if(groups!=null) return groups;
 		groups=new ArrayList();
 		ArrayList data = new ArrayList();
@@ -287,9 +278,13 @@ public class User {
 			
 			while(i<len)
 			{
-				Group t = new Group(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString(), data.get(i+6).toString());
+				Group t=new Group(data.get(i).toString(),
+						data.get(i+1).toString(),
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),"",""),
+						data.get(i+4).toString(),
+						data.get(i+5).toString(),
+						data.get(i+6).toString()
+						);
 				groups.add(t);
 				i += 7;
 			}
@@ -364,20 +359,20 @@ public class User {
 	//Tạo yêu cầu tham gia nhóm
 	public Request CreateRequest(String groupId)
 	{
-		request = new Request(userId, groupId);
+		Request request = new Request(userId, groupId);
 		request.Create();
 		return request;
 	}
 	//Xác nhận yêu cầu tham gia nhóm
 	public boolean ConfirmRequest(String requestId)
 	{
-		request = new Request(requestId);
+		Request request = new Request(requestId);
 		return request.Confirm();
 	}
 	//Xóa yêu cầu tham gia nhóm
 	public boolean DeleteRequest(String requestId)
 	{
-		request = new Request(requestId);
+		Request request = new Request(requestId);
 		return request.Delete();
 	}
 	//Sửa thông tin tài khoản
@@ -404,39 +399,37 @@ public class User {
 	//Tạo nhóm
 	public Group CreateGroup(String groupName)
 	{
-		group = new Group(userId, groupName);
-		group.Create();
-		return group;
+		return Group.Create(this,groupName);
 	}
 	//Sửa nhóm
 	public boolean UpdateGroup(String groupId, String groupName, String groupDescription, String groupRule)
 	{
-		group = new Group(groupId, groupName, groupDescription, groupRule);
+		Group group = new Group(groupId, groupName, groupDescription, groupRule);
 		return group.Update();
 	}
 	//Xóa nhóm
 	public boolean DeleteGroup(String groupId)
 	{
-		group = new Group(groupId);
+		Group group = new Group(groupId);
 		return group.Delete();
 	}
 	//Tạo bài viết
 	public Topic CreateTopic(String topicTitle, String topicContent)
 	{
-		topic = new Topic(topicTitle, topicContent);
+		Topic topic = new Topic(topicTitle, topicContent);
 		topic.Create(userId);
 		return topic;
 	}
 	//Sửa bài viết
 	public boolean UpdateTopic(String topicId, String topicTitle, String topicContent)
 	{
-		topic = new Topic(topicId, topicTitle, topicContent);
+		Topic topic = new Topic(topicId, topicTitle, topicContent);
 		return topic.Update();
 	}
 	//Xóa bài viết
 	public boolean DeleteTopic(String topicId)
 	{
-		topic = new Topic(topicId);
+		Topic topic = new Topic(topicId);
 		return topic.Delete();
 	}
 	/*//Tạo và chia sẻ bài viết
@@ -445,36 +438,42 @@ public class User {
 		topicgroup = new TopicGroup(userId, topicTitle, topicContent, groupId);
 		topicgroup.Create();
 		return topicgroup;
-	}
-	//Chia sẻ bài viết
-	public TopicGroup ShareTopic(String topicId, String groupId)
-	{
-		topicgroup = new TopicGroup(userId, topicId, groupId);
-		topicgroup.Share();
-		return topicgroup;
 	}*/
+	//Chia sẻ bài viết
+	public TopicGroup ShareTopic(Topic t,Group g)
+	{
+		try
+		{
+			String topicGroupId=Html.SendRequest("",
+					new String[]{"CVM","xMaBaiViet","xMaNhom","xTaiKhoan"},
+					new String[]{"ChiaSeBaiViet",t.topicId,g.groupId,this.username}
+					);
+			return new TopicGroup(topicGroupId);
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
 	//Xóa chía sẻ bài viết
 	public boolean DeleteShareTopic(String topicGroupId)
 	{
 		return TopicGroup.Delete(new TopicGroup(topicGroupId));
 	}
 	//Tạo bình luận
-	public Comment CreateComment(String topicGroupId, String commentContent)
+	public Comment CreateComment(TopicGroup t, String commentContent)
 	{
-		comment = new Comment(userId, commentContent);
-		comment.Create(topicGroupId);
-		return comment;
+		return Comment.Create(t, this, commentContent);
 	}
 	//Tạo bình luận
-	public boolean UpdateComment(String commentId, String commentContent)
+	public boolean UpdateComment(Comment c, String commentContent)
 	{
-		comment = new Comment(commentId, "", commentContent);
-		return comment.Update();
+		c.content = commentContent;
+		return c.Update();
 	}
 	//Xóa bình luận
-	public boolean DeleteComment(String commentId, String commentContent)
+	public boolean DeleteComment(Comment c)
 	{
-		comment = new Comment(commentId);
-		return comment.Delete();
+		return Comment.Delete(c);
 	}
 }
