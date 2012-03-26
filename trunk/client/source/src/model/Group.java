@@ -19,12 +19,12 @@ public class Group {
 	public ArrayList topics;
 	public ArrayList members;
 	public ArrayList requests;
-	//su dung cho thao tac xoa
+	//for delete action
 	public Group(String groupId)
 	{
 		this.groupId = groupId;
 	}
-	//thao tac cap nhat nhom
+	//for update action
     public Group(String groupId, String groupName, String description, String rule)
     {
             this.groupId = groupId;
@@ -32,6 +32,7 @@ public class Group {
             this.description = description;
             this.rule = rule;
     }
+    //for the action that show the list and detail of group
 	public Group(String groupId, String groupName, User leader, String createDate,
 			String topicsCount, String membersCount)
 	{
@@ -116,9 +117,7 @@ public class Group {
 			int i=0;
 			while(i<len)
 			{
-				Request t = new Request(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString());
+				Request t = null;//new Request(data.get(i).toString(),data.get(i+1).toString(),data.get(i+2).toString(),data.get(i+3).toString(),data.get(i+4).toString(),data.get(i+5).toString());
 				requests.add(t);
 				i += 6;
 			}
@@ -186,13 +185,13 @@ public class Group {
 		}
 	}
 	
-	public boolean Delete()
+	public static boolean Delete(Group g)
 	{
 		try
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaNhom"},
-					new String[] {"XoaNhom", groupId}
+					new String[] {"XoaNhom", g.groupId}
 					);
 			if(id.indexOf("false")>=0) return false;
 			return true;

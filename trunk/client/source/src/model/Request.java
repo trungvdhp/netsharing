@@ -5,57 +5,43 @@ import base.Constants;
 
 public class Request {
 	public String requestId;
-	public String groupId;
-	public String groupName;
-	public String userId;
-	public String userFullname;
+	public Group group;
+	public User user;
 	public String requestDate;
-	public Request()
-	{
-		this.requestId = "";
-		this.groupId = "";
-		this.groupName = "";
-		this.userId = "";
-		this.userFullname = "";
-		this.requestDate = "";
-	}
 	
 	public Request(String requestId)
 	{
 		this.requestId = requestId;
 	}
 	
-	public Request(String userId, String groupId)
+	public Request(User u,Group g)
 	{
-		this.userId = userId;
-		this.groupId = groupId;
+		this.user=u;
+		this.group=g;
 	}
-	public Request(String requestId, String groupId, String groupName, String userId, String userFullname, String requestDate)
+	public Request(String requestId, Group g, User u, String requestDate)
 	{
 		this.requestId = requestId;
-		this.groupId = groupId;
-		this.groupName = groupName;
-		this.userId = userId;
-		this.userFullname = userFullname;
+		group = g;
+		user = u;
 		this.requestDate = requestDate;
 	}
 	
-	public boolean Create()
+	public static Request Create(User u,Group g)
 	{
 		try
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMaNhom"},
-					new String[] {"TaoYeuCau",userId, groupId}
+					new String[] {"TaoYeuCau",u.userId, g.groupId}
 					);
-			if(id.indexOf("false")>=0) return false;
-			requestId = id;
-			requestDate = UtilString.GetTimeString();
-			return true;
+			if(id.indexOf("false")>=0) return null;
+			String requestDate = UtilString.GetTimeString();
+			return new Request(id);
 		}
 		catch(Exception ex)
 		{
-			return false;
+			return null;
 		}
 	}
 	

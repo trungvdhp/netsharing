@@ -107,22 +107,22 @@ public class Topic {
 		}
 	}
 	
-	public boolean Create(String userId)
+	public static Topic Create(User u,String title,String content)
 	{
 		try
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung"},
-					new String[] {"TaoBaiViet",userId,title,content}
+					new String[] {"TaoBaiViet",u.userId,title,content}
 					);
-			if(id.indexOf("false")>=0) return false;
-			topicId = id;
-			createDate = UtilString.GetTimeString();
-			return true;
+			if(id.indexOf("false")>=0) return null;
+			//topicId = id;
+			String createDate = UtilString.GetTimeString();
+			return new Topic(u, id, title, content, createDate);
 		}
 		catch(Exception ex)
 		{
-			return false;
+			return null;
 		}
 	}
 	
@@ -144,13 +144,13 @@ public class Topic {
 		}
 	}
 	
-	public boolean Delete()
+	public static boolean Delete(Topic t)
 	{
 		try
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaBaiViet"},
-					new String[] {"XoaBaiViet",topicId}
+					new String[] {"XoaBaiViet",t.topicId}
 					);
 			if(id.indexOf("false")>=0) return false;
 			return true;
