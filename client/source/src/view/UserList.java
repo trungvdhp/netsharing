@@ -44,14 +44,13 @@ public class UserList extends List{
 	}
 	public Item getCurrentItem()
 	{
-		Item i=(Item)items.get(this.getCurrentIndex());
-		
+		UserItem i=(UserItem)items.get(this.getCurrentIndex());
 		return i; 
 	}
-	public Item getCurrentItem(Display display,Displayable disp)
+	/*public Item getCurrentItem(Display display,Displayable disp)
 	{
 		UserItem i=(UserItem)items.get(this.getCurrentIndex());
 		//MessageBox.Show("a",display,disp);
 		return i; 
-	}
+	}*/
 }
