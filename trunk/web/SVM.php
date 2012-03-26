@@ -228,7 +228,7 @@ switch ($Case){
 					.$row["TenNhom"] . $KyTuChiaBanGhi;
 			}*/
 			
-			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, (tk.HoDem+' '+tk.Ten) AS HoTen,n.NgayTao  FROM nhom n INNER JOIN taikhoan_nhom tkn ON tkn.MaNhom = n.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = tkn.MaTaiKhoan
+			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, tk.TaiKhoan,n.NgayTao  FROM nhom n INNER JOIN taikhoan_nhom tkn ON tkn.MaNhom = n.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = tkn.MaTaiKhoan
 WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
@@ -239,7 +239,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 				echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
 					.$rowTaiKhoan_Nhom["TenNhom"] . $KyTuChiaTruongDL
 					.$rowTaiKhoan_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
-					.$rowTaiKhoan_Nhom["HoTen"] . $KyTuChiaTruongDL
+					.$rowTaiKhoan_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
 					.$rowTaiKhoan_Nhom["NgayTao"] . $KyTuChiaTruongDL
 					.$tmprow2["SoBaiViet"] . $KyTuChiaTruongDL
 					.$tmprow1["SoThanhVien"] . $KyTuChiaTruongDL;
