@@ -246,11 +246,11 @@ implements ApplicationInitializer, CommandListener
 		// create main menu:
 		
 		this.screenMainMenu = createMainMenu();
-		//screenHistory.show( this.screenMainMenu );
-		//user = new User("34061","000000");	
-		//user.Login();
+		screenHistory.show( this.screenMainMenu );
+		user = new User("34061","000000");	
+		user.Login();
 
-		frmLogin=new UserForm("Đăng nhập",null);
+		/*frmLogin=new UserForm("Đăng nhập",null);
 		frmLogin.addTextField(txtUsername);
 		frmLogin.addTextField(txtPassword);
 		//#style checkBoxItem
@@ -263,7 +263,7 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.setCommandListener(this.commandListener);
 		
 		
-		screenHistory.show(frmLogin);
+		screenHistory.show(frmLogin);*/
 		/*LoginForm form = new LoginForm(midlet);
 		screenHistory.show(form);*/
 		long currentTime = System.currentTimeMillis();
@@ -401,7 +401,7 @@ implements ApplicationInitializer, CommandListener
 			{
 				UserItem item=(UserItem)frmGroup.getCurrentItem();
 				Group g=(Group)item.data;
-				if(user.DeleteGroup(g.groupId))
+				if(user.DeleteGroup(g))
 				{
 					showMessage("Nhóm đã được xóa!", frmGroup, AlertType.INFO);
 				}
@@ -510,12 +510,7 @@ implements ApplicationInitializer, CommandListener
 
 	private void openJoinRequestDetail(Request request) {
 		// TODO Auto-generated method stub
-		String body="";
-		body+="Nhóm muốn tham gia: "+request.groupName;
-		body+="Họ tên: "+request.userFullname+"\n";
-		body+="Ngày yêu cầu: "+request.requestDate+"\n";
-		frmJoinRequestDetail=new UserForm(request.userFullname,new UserItem("",request));
-		frmJoinRequestDetail.append(new StringItem(request.groupName,body));
+		
 		frmJoinRequestDetail.addMenu(cmdConfirm);
 		frmJoinRequestDetail.addMenu(cmdReject);
 		frmJoinRequestDetail.setCommandListener(this.commandListener);
@@ -615,7 +610,7 @@ implements ApplicationInitializer, CommandListener
 		frmJoinRequest=new UserList("Danh sách yêu cầu");
 		for(int i=0;i<requests.length;i++)
 		{
-			frmJoinRequest.addEntry(new UserItem(requests[i].userFullname,requests[i].requestId),"request");
+			frmJoinRequest.addEntry(new UserItem(requests[i].user.username,requests[i].requestId),"request");
 		}
 		frmJoinRequest.addCommand(cmdConfirm);
 		frmJoinRequest.addCommand(cmdReject);

@@ -313,9 +313,9 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Request t = new Request(data.get(i).toString(),data.get(i+1).toString(),
+				Request t = null;/* new Request(data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString());
+						data.get(i+4).toString(),data.get(i+5).toString());*/
 				requests.add(t);
 				i += 6;
 			}
@@ -343,9 +343,9 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Request t = new Request(data.get(i).toString(),data.get(i+1).toString(),
+				Request t =null;/* new Request(data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString());
+						data.get(i+4).toString(),data.get(i+5).toString());*/
 				requests.add(t);
 				i += 6;
 			}
@@ -357,11 +357,10 @@ public class User {
 		}
 	}
 	//Tạo yêu cầu tham gia nhóm
-	public Request CreateRequest(String groupId)
+	public Request CreateRequest(Group g)
 	{
-		Request request = new Request(userId, groupId);
-		request.Create();
-		return request;
+		
+		return Request.Create(this, g);
 	}
 	//Xác nhận yêu cầu tham gia nhóm
 	public boolean ConfirmRequest(String requestId)
@@ -408,17 +407,14 @@ public class User {
 		return group.Update();
 	}
 	//Xóa nhóm
-	public boolean DeleteGroup(String groupId)
+	public boolean DeleteGroup(Group g)
 	{
-		Group group = new Group(groupId);
-		return group.Delete();
+		return Group.Delete(g);
 	}
 	//Tạo bài viết
-	public Topic CreateTopic(String topicTitle, String topicContent)
+	public Topic CreateTopic(String title, String content)
 	{
-		Topic topic = new Topic(topicTitle, topicContent);
-		topic.Create(userId);
-		return topic;
+		return Topic.Create(this, title, content);
 	}
 	//Sửa bài viết
 	public boolean UpdateTopic(String topicId, String topicTitle, String topicContent)
@@ -427,10 +423,9 @@ public class User {
 		return topic.Update();
 	}
 	//Xóa bài viết
-	public boolean DeleteTopic(String topicId)
+	public boolean DeleteTopic(Topic t)
 	{
-		Topic topic = new Topic(topicId);
-		return topic.Delete();
+		return Topic.Delete(t);
 	}
 	/*//Tạo và chia sẻ bài viết
 	public TopicGroup CreateAndShare(String topicTitle, String topicContent, String groupId)
