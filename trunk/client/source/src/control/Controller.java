@@ -33,6 +33,7 @@ import model.*;
 import app.App;
 
 
+import de.enough.polish.event.ThreadedCommandListener;
 import de.enough.polish.io.RmsStorage;
 import de.enough.polish.ui.Alert;
 import de.enough.polish.ui.AlertType;
@@ -75,7 +76,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtGroupName = new TextField("Tên nhóm: ","", 50,TextField.ANY);
 	private TextField txtDescription = new TextField("Mô tả: ","", 100,TextField.ANY);
 	private TextField txtGroupRule = new TextField("Quy tắc: ","", 300,TextField.ANY);
-	
+	private CommandListener commandListener;
 	private ChoiceGroup cgRemember = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 	
 	private Command cmdLogin = new Command("Đăng nhập",Command.SCREEN,1);
@@ -121,6 +122,7 @@ implements ApplicationInitializer, CommandListener
 		this.midlet = midlet;
 		this.display = Display.getDisplay(midlet);
 		this.screenHistory = new SimpleScreenHistory(this.display);
+		this.commandListener = new ThreadedCommandListener(this);
 	}
 
 	/**
@@ -172,7 +174,7 @@ implements ApplicationInitializer, CommandListener
 		frmRegister.addTextField(txtConfirm);
 		frmRegister.addMenu(cmdConfirm);
 		frmRegister.addMenu(cmdBack);
-		frmRegister.setCommandListener(this);
+		frmRegister.setCommandListener(this.commandListener);
 		screenHistory.show(frmRegister);
 	}
 	public void openGroupForm(ArrayList groups)
@@ -197,7 +199,7 @@ implements ApplicationInitializer, CommandListener
 			frmGroup.addEntry(new UserItem(group.groupName,group),"group");
 		}
 		
-		frmGroup.setCommandListener(this);
+		frmGroup.setCommandListener(this.commandListener);
 		screenHistory.show(frmGroup);
 	}
 	public void openGroupDetail(Group group)
@@ -217,7 +219,7 @@ implements ApplicationInitializer, CommandListener
 		frmGroupDetail.addCommand(cmdCreateTopic);
 		frmGroupDetail.addCommand(cmdDeleteTopic);
 		frmGroupDetail.addCommand(cmdBack);
-		frmGroupDetail.setCommandListener(this);
+		frmGroupDetail.setCommandListener(this.commandListener);
 		screenHistory.show(frmGroupDetail);
 	}
 	/**
@@ -258,7 +260,7 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.addMenu(cmdLogin);
 		frmLogin.addMenu(cmdRegister);
 		frmLogin.addMenu(cmdExit);
-		frmLogin.setCommandListener(this);
+		frmLogin.setCommandListener(this.commandListener);
 		
 		
 		screenHistory.show(frmLogin);
@@ -275,7 +277,7 @@ implements ApplicationInitializer, CommandListener
 	}
 	private MainMenuList createMainMenu() {
 		MainMenuList list = new MainMenuList();
-		list.setCommandListener(this);
+		list.setCommandListener(this.commandListener);
 		list.addCommand(this.cmdExit);
 		list.addEntry("Tin mới");
 		list.addEntry("Nhóm");
@@ -323,6 +325,7 @@ implements ApplicationInitializer, CommandListener
 	 */
 	public void commandAction(Command cmd, Displayable disp) 
 	{
+		//showMessage("Please wait...", disp, AlertType.INFO);
 		if (cmd == this.cmdExit) {
 			if (this.configuration.isDirty()) {
 				configurationSave();
@@ -478,7 +481,7 @@ implements ApplicationInitializer, CommandListener
 			frmConfirmDelGroup=MessageBox.Show("Bạn có chắc chắn muốn xóa nhóm "+g.groupName+" không?",AlertType.CONFIRMATION);
 			frmConfirmDelGroup.addCommand(cmdConfirm);
 			frmConfirmDelGroup.addCommand(cmdBack);
-			frmConfirmDelGroup.setCommandListener(this);
+			frmConfirmDelGroup.setCommandListener(this.commandListener);
 			screenHistory.show(frmConfirmDelGroup);
 		}
 		else if(cmd==cmdUpdateGroup)
@@ -501,7 +504,7 @@ implements ApplicationInitializer, CommandListener
 		frmUpdateGroup.addTextBox(txtGroupRule);
 		frmUpdateGroup.addCommand(cmdConfirm);
 		frmUpdateGroup.addCommand(cmdBack);
-		frmUpdateGroup.setCommandListener(this);
+		frmUpdateGroup.setCommandListener(this.commandListener);
 		screenHistory.show(frmUpdateGroup);
 	}
 
@@ -515,7 +518,7 @@ implements ApplicationInitializer, CommandListener
 		frmJoinRequestDetail.append(new StringItem(request.groupName,body));
 		frmJoinRequestDetail.addMenu(cmdConfirm);
 		frmJoinRequestDetail.addMenu(cmdReject);
-		frmJoinRequestDetail.setCommandListener(this);
+		frmJoinRequestDetail.setCommandListener(this.commandListener);
 		screenHistory.show(frmJoinRequestDetail);
 	}
 
@@ -526,7 +529,7 @@ implements ApplicationInitializer, CommandListener
 		frmCreateTopic.addTextBox(txtTopicContent);
 		frmCreateTopic.addCommand(cmdConfirm);
 		frmCreateTopic.addCommand(cmdBack);
-		frmCreateTopic.setCommandListener(this);
+		frmCreateTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmCreateTopic);
 	}
 
@@ -537,7 +540,7 @@ implements ApplicationInitializer, CommandListener
 		frmCreateGroup.addTextField(txtGroupName);
 		frmCreateGroup.addMenu(cmdConfirm);
 		frmCreateGroup.addMenu(cmdBack);
-		frmCreateGroup.setCommandListener(this);
+		frmCreateGroup.setCommandListener(this.commandListener);
 		screenHistory.show(frmCreateGroup);
 	}
 
@@ -604,7 +607,7 @@ implements ApplicationInitializer, CommandListener
 		form.addMenu(cmdConfirm);
 		form.addMenu(cmdBack);
 		screenHistory.show(form);
-		form.setCommandListener(this);
+		form.setCommandListener(this.commandListener);
 	}
 
 	private void openJoinRequestsForm(Request[] requests) {
@@ -617,7 +620,7 @@ implements ApplicationInitializer, CommandListener
 		frmJoinRequest.addCommand(cmdConfirm);
 		frmJoinRequest.addCommand(cmdReject);
 		frmJoinRequest.addCommand(cmdBack);
-		frmJoinRequest.setCommandListener(this);
+		frmJoinRequest.setCommandListener(this.commandListener);
 		screenHistory.show(frmJoinRequest);
 	}
 
@@ -631,7 +634,7 @@ implements ApplicationInitializer, CommandListener
 		}
 		frmNewTopic.addCommand(cmdViewTopic);
 		frmNewTopic.addCommand(cmdBack);
-		frmNewTopic.setCommandListener(this);
+		frmNewTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmNewTopic);
 	}
 	private void openTopicDetailForm(TopicGroup t)
@@ -644,7 +647,7 @@ implements ApplicationInitializer, CommandListener
 				t.commentsCount+" bình luận\n";
 		frmTopicDetail.append(new StringItem("Đăng bởi: "+t.topic.author.username, body));
 		frmTopicDetail.addCommand(cmdBack);
-		frmTopicDetail.setCommandListener(this);
+		frmTopicDetail.setCommandListener(this.commandListener);
 		screenHistory.show(frmTopicDetail);
 	}
 }
