@@ -9,8 +9,7 @@ import base.Constants;
 public class Group {
 	public String groupId;
 	public String groupName;
-	public String userId;
-	public String userFullname;
+	public User leader;
 	public String description;
 	public String rule;
 	public String createDate;
@@ -20,73 +19,29 @@ public class Group {
 	public ArrayList topics;
 	public ArrayList members;
 	public ArrayList requests;
-	
-	public Group()
-	{
-		this.groupId = "";
-		this.groupName = "";
-		this.userId = "";
-		this.userFullname = "";
-		this.description ="";
-		this.rule = "";
-		this.createDate="";
-		this.topicsCount = "0";
-		this.membersCount = "0";
-	}
-	
+	//su dung cho thao tac xoa
 	public Group(String groupId)
 	{
 		this.groupId = groupId;
 	}
-	
-	public Group( String userId, String groupname)
-	{
-		this.groupName = groupname;
-		this.userId = userId;
-	}
-	
-	public Group(String groupId, String groupName, String description, String rule)
-	{
-		this.groupId = groupId;
-		this.groupName = groupName;
-		this.description = description;
-		this.rule = rule;
-	}
-	
-	public Group(String groupId, String groupName, String userId, String userFullname, String createDate,
+	//thao tac cap nhat nhom
+    public Group(String groupId, String groupName, String description, String rule)
+    {
+            this.groupId = groupId;
+            this.groupName = groupName;
+            this.description = description;
+            this.rule = rule;
+    }
+	public Group(String groupId, String groupName, User leader, String createDate,
 			String topicsCount, String membersCount)
 	{
 		this.groupId = groupId;
-		this.userId = userId;
 		this.groupName = groupName;
-		this.userFullname = userFullname;
+		this.leader = leader;
 		this.createDate = createDate;
 		this.topicsCount = topicsCount;
 		this.membersCount = membersCount;
 	}
-	
-	public boolean GetContents()
-	{
-		ArrayList data = new ArrayList();
-		try
-		{
-			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaNhom"},
-					new String[] {"MoTaNhom", groupId}
-					);
-			if(s.equalsIgnoreCase("false"))
-				return false;
-			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
-			this.description = data.get(0).toString();
-			this.rule = data.get(1).toString();
-			return true;
-		}
-		catch(Exception ex)
-		{
-			return false;
-		}
-	}
-	
 	public boolean GetDetails()
 	{
 		ArrayList data = new ArrayList();
@@ -100,8 +55,9 @@ public class Group {
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			this.groupName = data.get(0).toString();
-			this.userId = data.get(1).toString();
-			this.userFullname = data.get(2).toString();
+			//this.userId = data.get(1).toString();
+			//this.userFullname = data.get(2).toString();
+			this.leader = new User(data.get(2).toString(), "");
 			this.description = data.get(3).toString();
 			this.rule = data.get(4).toString();
 			this.createDate = data.get(5).toString();
@@ -121,8 +77,8 @@ public class Group {
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"DanhSachThanhVienNhom", userId}
+					new String[] {Constants.Case,"xMaNhom"},
+					new String[] {"DanhSachThanhVienNhom", groupId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -150,8 +106,8 @@ public class Group {
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"DanhSachYeuCauThamGiaNhom", userId}
+					new String[] {Constants.Case,"xMaNhom"},
+					new String[] {"DanhSachYeuCauThamGiaNhom", groupId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -211,25 +167,7 @@ public class Group {
 			return null;
 		}
 	}
-	public boolean Create()
-	{
-		try
-		{
-			String id=Html.SendRequest("",
-					new String[] {"CVM","xMaTaiKhoan","xTenNhom"},
-					new String[] {"TaoNhom",userId, groupName}
-					);
-			if(id.indexOf("false")>=0) return false;
-			groupId = id;
-			createDate = UtilString.GetTimeString();
-			return true;
-		}
-		catch(Exception ex)
-		{
-			return false;
-		}
-	}
-	
+		
 	public boolean Update()
 	{
 		try
@@ -262,6 +200,22 @@ public class Group {
 		catch(Exception ex)
 		{
 			return false;
+		}
+	}
+
+	public static Group Create(User user, String groupName) {
+		try
+		{
+			String id=Html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan","xTenNhom"},
+					new String[] {"TaoNhom",user.userId,groupName}
+					);
+			if(id.indexOf("false")>=0) return null;
+			return new Group(id);
+		}
+		catch(Exception ex)
+		{
+			return null;
 		}
 	}
 }

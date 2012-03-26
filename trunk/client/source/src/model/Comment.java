@@ -4,79 +4,37 @@ import util.UtilString;
 
 public class Comment {
 	public String commentId;
-	public String userId;
-	public String userFullname;
 	public String content;
 	public String time;
-	public User user=new User();
-	public Comment()
+	public User user;
+	public Comment(String commentId)
 	{
-		this.commentId = "";
-		this.userId = "";
-		this.userFullname = "";
-		this.content = "";
-		this.time = "";
+		this.commentId=commentId;
 	}
-	public Comment(String commendId,String userName,String content,String time)
+	public Comment(String commendId,User user,String content,String time)
 	{
 		this.commentId=commendId;
-		this.user.username = userName;
+		this.user = user;
 		this.content = content;
-		this.time=time;
-	}
-	public Comment(String id)
-	{
-		this.commentId = id;
-		this.userId = "";
-		this.userFullname = "";
-		this.content = "";
-		this.time = "";
+		this.time=time;		
 	}
 	
-	public Comment(String userId, String content)
-	{
-		this.userId = userId;
-		this.content = content;
-	}
-	public Comment(String id, String userId, String content)
-	{
-		this.commentId = id;
-		this.userId = userId;
-		this.content = content;
-	}
-	/*public Comment(String id, String userId, String username, String content)
-	{
-		this.commentId = id;
-		this.userId = userId;
-		this.userFullname = username;
-		this.content = content;
-	}*/
 	
-	public Comment(String id, String userId, String username, String content, String time)
-	{
-		this.commentId = id;
-		this.userId = userId;
-		this.userFullname = username;
-		this.content = content;
-		this.time = time;
-	}
-	
-	public boolean Create(String topicGroupId)
+	public static Comment Create(TopicGroup t,User u,String content)
 	{
 		try
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xMaBaiVietNhom", "xNoiDung"},
-					new String[] {"TaoBinhLuan",userId,topicGroupId,content}
+					new String[] {"TaoBinhLuan",u.userId,t.topicGroupId,content}
 					);
-			if(id.indexOf("false")>=0) return false;
-			commentId= id;
-			time = UtilString.GetTimeString();
-			return true;
+			if(id.indexOf("false")>=0) return null;
+			
+			return new Comment(id);
 		}
 		catch(Exception ex)
 		{
-			return false;
+			return null;
 		}
 	}
 	
@@ -98,13 +56,13 @@ public class Comment {
 		}
 	}
 	
-	public boolean Delete()
+	public static boolean Delete(Comment c)
 	{
 		try
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaBinhLuan"},
-					new String[] {"XoaBinhLuan", commentId}
+					new String[] {"XoaBinhLuan", c.commentId}
 					);
 			if(id.indexOf("false")>=0) return false;
 			return true;

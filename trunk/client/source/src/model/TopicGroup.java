@@ -42,7 +42,7 @@ public class TopicGroup {
 			int i=0;
 			while(i<len)
 			{
-				Comment comment = new Comment(data.get(i).toString(),data.get(i+1).toString(),data.get(i+2).toString(),data.get(i+3).toString());
+				Comment comment = null;// = new Comment(data.get(i).toString(),data.get(i+1).toString(),data.get(i+2).toString(),data.get(i+3).toString());
 				comments.add(comment);
 				i += 4;
 			}

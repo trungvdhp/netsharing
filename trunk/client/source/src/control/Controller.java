@@ -92,7 +92,7 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdMyGroup=new Command("Nhóm của bạn",Command.SCREEN,1);
 	private Command cmdShareTopic=new Command("Chia sẻ bài viết",Command.SCREEN,1);
 	private Command cmdUpdateGroup=new Command("Cập nhật thông tin",Command.SCREEN,1);
-	 Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
+	private Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
 	private Command cmdGroupDetail=new Command("Chi tiết",Command.SCREEN,1);
 	private Command cmdGroup =new Command("Nhóm",Command.SCREEN,1);
 	
@@ -147,7 +147,7 @@ implements ApplicationInitializer, CommandListener
 		{
 			topicForm.addEntry(topics[i].title);
 		}
-		this.display.setCurrent(topicForm);
+		screenHistory.show(topicForm);
 	}
 	public void openNewTopicForm(Topic[] topics)
 	{
@@ -156,7 +156,7 @@ implements ApplicationInitializer, CommandListener
 		{
 			topicForm.addEntry(topics[i].title);
 		}
-		this.display.setCurrent(topicForm);
+		screenHistory.show(topicForm);
 	}
 	public void showMessage(String content,Displayable disp,AlertType type)
 	{
@@ -173,7 +173,7 @@ implements ApplicationInitializer, CommandListener
 		frmRegister.addMenu(cmdConfirm);
 		frmRegister.addMenu(cmdBack);
 		frmRegister.setCommandListener(this);
-		this.display.setCurrent(frmRegister);
+		screenHistory.show(frmRegister);
 	}
 	public void openGroupForm(ArrayList groups)
 	{
@@ -189,20 +189,23 @@ implements ApplicationInitializer, CommandListener
 		//frmGroup.addCommand(cmdDeleteGroup);
 		frmGroup.addCommand(cmdMyGroup);
 		frmGroup.addCommand(cmdBack);
+		showMessage("S", screenMainMenu, AlertType.INFO);
 		//showMessage("openGroupForm",screenMainMenu,AlertType.INFO);
 		for(int i=0;i<groups.size();i++)
 		{
 			Group group=(Group)groups.get(i);
 			frmGroup.addEntry(new UserItem(group.groupName,group),"group");
 		}
+		
 		frmGroup.setCommandListener(this);
-		this.display.setCurrent(frmGroup);
+		screenHistory.show(frmGroup);
 	}
 	public void openGroupDetail(Group group)
 	{
 		
 		frmGroupDetail = new UserList(group.groupName);
 		ArrayList topics =group.GetTopics(display,frmGroup);
+		
 		for(int i=0;i<topics.size();i++)
 		{
 			TopicGroup t=(TopicGroup)topics.get(i);
@@ -215,7 +218,7 @@ implements ApplicationInitializer, CommandListener
 		frmGroupDetail.addCommand(cmdDeleteTopic);
 		frmGroupDetail.addCommand(cmdBack);
 		frmGroupDetail.setCommandListener(this);
-		this.display.setCurrent(frmGroupDetail);
+		screenHistory.show(frmGroupDetail);
 	}
 	/**
 	 * Lifecycle: pauses the application, e.g. when there is an incoming call.
@@ -241,12 +244,11 @@ implements ApplicationInitializer, CommandListener
 		// create main menu:
 		
 		this.screenMainMenu = createMainMenu();
-		this.display.setCurrent( this.screenMainMenu );
-		user = new User("34061","000000");
-		//showMessage("A", screenMainMenu, AlertType.INFO);		
-		user.Login();
+		//screenHistory.show( this.screenMainMenu );
+		//user = new User("34061","000000");	
+		//user.Login();
 
-		/*frmLogin=new UserForm("Đăng nhập");
+		frmLogin=new UserForm("Đăng nhập",null);
 		frmLogin.addTextField(txtUsername);
 		frmLogin.addTextField(txtPassword);
 		//#style checkBoxItem
@@ -259,9 +261,9 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.setCommandListener(this);
 		
 		
-		this.display.setCurrent(frmLogin);*/
+		screenHistory.show(frmLogin);
 		/*LoginForm form = new LoginForm(midlet);
-		this.display.setCurrent(form);*/
+		screenHistory.show(form);*/
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - initStartTime < 2000) { // show the splash at least for 2000 ms / 2 seconds:
 			try {
@@ -334,15 +336,15 @@ implements ApplicationInitializer, CommandListener
 			if (this.screenHistory.hasPrevious()) {
 				this.screenHistory.showPrevious();
 			} else {
-				this.display.setCurrent(this.screenMainMenu);
+				screenHistory.show(this.screenMainMenu);
 			}
 		} else if(cmd == this.cmdLogin) {
 			String username = txtUsername.getString();
 			String password = txtPassword.getString();
-			User user=new User(username,password);
+			this.user=new User(username,password);
 			if(user.Login())
 			{
-				this.display.setCurrent(screenMainMenu);
+				screenHistory.show(screenMainMenu);
 			}
 			else
 			{
@@ -425,8 +427,8 @@ implements ApplicationInitializer, CommandListener
 				handleCommandMainMenu();
 			else if(disp==frmGroup)
 			{
-				UserItem g=(UserItem)frmGroup.getCurrentItem();
-				openGroupDetail((Group)g.data);
+				UserItem item=(UserItem)frmGroup.getCurrentItem(display,screenMainMenu);
+				openGroupDetail((Group)item.data);
 			}
 			else if(disp==frmGroupDetail)
 			{
@@ -447,11 +449,7 @@ implements ApplicationInitializer, CommandListener
 				UserItem t=(UserItem)frmJoinRequest.getCurrentItem();
 				openJoinRequestDetail((Request)t.data);
 			}
-			else if(disp==frmGroup)
-			{
-				UserItem item=(UserItem)frmGroup.getCurrentItem();
-				openGroupDetail((Group)item.data);
-			}
+			
 		}
 		else if(cmd==cmdCreateGroup)
 		{
@@ -472,7 +470,7 @@ implements ApplicationInitializer, CommandListener
 		{
 			UserItem item=(UserItem)frmGroup.getCurrentItem();
 			Group g=(Group)item.data;
-			if(g.userId!=user.userId)
+			if(g.leader.userId!=user.userId)
 			{
 				showMessage("Không thể xóa nhóm không phải do bạn tạo!", frmGroup, AlertType.INFO);
 				return;
@@ -481,7 +479,7 @@ implements ApplicationInitializer, CommandListener
 			frmConfirmDelGroup.addCommand(cmdConfirm);
 			frmConfirmDelGroup.addCommand(cmdBack);
 			frmConfirmDelGroup.setCommandListener(this);
-			this.display.setCurrent(frmConfirmDelGroup);
+			screenHistory.show(frmConfirmDelGroup);
 		}
 		else if(cmd==cmdUpdateGroup)
 		{
@@ -504,7 +502,7 @@ implements ApplicationInitializer, CommandListener
 		frmUpdateGroup.addCommand(cmdConfirm);
 		frmUpdateGroup.addCommand(cmdBack);
 		frmUpdateGroup.setCommandListener(this);
-		this.display.setCurrent(frmUpdateGroup);
+		screenHistory.show(frmUpdateGroup);
 	}
 
 	private void openJoinRequestDetail(Request request) {
@@ -518,7 +516,7 @@ implements ApplicationInitializer, CommandListener
 		frmJoinRequestDetail.addMenu(cmdConfirm);
 		frmJoinRequestDetail.addMenu(cmdReject);
 		frmJoinRequestDetail.setCommandListener(this);
-		this.display.setCurrent(frmJoinRequestDetail);
+		screenHistory.show(frmJoinRequestDetail);
 	}
 
 	private void openCreateTopicForm() {
@@ -529,7 +527,7 @@ implements ApplicationInitializer, CommandListener
 		frmCreateTopic.addCommand(cmdConfirm);
 		frmCreateTopic.addCommand(cmdBack);
 		frmCreateTopic.setCommandListener(this);
-		this.display.setCurrent(frmCreateTopic);
+		screenHistory.show(frmCreateTopic);
 	}
 
 	private void openCreateGroupForm() {
@@ -540,7 +538,7 @@ implements ApplicationInitializer, CommandListener
 		frmCreateGroup.addMenu(cmdConfirm);
 		frmCreateGroup.addMenu(cmdBack);
 		frmCreateGroup.setCommandListener(this);
-		this.display.setCurrent(frmCreateGroup);
+		screenHistory.show(frmCreateGroup);
 	}
 
 	/**
@@ -566,6 +564,7 @@ implements ApplicationInitializer, CommandListener
 		case 1:
 			
 			ArrayList group=user.GetMyGroups(display,screenMainMenu);
+			//showMessage("S", screenMainMenu, AlertType.INFO);
 			openGroupForm(group);
 			break;
 		case 2:
@@ -604,7 +603,7 @@ implements ApplicationInitializer, CommandListener
 		form.addTextField(txtSearch);
 		form.addMenu(cmdConfirm);
 		form.addMenu(cmdBack);
-		this.display.setCurrent(form);
+		screenHistory.show(form);
 		form.setCommandListener(this);
 	}
 
@@ -619,7 +618,7 @@ implements ApplicationInitializer, CommandListener
 		frmJoinRequest.addCommand(cmdReject);
 		frmJoinRequest.addCommand(cmdBack);
 		frmJoinRequest.setCommandListener(this);
-		this.display.setCurrent(frmJoinRequest);
+		screenHistory.show(frmJoinRequest);
 	}
 
 	private void openNewTopicForm(ArrayList topics) {
@@ -633,7 +632,7 @@ implements ApplicationInitializer, CommandListener
 		frmNewTopic.addCommand(cmdViewTopic);
 		frmNewTopic.addCommand(cmdBack);
 		frmNewTopic.setCommandListener(this);
-		this.display.setCurrent(frmNewTopic);
+		screenHistory.show(frmNewTopic);
 	}
 	private void openTopicDetailForm(TopicGroup t)
 	{
@@ -646,6 +645,6 @@ implements ApplicationInitializer, CommandListener
 		frmTopicDetail.append(new StringItem("Đăng bởi: "+t.topic.author.username, body));
 		frmTopicDetail.addCommand(cmdBack);
 		frmTopicDetail.setCommandListener(this);
-		this.display.setCurrent(frmTopicDetail);
+		screenHistory.show(frmTopicDetail);
 	}
 }

@@ -33,7 +33,7 @@
  /*******************   UserForm   **************************/
 .textBox {
 	layout: left | expand;
-	text-wrap: false;
+	text-wrap: true;
 	border-color: #8699a9;
 	margin-left: 5;
 	margin-right:5;
@@ -121,6 +121,14 @@
 
 .userListItem{
 	
+}
+.groupItem {
+	icon-image: url(group_icon.png);
+	layout: left | expand;
+}
+.topicItem {
+	icon-image: url(topic_icon.png);
+	layout: left | expand;
 }
 
 /**********************************************************************/
