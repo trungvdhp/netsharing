@@ -1,5 +1,6 @@
 package model;
 
+import control.MessageBox;
 import util.UtilString;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
@@ -43,7 +44,7 @@ public class Group {
 		this.topicsCount = topicsCount;
 		this.membersCount = membersCount;
 	}
-	public boolean GetDetails()
+	public boolean GetDetails(Display display,Displayable disp)
 	{
 		ArrayList data = new ArrayList();
 		try
@@ -52,22 +53,22 @@ public class Group {
 					new String[] {Constants.Case,"xMaNhom"},
 					new String[] {"ChiTietNhom", groupId}
 					);
+			//MessageBox.Show(s, display, disp);
 			if(s.equalsIgnoreCase("false"))
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			this.groupName = data.get(0).toString();
-			//this.userId = data.get(1).toString();
-			//this.userFullname = data.get(2).toString();
-			this.leader = new User(data.get(2).toString(), "");
-			this.description = data.get(3).toString();
-			this.rule = data.get(4).toString();
-			this.createDate = data.get(5).toString();
-			this.topicsCount = data.get(6).toString();
-			this.membersCount = data.get(7).toString();
+			this.leader.username =data.get(6).toString();
+			this.description = data.get(1).toString();
+			this.rule = data.get(2).toString();
+			this.createDate = data.get(3).toString();
+			this.topicsCount = data.get(5).toString();
+			this.membersCount = data.get(4).toString();
 			return true;
 		}
 		catch(Exception ex)
 		{
+			//MessageBox.Show(ex.toString(), display, disp);
 			return false;
 		}
 	}
@@ -97,7 +98,7 @@ public class Group {
 		}
 		catch(Exception ex)
 		{
-			return null;
+			return data;
 		}
 	}
 	
@@ -125,7 +126,7 @@ public class Group {
 		}
 		catch(Exception ex)
 		{
-			return null;
+			return data;
 		}
 	}
 	
@@ -151,7 +152,7 @@ public class Group {
 						data.get(i).toString(), 
 						new Topic(new User(data.get(i+5).toString(),""),
 								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
-						new User(data.get(i+7).toString(), ""),
+						new User(data.get(i+7).toString(), "","",""),
 						data.get(i+6).toString(),
 						data.get(i+8).toString() );
 				
@@ -163,7 +164,8 @@ public class Group {
 		}
 		catch(Exception ex)
 		{
-			return null;
+			MessageBox.Show(ex.toString(), display, disp);
+			return topics;
 		}
 	}
 		

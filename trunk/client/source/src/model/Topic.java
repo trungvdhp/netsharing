@@ -107,16 +107,17 @@ public class Topic {
 		}
 	}
 	
-	public static Topic Create(User u,String title,String content)
+	public static Topic Create(User u,String title,String content,Group g)
 	{
 		try
 		{
-			String id=Html.SendRequest("",
-					new String[] {"CVM","xMaTaiKhoan", "xTieuDe","xNoiDung"},
-					new String[] {"TaoBaiViet",u.userId,title,content}
+			String buf=Html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan","xMaNhom", "xTieuDe","xNoiDung"},
+					new String[] {"TaoBaiViet",u.userId,g.groupId,title,content}
 					);
-			if(id.indexOf("false")>=0) return null;
-			//topicId = id;
+			if(buf.indexOf("false")>=0) return null;
+			ArrayList data=UtilString.Split(buf, Constants.KyTuChiaTruongDL);
+			String id=data.get(0).toString();
 			String createDate = UtilString.GetTimeString();
 			return new Topic(u, id, title, content, createDate);
 		}
