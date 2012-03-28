@@ -94,6 +94,7 @@ switch ($Case){
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TieuDe = $_REQUEST["xTieuDe"];
 		$NoiDung = $_REQUEST["xNoiDung"];
+		$MaNhom=$_REQUEST['xMaNhom'];
 		
 		if($MaTaiKhoan != "" && $TieuDe != "" && $NoiDung != "") {
 			$TieuDe =  addslashes(str_replace("$", "\n", str_replace("|", " ", $TieuDe)));
@@ -106,15 +107,26 @@ switch ($Case){
 						ORDER BY MaBaiViet DESC LIMIT 0,1";
 				$resultSelect = mysql_query($sqlSelect) or die("Lệnh truy vấn không chính xác!");
 				$row = mysql_fetch_array($resultSelect);
-				if ($row != null)
-					echo $row["MaBaiViet"];
+				
+				/*$sqlThanhVien = "SELECT MaTaiKhoan FROM TaiKhoan_nhom WHERE MaNhom='$MaNhom'";
+				$result=mysql_query($sqlThanhVien);
+				while(($row=mysql_fetch_array($result))
+				{
+				
+				}*/
+				
+				if ($row != null){
+					echo $row["MaBaiViet"].$KyTuChiaTruongDL;
+					$_REQUEST['xMaBaiViet']=$row["MaBaiViet"];
+					$Case="ChiaSeBaiViet";
+					$re=true;
+				}
 				else 
 					echo $false;
 			}else 
 				echo $false;
 		}else 
 			echo $false;
-			$Case="ChiaSeBaiViet";
 		break;
 	}
 	
@@ -152,24 +164,34 @@ switch ($Case){
 	}
 	// CHIA SẺ BÀI VIẾT
 	case "ChiaSeBaiViet": {
-		$MaBaiViet = $_REQUEST["xMaBaiViet_BVN"];
-		$Count = $_REQUEST["Count"];
-		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
-		$Check = true;
-		if ($MaBaiViet != "" && $Count != "" && $MaTaiKhoan != "") {
-			for ($i = 0; $i < $Count; $i++) {
-				$MaNhom = $_REQUEST["CMN".$i];
-				$sql = "INSERT INTO baiviet_nhom(MaTaiKhoan, MaNhom, MaBaiViet) VALUES('".$MaTaiKhoan."','".$MaNhom."','".$MaBaiViet."')";
-				$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
-				if ($result == null)
-					$Check = false;
+		$MaNhom=$_REQUEST['xMaNhom'];
+		$MaBaiViet=$_REQUEST['xMaBaiViet'];
+		$MaTaiKhoan = $_REQUEST['xMaTaiKhoan'];
+		$sql="INSERT INTO baiviet_nhom(MaTaiKhoan,MaBaiViet,MaNhom,TrangThai)
+				VALUES ('$MaTaiKhoan',$MaBaiViet,'$MaNhom',1)";
+		$result=mysql_query($sql) or die("Truy vấn ko chính xác!");
+		$sql="SELECT MaBaiViet_Nhom FROM baiviet_nhom ORDER BY MaBaiViet_Nhom LIMIT 0,1";
+		$result = mysql_query($sql);
+		$row=mysql_fetch_array($result);
+		$MaBaiViet_Nhom=$row['MaBaiViet_Nhom'];
+		$sql="SELECT MaTaiKhoan FROM TaiKhoan_nhom WHERE MaNhom='$MaNhom'";
+		$result=mysql_query($sql);
+		while($row=mysql_fetch_array($result))
+		{
+			if($row['MaTaiKhoan']!=$MaTaiKhoan)
+			{
+			$sql1="INSERT INTO baivietmoi 
+					(MaTaiKhoan, 
+					MaBaiViet_Nhom
+					)
+					VALUES
+					('".$row['MaTaiKhoan']."', 
+					$MaBaiViet_Nhom
+					)";
+				$result1=mysql_query($sql1);
 			}
-			if ($Check)
-				echo $true;
-			else 
-				echo $false;
-		}else
-			echo $false;
+		}
+		echo $true;
 		break;
 	}
 	// CHIA SẺ ẢNH
@@ -880,7 +902,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
     
 	case "ChiTietNhom": {
     	$MaNhom = $_REQUEST["xMaNhom"];
-    	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+    	//$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
     	if ($MaNhom != "") {
     		$sqlNhom = "SELECT n.*, tk.TaiKhoan, tk.HoDem, tk.Ten FROM nhom n INNER JOIN taikhoan tk ON n.MaTaiKhoan = tk.MaTaiKhoan 
     					WHERE MaNhom = '".$MaNhom."'";
@@ -891,24 +913,26 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
     			$sqlThanhVien = "SELECT MaTaiKhoan_Nhom FROM taikhoan_nhom WHERE TrangThai = 1 AND MaNhom = '".$rowNhom["MaNhom"]."'";
     			$resultThanhVien = mysql_query($sqlThanhVien) or die("Lệnh truy vấn không chính xác2!");
     			$CountThanhVien = mysql_num_rows($resultThanhVien) + 1; // Cộng thêm Tài khoản trưởng nhóm
+    			$sqlBaiViet="SELECT COUNT(*) AS SoBaiViet FROM baiviet_nhom WHERE manhom='".$MaNhom."'";
+				$resultBaiViet=mysql_query($sqlBaiViet);
+				$rowBaiViet=mysql_fetch_array($resultBaiViet);
+    			//$image = new SimpleImage();
+            	//$AnhDaiDien = $image->checkImage($AvatarMobile, $rowNhom["AnhDaiDien"]);
     			
-    			$image = new SimpleImage();
-            	$AnhDaiDien = $image->checkImage($AvatarMobile, $rowNhom["AnhDaiDien"]);
-    			
-            	$IsTruongNhom = ($rowNhom["MaTaiKhoan"] == $MaTaiKhoan) ? "1" : 0;
+            	//$IsTruongNhom = ($rowNhom["MaTaiKhoan"] == $MaTaiKhoan) ? "1" : 0;
             	
-    			echo $rowNhom["MaNhom"] . $KyTuChiaTruongDL
-    				. $rowNhom["TenNhom"] . $KyTuChiaTruongDL
-    				. $AnhDaiDien . $KyTuChiaTruongDL
+    			echo $rowNhom["TenNhom"] . $KyTuChiaTruongDL
+    				//. $AnhDaiDien . $KyTuChiaTruongDL
     				. $rowNhom["MoTa"] . $KyTuChiaTruongDL
     				. $rowNhom["QuyTac"] . $KyTuChiaTruongDL
     				. $rowNhom["NgayTao"] . $KyTuChiaTruongDL
     				. $CountThanhVien . $KyTuChiaTruongDL
-    				. $IsTruongNhom . $KyTuChiaTruongDL
-    				. $rowNhom["TaiKhoan"] . $KyTuChiaTruongDL
-    				. $rowNhom["HoDem"] . $KyTuChiaTruongDL
-    				. $rowNhom["Ten"] . $KyTuChiaTruongDL
-    				. $rowNhom["LoaiNhom"]
+					. $rowBaiViet['SoBaiViet'] . $KyTuChiaTruongDL
+    				//. $IsTruongNhom . $KyTuChiaTruongDL
+    				. $rowNhom["TaiKhoan"];// . $KyTuChiaTruongDL
+    				//. $rowNhom["HoDem"] . $KyTuChiaTruongDL
+    				//. $rowNhom["Ten"] . $KyTuChiaTruongDL
+    				//. $rowNhom["LoaiNhom"]
     				//. "1" . $KyTuChiaBanGhi
     				;
     		} else 
@@ -948,7 +972,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 	case "DanhSachBaiVietTheoNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		if ($MaNhom != "") {
-			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.TaiKhoan,bvn.TaiKhoan AS TaiKhoanChiaSe
+			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.TaiKhoan,bvn.MaTaiKhoan AS TaiKhoanChiaSe
 							FROM baiviet_nhom bvn 
 								INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet
 								INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan  
@@ -972,7 +996,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 						. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NoiDung"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NgayTao"] . $KyTuChiaTruongDL
-						. $rowBaiViet_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["TaiKhoanChiaSe"] . $KyTuChiaTruongDL
 						//. $rowBaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
