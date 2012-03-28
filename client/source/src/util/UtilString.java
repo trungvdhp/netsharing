@@ -15,6 +15,7 @@ public class UtilString {
 			rs.add(inputString.substring(beginIndex, endIndex));
 			beginIndex = endIndex+span;
 		}
+		if(beginIndex<inputString.length()-1) rs.add(inputString.substring(beginIndex));
 		return rs;
 	}
 	

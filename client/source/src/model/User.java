@@ -29,11 +29,6 @@ public class User {
 	ArrayList groups;
 	ArrayList requests;
 	
-	public User()
-	{
-		
-	}
-	
 	public User(String username,String password)
 	{
 		this.username=username;
@@ -72,9 +67,11 @@ public class User {
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangNhap",username,password}
 					);
+			//String data=Html.SendRequest("");
+			userId=data;
 			if(data.indexOf("TKTD")<0)
 				return false;
-			userId=data;
+
 			return true;
 		}
 		catch(Exception ex)
@@ -412,9 +409,9 @@ public class User {
 		return Group.Delete(g);
 	}
 	//Tạo bài viết
-	public Topic CreateTopic(String title, String content)
+	public Topic CreateTopic(String title, String content,Group g)
 	{
-		return Topic.Create(this, title, content);
+		return Topic.Create(this, title, content,g);
 	}
 	//Sửa bài viết
 	public boolean UpdateTopic(String topicId, String topicTitle, String topicContent)

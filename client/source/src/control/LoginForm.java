@@ -47,7 +47,6 @@ public class LoginForm extends UserForm implements CommandListener
 		addMenu(cmdLogin);
 		addMenu(cmdRegister);
 		addMenu(cmdExit);
-		user=new User();
 		setCommandListener(this);
 		
 	}

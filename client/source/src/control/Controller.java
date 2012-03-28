@@ -184,15 +184,10 @@ implements ApplicationInitializer, CommandListener
 		UiAccess.addSubCommand(cmdGroupDetail, cmdGroup,frmGroup);
 		UiAccess.addSubCommand(cmdUpdateGroup, cmdGroup,frmGroup);
 		UiAccess.addSubCommand(cmdDeleteGroup, cmdGroup,frmGroup);
-		
-		//frmGroup.addCommand(cmdGroupDetail);
-		//frmGroup.addCommand(cmdUpdateGroup);
 		frmGroup.addCommand(cmdCreateGroup);
-		//frmGroup.addCommand(cmdDeleteGroup);
 		frmGroup.addCommand(cmdMyGroup);
 		frmGroup.addCommand(cmdBack);
 		showMessage("S", screenMainMenu, AlertType.INFO);
-		//showMessage("openGroupForm",screenMainMenu,AlertType.INFO);
 		for(int i=0;i<groups.size();i++)
 		{
 			Group group=(Group)groups.get(i);
@@ -206,8 +201,7 @@ implements ApplicationInitializer, CommandListener
 	{
 		
 		frmGroupDetail = new UserList(group.groupName);
-		ArrayList topics =group.GetTopics(display,frmGroup);
-		
+		ArrayList topics=group.GetTopics(display,frmGroup);
 		for(int i=0;i<topics.size();i++)
 		{
 			TopicGroup t=(TopicGroup)topics.get(i);
@@ -380,7 +374,7 @@ implements ApplicationInitializer, CommandListener
 			else if(disp==frmCreateTopic)
 			{
 				
-				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString())!=null);
+				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString(),(Group)frmCreateTopic.data)!=null);
 				showMessage("Đã tạo topic", frmCreateTopic, AlertType.INFO);
 			}
 			else if(disp==frmCreateGroup)
@@ -473,7 +467,7 @@ implements ApplicationInitializer, CommandListener
 		{
 			UserItem item=(UserItem)frmGroup.getCurrentItem();
 			Group g=(Group)item.data;
-			if(g.leader.userId!=user.userId)
+			if(!g.leader.userId.equals(user.userId))
 			{
 				showMessage("Không thể xóa nhóm không phải do bạn tạo!", frmGroup, AlertType.INFO);
 				return;
@@ -495,11 +489,12 @@ implements ApplicationInitializer, CommandListener
 		// TODO Auto-generated method stub
 		UserItem item=(UserItem)frmGroup.getCurrentItem();
 		Group g=(Group)item.data;
-		if(g.leader.userId!=user.userId)
+		if(!g.leader.userId.equals(user.userId))
 		{
 			showMessage("Không thể sửa nhóm không phải do bạn tạo!", frmGroup, AlertType.INFO);
 			return;
 		}
+		g.GetDetails(display,frmGroup);
 		frmUpdateGroup = new UserForm(g.groupName,g);
 		txtGroupName.setString(g.groupName);
 		txtDescription.setString(g.description);
@@ -524,7 +519,9 @@ implements ApplicationInitializer, CommandListener
 
 	private void openCreateTopicForm() {
 		// TODO Auto-generated method stub
-		frmCreateTopic=new UserForm("Viết bài mới",null);
+		UserItem item=(UserItem)frmGroup.getCurrentItem();
+		Group g=(Group)item.data;
+		frmCreateTopic=new UserForm("Viết bài mới",g);
 		frmCreateTopic.addTextField(txtTopicTitle);
 		frmCreateTopic.addTextBox(txtTopicContent);
 		frmCreateTopic.addCommand(cmdConfirm);
