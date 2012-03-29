@@ -241,7 +241,6 @@ switch ($Case){
 	
 	case "NhomBanThamGia": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
-		$Check = true;
 		if ($MaTaiKhoan != "") {
 			/*$sqlTruongNhom = "SELECT MaNhom, TenNhom FROM nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
 			$resultTruongNhom = mysql_query($sqlTruongNhom) or die("Lệnh truy vấn không chính xác!");
@@ -614,7 +613,30 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
     }
     
     case "TimKiemNhom": {
-    	$KhongCoNhom = "KhongCoNhom";
+	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+	$TuKhoa = $_REQUEST['xTuKhoa'];
+		if ($MaTaiKhoan != "") {
+			
+			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, tk.TaiKhoan,n.NgayTao  FROM nhom n INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan WHERE TenNhom LIKE '%$TuKhoa%' AND MaNhom NOT IN (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '$MaTaiKhoan')";
+			
+			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
+			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
+				$tmpsql1="SELECT COUNT(*) AS SoThanhVien FROM taikhoan_nhom WHERE manhom = '" . $rowTaiKhoan_Nhom["MaNhom"] . "'"; 
+				$tmprow1=mysql_fetch_array(mysql_query($tmpsql1));
+				$tmpsql2="SELECT COUNT(*) AS SoBaiViet FROM baiviet_nhom WHERE manhom = '".$rowTaiKhoan_Nhom["MaNhom"]."'";
+				$tmprow2=mysql_fetch_array(mysql_query($tmpsql2));
+				echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
+					.$rowTaiKhoan_Nhom["TenNhom"] . $KyTuChiaTruongDL
+					.$rowTaiKhoan_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
+					.$rowTaiKhoan_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
+					.$rowTaiKhoan_Nhom["NgayTao"] . $KyTuChiaTruongDL
+					.$tmprow2["SoBaiViet"] . $KyTuChiaTruongDL
+					.$tmprow1["SoThanhVien"] . $KyTuChiaTruongDL;
+			}
+		}else
+			echo $false;
+	
+    	/*$KhongCoNhom = "KhongCoNhom";
     	$TenNhom = $_REQUEST["xTenNhom"];
     	if ($TenNhom != "") {
     		$sqlNhom = "SELECT MaNhom, TenNhom, AnhDaiDien, LoaiNhom FROM nhom WHERE TenNhom LIKE '%".$TenNhom."%'";
@@ -638,7 +660,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
     		} else 
     			echo $KhongCoNhom;
     	} else 
-    		echo $false;
+    		echo $false;*/
     	break;
     }
     
@@ -686,15 +708,15 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
     			if (mysql_num_rows($resultTruongNhom) > 0) {
     				echo "TruongNhom";
     			} else {
-    				$sqlNhom = "SELECT LoaiNhom FROM nhom WHERE MaNhom = '".$MaNhom."'";
+    				/*$sqlNhom = "SELECT LoaiNhom FROM nhom WHERE MaNhom = '".$MaNhom."'";
     				$resultNhom = mysql_query($sqlNhom);
     				$rowNhom = mysql_fetch_array($resultNhom);
     				$TrangThai = "";
     				if ($rowNhom["LoaiNhom"] == 0)
     					$TrangThai = "0";
     				elseif ($rowNhom["LoaiNhom"] == 1)
-    					$TrangThai = "1";
-    				
+    					$TrangThai = "1";*/
+    				$TrangThai=0;
     				$sqlInsertTaiKhoan_Nhom = "INSERT INTO taikhoan_nhom(MaTaiKhoan, MaNhom, TrangThai) VALUES('".$MaTaiKhoan."', '".$MaNhom."', '".$TrangThai."')";
 		    		$result = mysql_query($sqlInsertTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 		    		if ($result != null) {
@@ -753,7 +775,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 		break;
     }
     
-    case "ThongBaoThamGiaNhom": {
+    case "DanhSachYeuCauThamGia": {
     	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
     	$CountTaiKhoan_Nhom = 0;
     	if ($MaTaiKhoan != "") {
@@ -762,7 +784,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
     		if (mysql_num_rows($resultNhom) > 0) {
     			while ($rowNhom = mysql_fetch_array($resultNhom)) {
     				$MaNhom = $rowNhom["MaNhom"];
-    				$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.AnhDaiDien, tk.TaiKhoan, tk.HoDem, tk.Ten, n.TenNhom, tkn.NgayVaoNhom 
+    				$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.AnhDaiDien, tk.TaiKhoan, tk.MaTaiKhoan,n.MaNhom, n.TenNhom, tkn.NgayVaoNhom 
     							FROM taikhoan_nhom tkn 
     								INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan 
     								INNER JOIN nhom n ON tkn.MaNhom = n.MaNhom 
@@ -775,12 +797,12 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
             				$AnhDaiDien = $image->checkImage($AvatarMobile, $rowTaiKhoan_Nhom["AnhDaiDien"]);
             				
             				echo $rowTaiKhoan_Nhom["MaTaiKhoan_Nhom"] . $KyTuChiaTruongDL
-            					. $AnhDaiDien . $KyTuChiaTruongDL
+            					//. $AnhDaiDien . $KyTuChiaTruongDL
+            					. $rowTaiKhoan_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
             					. $rowTaiKhoan_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
-            					. $rowTaiKhoan_Nhom["HoDem"] . $KyTuChiaTruongDL
-            					. $rowTaiKhoan_Nhom["Ten"] . $KyTuChiaTruongDL
+            					. $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
             					. $rowTaiKhoan_Nhom["TenNhom"] . $KyTuChiaTruongDL
-            					. $rowTaiKhoan_Nhom["NgayVaoNhom"] . $KyTuChiaBanGhi
+            					. $rowTaiKhoan_Nhom["NgayVaoNhom"] . $KyTuChiaTruongDL
             				;
 	    				}
     				}
@@ -972,7 +994,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 	case "DanhSachBaiVietTheoNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		if ($MaNhom != "") {
-			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.TaiKhoan,bvn.MaTaiKhoan AS TaiKhoanChiaSe
+			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
 							FROM baiviet_nhom bvn 
 								INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet
 								INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan  
@@ -988,6 +1010,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 					
     				$image = new SimpleImage();
             		$AnhDaiDien = $image->checkImage($AvatarMobile, $rowBaiViet_Nhom["AnhDaiDien"]);
+					$TaiKhoanChiaSe = get_user_info($rowBaiViet_Nhom["MaTaiKhoanChiaSe"]);
                     //8 truong
 					echo $rowBaiViet_Nhom["MaBaiViet_Nhom"] . $KyTuChiaTruongDL
 						//. SimpleImage::MySubString($rowBaiViet_Nhom["TieuDe"], 20) . $KyTuChiaTruongDL
@@ -998,11 +1021,13 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 						. $rowBaiViet_Nhom["NgayTao"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
-						. $rowBaiViet_Nhom["TaiKhoanChiaSe"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaTaiKhoanChiaSe"] . $KyTuChiaTruongDL
 						//. $rowBaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
 						//. $rowBaiViet_Nhom["Ten"] . $KyTuChiaTruongDL
                         //. $AnhDaiDien . $KyTuChiaTruongDL
 						. $countBinhLuanBaiViet . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom['TaiKhoan'] . $KyTuChiaTruongDL
+						. $TaiKhoanChiaSe['TaiKhoan'] . $KyTuChiaTruongDL
 						;
 				}
 			} else 
@@ -1341,6 +1366,8 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 					$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 					$row = mysql_fetch_array($result);
 					echo $row["MaNhom"];
+					$sql="INSERT INTO taikhoan_nhom(MaTaiKhoan,MaNhom,TrangThai) values('$MaTaiKhoan','".$row['MaNhom']."',1)";
+					mysql_query($sql);
 				} else 
 					echo $false;
 			} else 
