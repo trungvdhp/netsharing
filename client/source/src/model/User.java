@@ -135,32 +135,40 @@ public class User {
 	//Danh sách các bài viết mới
 	public ArrayList GetNewTopics()
 	{
+		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"BaiVietMoi", userId}
+					new String[] {"DanhSachBaiVietMoi", this.userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			int len = data.size();
 			int i=0;
+			
 			while(i<len)
 			{
-				/*TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString(), 
-						data.get(i+6).toString(),data.get(i+7).toString(),data.get(i+8).toString());
-				topics.add(t);*/
-				i += 9;
+				TopicGroup t=new TopicGroup(
+						data.get(i).toString(), 
+						new Topic(new User(data.get(i+5).toString(),data.get(i+9).toString(),"",""),
+								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
+						new User(data.get(i+7).toString(), data.get(i+10).toString(),"",""),
+						data.get(i+6).toString(),
+						data.get(i+8).toString() );
+				
+				topics.add(t);
+				i += 11;
 			}
+			
 			return topics;
 		}
 		catch(Exception ex)
 		{
-			return null;
+			//MessageBox.Show(ex.toString(), display, disp);
+			return topics;
 		}
 	}
 	//Lấy danh sách các bài viết của bạn
@@ -480,7 +488,7 @@ public class User {
 					new String[]{"TimKiemNhom",keyword,this.userId}
 			);
 			if(s.indexOf("false")>=0)
-				return null;
+				return groups;
 			
 			ArrayList data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			int len = data.size();
@@ -504,5 +512,21 @@ public class User {
 			
 		}
 		return groups;
+	}
+
+	public boolean ViewedNewTopic(TopicGroup t) {
+		try
+		{
+			String s=Html.SendRequest("", 
+					new String[]{"CVM","xMaTaiKhoan"},
+					new String[]{"XemBaiVietMoi",this.userId}
+			);
+			if(s.indexOf("true")>=0)return true;
+			return false;
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
 	}
 }

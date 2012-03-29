@@ -145,24 +145,6 @@ implements ApplicationInitializer, CommandListener
 		this.display.setCurrent( splash );
 		
 	}
-	public void openTopicForm(Topic[] topics)
-	{
-		UserList topicForm=new UserList("Bài viết mới");
-		for(int i=0;i<topics.length;i++)
-		{
-			topicForm.addEntry(topics[i].title);
-		}
-		screenHistory.show(topicForm);
-	}
-	public void openNewTopicForm(Topic[] topics)
-	{
-		UserList topicForm=new UserList("Bài viết mới");
-		for(int i=0;i<topics.length;i++)
-		{
-			topicForm.addEntry(topics[i].title);
-		}
-		screenHistory.show(topicForm);
-	}
 	public void showMessage(String content,Displayable disp,AlertType type)
 	{
 		//#style alertBox
@@ -471,6 +453,7 @@ implements ApplicationInitializer, CommandListener
 				UserItem item=(UserItem)frmNewTopic.getCurrentItem();
 				TopicGroup t=(TopicGroup)item.data;
 				openTopicDetailForm(t);
+				user.ViewedNewTopic(t);
 			}
 			else if(disp==frmJoinRequest)
 			{
@@ -534,6 +517,10 @@ implements ApplicationInitializer, CommandListener
 				showMessage("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!", frmJoinRequest, AlertType.INFO);
 			else
 				showMessage("Đã từ chối yêu cầu tham gia nhóm!", frmJoinRequest, AlertType.INFO);
+		}
+		else if(cmd==cmdViewTopic)
+		{
+			commandAction(List.SELECT_COMMAND,disp);
 		}
 	}
 
@@ -677,11 +664,14 @@ implements ApplicationInitializer, CommandListener
 	private void openNewTopicForm(ArrayList topics) {
 		// TODO Auto-generated method stub
 		frmNewTopic = new UserList("Bài viết mới");
+		
 		for(int i=0;i<topics.size();i++)
 		{
-			Topic t=(Topic)topics.get(i);
-			frmNewTopic.addEntry(new UserItem(t.title,t),"topic");
+			TopicGroup t=(TopicGroup)topics.get(i);
+			UserItem topic=new UserItem(t.topic.title,t);
+			frmNewTopic.addEntry(topic,"topic");
 		}
+		
 		frmNewTopic.addCommand(cmdViewTopic);
 		frmNewTopic.addCommand(cmdBack);
 		frmNewTopic.setCommandListener(this.commandListener);
