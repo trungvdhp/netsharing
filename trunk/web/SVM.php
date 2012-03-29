@@ -992,9 +992,55 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 	}
 	
 	case "DanhSachBaiVietTheoNhom": {
+		$MaTaiKhoan = $_REQUEST["xMaNhom"];
+		if ($MaTaiKhoan != "") {
+			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
+							FROM baiviet_nhom bvn 
+								INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet
+								INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan  
+								INNER JOIN baivietmoi bvm ON bvm.MaBaiViet_Nhom=bvn.MaBaiViet_Nhom
+							WHERE bvm.MaTaiKhoan='$MaTaiKhoan' AND bvn.TrangThai = 1 
+							ORDER BY MaBaiVietMoi DESC";
+			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
+			// MỘT TÀI KHOẢN CÓ THỂ THAM GIA NHIỀU NHÓM
+			// Nếu có quyền trưởng nhóm thì không có bản ghi dữ liệu trong bảng: TaiKhoan_Nhom
+			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
+				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
+					$sqlBinhLuanBaiViet = "SELECT MaBinhLuan FROM binhluanbaiviet WHERE MaBaiViet_Nhom = '".$rowBaiViet_Nhom["MaBaiViet_Nhom"]."'";
+					$countBinhLuanBaiViet = mysql_num_rows(mysql_query($sqlBinhLuanBaiViet));
+					
+    				$image = new SimpleImage();
+            		$AnhDaiDien = $image->checkImage($AvatarMobile, $rowBaiViet_Nhom["AnhDaiDien"]);
+					$TaiKhoanChiaSe = get_user_info($rowBaiViet_Nhom["MaTaiKhoanChiaSe"]);
+                    //8 truong
+					echo $rowBaiViet_Nhom["MaBaiViet_Nhom"] . $KyTuChiaTruongDL
+						//. SimpleImage::MySubString($rowBaiViet_Nhom["TieuDe"], 20) . $KyTuChiaTruongDL
+						//. SimpleImage::MySubString($rowBaiViet_Nhom["NoiDung"], 50) . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaBaiViet"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["NoiDung"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["NgayTao"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaTaiKhoanChiaSe"] . $KyTuChiaTruongDL
+						//. $rowBaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
+						//. $rowBaiViet_Nhom["Ten"] . $KyTuChiaTruongDL
+                        //. $AnhDaiDien . $KyTuChiaTruongDL
+						. $countBinhLuanBaiViet . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom['TaiKhoan'] . $KyTuChiaTruongDL
+						. $TaiKhoanChiaSe['TaiKhoan'] . $KyTuChiaTruongDL
+						;
+				}
+			} else 
+				echo $null;
+		}else 
+			echo $false;
+		break;
+	}
+	case "DanhSachBaiVietMoi": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		if ($MaNhom != "") {
-			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
+			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
 							FROM baiviet_nhom bvn 
 								INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet
 								INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan  
@@ -1034,6 +1080,15 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 				echo $null;
 		}else 
 			echo $false;
+		break;
+	}
+	case "XemBaiVietMoi": {
+		$MaTaiKhoan=$_REQUEST['xMaTaiKhoan'];
+		$MaBaiViet_Nhom = $_REQUEST['xMaBaiViet_Nhom'];
+		$sql="DELETE from baivietmoi where MaTaiKhoan='$MaTaiKhoan' AND MaBaiViet_Nhom=$MaBaiViet_Nhom";
+		mysql_query($sql);
+		echo $true;
+		
 		break;
 	}
 	
