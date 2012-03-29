@@ -150,14 +150,14 @@ public class Group {
 			{
 				TopicGroup t=new TopicGroup(
 						data.get(i).toString(), 
-						new Topic(new User(data.get(i+5).toString(),""),
+						new Topic(new User(data.get(i+5).toString(),data.get(i+9).toString(),"",""),
 								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
-						new User(data.get(i+7).toString(), "","",""),
+						new User(data.get(i+7).toString(), data.get(i+10).toString(),"",""),
 						data.get(i+6).toString(),
 						data.get(i+8).toString() );
 				
 				topics.add(t);
-				i += 9;
+				i += 11;
 			}
 			
 			return topics;
@@ -219,4 +219,5 @@ public class Group {
 			return null;
 		}
 	}
+	
 }

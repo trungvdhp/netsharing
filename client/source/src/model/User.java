@@ -294,8 +294,9 @@ public class User {
 		}
 	}
 	//Lấy danh sách các yêu cầu tham gia
-	public ArrayList GetJoinRequests()
+	public ArrayList GetJoinRequests(Display display,Displayable disp)
 	{
+		requests=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
@@ -310,9 +311,11 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Request t = null;/* new Request(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString());*/
+				Request t = new Request(data.get(i).toString(),
+						 new Group(data.get(i+3).toString(),data.get(i+4).toString(),"",""),
+						 new User(data.get(i+1).toString(),data.get(i+2).toString(),"",""),
+						 data.get(i+5).toString()
+						);
 				requests.add(t);
 				i += 6;
 			}
@@ -320,7 +323,8 @@ public class User {
 		}
 		catch(Exception ex)
 		{
-			return null;
+			MessageBox.Show(ex.toString(), display, disp);
+			return requests;
 		}
 	}
 	//Lấy danh sách các yêu cầu tham gia nhóm của bạn
@@ -354,22 +358,20 @@ public class User {
 		}
 	}
 	//Tạo yêu cầu tham gia nhóm
-	public Request CreateRequest(Group g)
+	public boolean CreateRequest(Group g)
 	{
 		
 		return Request.Create(this, g);
 	}
 	//Xác nhận yêu cầu tham gia nhóm
-	public boolean ConfirmRequest(String requestId)
+	public boolean ConfirmRequest(Request r)
 	{
-		Request request = new Request(requestId);
-		return request.Confirm();
+		return Request.Confirm(r);
 	}
 	//Xóa yêu cầu tham gia nhóm
-	public boolean DeleteRequest(String requestId)
+	public boolean DeleteRequest(Request r)
 	{
-		Request request = new Request(requestId);
-		return request.Delete();
+		return Request.Delete(r);
 	}
 	//Sửa thông tin tài khoản
 	public boolean Update()
@@ -467,5 +469,40 @@ public class User {
 	public boolean DeleteComment(Comment c)
 	{
 		return Comment.Delete(c);
+	}
+	public ArrayList SearchGroup(String keyword)
+	{
+		ArrayList groups=new ArrayList();
+		try
+		{
+			String s=Html.SendRequest("", 
+					new String[]{"CVM","xTuKhoa","xMaTaiKhoan"},
+					new String[]{"TimKiemNhom",keyword,this.userId}
+			);
+			if(s.indexOf("false")>=0)
+				return null;
+			
+			ArrayList data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			
+			while(i<len)
+			{
+				Group t=new Group(data.get(i).toString(),
+						data.get(i+1).toString(),
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),"",""),
+						data.get(i+4).toString(),
+						data.get(i+5).toString(),
+						data.get(i+6).toString()
+						);
+				groups.add(t);
+				i += 7;
+			}
+		}
+		catch(Exception ex)
+		{
+			
+		}
+		return groups;
 	}
 }
