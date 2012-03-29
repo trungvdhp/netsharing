@@ -164,7 +164,7 @@ public class Group {
 		}
 		catch(Exception ex)
 		{
-			MessageBox.Show(ex.toString(), display, disp);
+			//MessageBox.Show(ex.toString(), display, disp);
 			return topics;
 		}
 	}
