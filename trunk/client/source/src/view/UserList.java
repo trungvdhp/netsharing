@@ -1,6 +1,7 @@
 package view;
 
 import model.Group;
+import model.Request;
 import model.Topic;
 import model.TopicGroup;
 import control.MessageBox;
@@ -40,6 +41,11 @@ public class UserList extends List{
 			TopicGroup t=(TopicGroup)item.data;
 			//#style topicItem
 			this.append(t.topic.title,null);
+		}
+		else if(type.equals("request"))
+		{
+			Request r=(Request)item.data;
+			this.append(item.getText(), null);
 		}
 	}
 	public Item getCurrentItem()

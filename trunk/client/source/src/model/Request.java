@@ -27,31 +27,30 @@ public class Request {
 		this.requestDate = requestDate;
 	}
 	
-	public static Request Create(User u,Group g)
+	public static boolean Create(User u,Group g)
 	{
 		try
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMaNhom"},
-					new String[] {"TaoYeuCau",u.userId, g.groupId}
+					new String[] {"ThamGiaNhom",u.userId, g.groupId}
 					);
-			if(id.indexOf("false")>=0) return null;
-			String requestDate = UtilString.GetTimeString();
-			return new Request(id);
+			if(id.indexOf("false")>=0) return false;
+			return true;
 		}
 		catch(Exception ex)
 		{
-			return null;
+			return false;
 		}
 	}
 	
-	public boolean Confirm()
+	public static boolean Confirm(Request r)
 	{
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaYeuCau"},
-					new String[] {"XacNhanYeuCauThamGia", requestId}
+					new String[] {Constants.Case,"xMaTaiKhoan_Nhom","xXuLy"},
+					new String[] {"DuyetYeuCauThamGia",r.requestId,"DongY"}
 					);
 			if(s.indexOf("false")>=0)
 				return false;
@@ -63,13 +62,13 @@ public class Request {
 		}
 	}
 	
-	public boolean Delete()
+	public static boolean Delete(Request r)
 	{
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaYeuCau"},
-					new String[] {"XoaYeuCauThamGia", requestId}
+					new String[] {Constants.Case,"xMaTaiKhoan_Nhom","xXuLy"},
+					new String[] {"DuyetYeuCauThamGia", r.requestId,"KhongDongY"}
 					);
 			if(s.indexOf("false")>=0)
 				return false;
