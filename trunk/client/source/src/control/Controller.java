@@ -356,13 +356,18 @@ implements ApplicationInitializer, CommandListener
 				if(txtPassword.getString().equals(txtConfirm.getString()))
 				{
 					user = new User(txtUsername.getString(),txtPassword.getString());
-					if(user.Register())
+					String rs = user.Register();
+					if(rs.equals("true"))
 					{
 						showMessage("Bạn đã đăng ký thành công!", frmLogin, AlertType.INFO);
 					}
+					else if(rs.equals("TonTai"))
+					{
+						showMessage("Tài khoản này đã tồn tại!", frmRegister, AlertType.INFO);
+					}
 					else
 					{
-						showMessage("Đăng ký không thành công!", frmRegister, AlertType.INFO);
+						showMessage("Đăng ký tài khoản thất bại!", frmRegister, AlertType.INFO);
 					}
 				}
 				else
