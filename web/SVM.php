@@ -250,7 +250,7 @@ switch ($Case){
 			}*/
 			
 			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, tk.TaiKhoan,n.NgayTao  FROM nhom n INNER JOIN taikhoan_nhom tkn ON tkn.MaNhom = n.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = tkn.MaTaiKhoan
-WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
+WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' and tkn.TrangThai = 1";
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
 				$tmpsql1="SELECT COUNT(*) AS SoThanhVien FROM taikhoan_nhom WHERE manhom = '" . $rowTaiKhoan_Nhom["MaNhom"] . "'"; 
