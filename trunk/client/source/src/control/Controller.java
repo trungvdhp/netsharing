@@ -41,6 +41,7 @@ import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.CommandListener;
 import de.enough.polish.ui.Display;
+import de.enough.polish.ui.Gauge;
 import de.enough.polish.ui.List;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextField;
@@ -87,7 +88,7 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdCreateTopic=new Command("Đăng bài mới",Command.SCREEN,1);
 	private Command cmdDeleteTopic=new Command("Xóa bài viết",Command.SCREEN,1);
 	private Command cmdDeleteGroup=new Command("Xóa nhóm",Command.SCREEN,1);
-	private Command cmdViewTopic=new Command("Xem bài viết",Command.SCREEN,1);
+	private Command cmdViewTopic=new Command("Xem bài viết",Command.OK,1);
 	private Command cmdConfirm=new Command("Xác nhận",Command.SCREEN,1);
 	private Command cmdReject=new Command("Từ chối",Command.SCREEN,1);
 	private Command cmdMyGroup=new Command("Nhóm của bạn",Command.SCREEN,1);
@@ -96,7 +97,7 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
 	private Command cmdGroupDetail=new Command("Chi tiết",Command.SCREEN,1);
 	private Command cmdGroup =new Command("Nhóm",Command.SCREEN,1);
-	private Command cmdSendRequest =new Command("Yêu cầu tham gia",Command.SCREEN,1);
+	private Command cmdSendRequest =new Command("Tham gia",Command.OK,1);
 	
 	private MainMenuList screenMainMenu;
 	private SimpleScreenHistory screenHistory;
@@ -336,7 +337,21 @@ implements ApplicationInitializer, CommandListener
 				screenHistory.show(this.screenMainMenu);
 			}
 		} else if(cmd == this.cmdLogin) {
-			String username = txtUsername.getString();
+			Gauge load=new Gauge("Loading...",false,10,0);
+			frmLogin.append(load);
+			try
+			{
+				for(int i=0;i<10;i++)
+				{
+					load.setValue(load.getValue()+1);
+					Thread.sleep(200);
+				}
+			}
+			catch(Exception ex)
+			{
+				showMessage("failed!", frmLogin, AlertType.INFO);
+			}
+			/*String username = txtUsername.getString();
 			String password = txtPassword.getString();
 			this.user=new User(username,password);
 			if(user.Login())
@@ -346,7 +361,7 @@ implements ApplicationInitializer, CommandListener
 			else
 			{
 				showMessage("Đăng nhập thất bại! Lỗi: "+user.userId, frmLogin, AlertType.INFO);
-			}
+			}*/
 		} else if(cmd == this.cmdRegister)
 		{
 			openRegisterForm();

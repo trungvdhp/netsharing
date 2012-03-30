@@ -11,7 +11,7 @@ import de.enough.polish.util.URL;
 
 public class Html {
 	//private String sessionId;
-	private static String path="http://localhost/VM_Server/SVM.php";
+	private static String path="http://vimaru.byethost7.com/SVM.php";
 	//private static String path="http://hanghaicnt.net/mediafire.xml";
 	public static String SendRequest(String url,String[] args,String[] values) throws Exception
 	{
