@@ -29,7 +29,8 @@
 	<!-- the device for the test mode - you can define it on the command-line
 	     using the -D switch, e.g. ant -Ddevice=Generic/midp2 emulator -->
 	<property name="device" value="Generic/AnyPhone"/>
-	<property name="devices" value="${device}"/>
+	<property name="d2" value="Nokia/Series40E3"/>
+	<property name="devices" value="Nokia/E61"/>
 	
 	
 
@@ -147,12 +148,12 @@
 					</localization>
 				</resources>
 				<!-- obfuscator settings: do not obfuscate when the test-property is true -->
-				<!--obfuscator name="ProGuard" unless="test or polish.blackberry"-->
+				<obfuscator name="ProGuard" unless="test or polish.blackberry">
 					<!--
 					You can set additional parameters here, e.g.:
 					<parameter name="optimize" value="false" />
 					-->
-				<!--/obfuscator-->
+				</obfuscator>
 				<!-- log settings: only use debug setting when the test-property is true -->
 				<debug if="test or log" verbose="true" level="error">
 					<filter pattern="de.enough.polish.example.*" level="debug" />
