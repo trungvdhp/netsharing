@@ -54,7 +54,7 @@ public class Group {
 					new String[] {"ChiTietNhom", groupId}
 					);
 			//MessageBox.Show(s, display, disp);
-			if(s.equalsIgnoreCase("false"))
+			if(s.equals("false"))
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			this.groupName = data.get(0).toString();
@@ -149,13 +149,14 @@ public class Group {
 			while(i<len)
 			{
 				TopicGroup t=new TopicGroup(
-						data.get(i).toString(), 
+						data.get(i).toString(),
 						new Topic(new User(data.get(i+5).toString(),data.get(i+9).toString(),"",""),
 								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
 						new User(data.get(i+7).toString(), data.get(i+10).toString(),"",""),
 						data.get(i+6).toString(),
-						data.get(i+8).toString() );
-				
+						data.get(i+8).toString()
+					
+						);
 				topics.add(t);
 				i += 11;
 			}
@@ -164,7 +165,7 @@ public class Group {
 		}
 		catch(Exception ex)
 		{
-			//MessageBox.Show(ex.toString(), display, disp);
+			MessageBox.Show(ex.toString(), display, disp);
 			return topics;
 		}
 	}

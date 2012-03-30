@@ -44,7 +44,7 @@ public class UserList extends List{
 		}
 		else if(type.equals("request"))
 		{
-			Request r=(Request)item.data;
+			//#style requestItem
 			this.append(item.getText(), null);
 		}
 	}
