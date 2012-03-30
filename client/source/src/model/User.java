@@ -85,21 +85,18 @@ public class User {
 		userId = "";
 	}
 	//Đăng ký tài khoản
-	public boolean Register()
+	public String Register()
 	{
 		try
 		{
-			String data=Html.SendRequest("",
+			return Html.SendRequest("",
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangKyTaiKhoan",username,password}
-					);
-			if(data.indexOf("false") >= 0)
-				return false;
-			return true;
+			);
 		}
 		catch(Exception ex)		
 		{
-			return false;
+			return "false";
 		}
 	}
 	//Lấy thông tin tài khoản của bạn
