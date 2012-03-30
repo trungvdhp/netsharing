@@ -114,11 +114,9 @@ CREATE TABLE `baiviet` (
   `TrangThai` tinyint(1) NOT NULL DEFAULT '1',
   `MaTaiKhoan` varchar(11) NOT NULL,
   PRIMARY KEY (`MaBaiViet`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `baiviet` */
-
-insert  into `baiviet`(`MaBaiViet`,`TieuDe`,`NoiDung`,`NgayTao`,`TrangThai`,`MaTaiKhoan`) values (2,'she neva knows ','Nhungdau ai biet se co mot ngay moi cam xuc ','2012-03-12 22:43:22',1,'TKTD0'),(3,'lonely star ','nang gio ben em anh ko the cho che dc j ','2012-03-12 22:44:00',1,'TKTD0'),(4,'Sinh nhat Hai Anh ','Ai ranh thi toi nay di nhe, tai ptro Nghia ','2012-03-28 20:05:40',1,'TKTD0');
 
 /*Table structure for table `baiviet_chude` */
 
@@ -149,11 +147,9 @@ CREATE TABLE `baiviet_nhom` (
   `MaNhom` varchar(11) DEFAULT NULL,
   `MaDanhMuc` int(11) DEFAULT NULL,
   PRIMARY KEY (`MaBaiViet_Nhom`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `baiviet_nhom` */
-
-insert  into `baiviet_nhom`(`MaBaiViet_Nhom`,`MaTaiKhoan`,`MaBaiViet`,`NgayChiaSe`,`TrangThai`,`ViTriGPS`,`MaNhom`,`MaDanhMuc`) values (6,'TKTD0',2,'2012-03-28 19:30:36',1,NULL,'NTD0',NULL),(7,'TKTD0',4,'2012-03-28 20:06:20',1,NULL,'NTD1',NULL);
 
 /*Table structure for table `baivietmoi` */
 
@@ -164,11 +160,9 @@ CREATE TABLE `baivietmoi` (
   `MaTaiKhoan` varchar(11) NOT NULL,
   `MaBaiViet_Nhom` int(11) NOT NULL,
   PRIMARY KEY (`MaBaiVietMoi`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `baivietmoi` */
-
-insert  into `baivietmoi`(`MaBaiVietMoi`,`MaTaiKhoan`,`MaBaiViet_Nhom`) values (1,'TKTD1',6),(2,'TKTD2',6);
 
 /*Table structure for table `binhluananh` */
 
@@ -199,11 +193,9 @@ CREATE TABLE `binhluanbaiviet` (
   `ViTriGPS` varchar(100) DEFAULT NULL,
   `MaBaiViet_Nhom` int(11) NOT NULL,
   PRIMARY KEY (`MaBinhLuan`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `binhluanbaiviet` */
-
-insert  into `binhluanbaiviet`(`MaBinhLuan`,`NoiDung`,`MaTaiKhoan`,`NgayTao`,`ViTriGPS`,`MaBaiViet_Nhom`) values (1,'Hay hay','TKTD0','2012-03-25 11:44:09',NULL,1);
 
 /*Table structure for table `chude` */
 
@@ -216,11 +208,9 @@ CREATE TABLE `chude` (
   `NgayCapNhat` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `MaTaiKhoan` varchar(11) NOT NULL,
   PRIMARY KEY (`MaChuDe`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `chude` */
-
-insert  into `chude`(`MaChuDe`,`TenChuDe`,`NgayTao`,`NgayCapNhat`,`MaTaiKhoan`) values (1,'Meo con long vang ','2012-03-13 17:31:04','2012-03-13 00:00:00','TKTD0');
 
 /*Table structure for table `danhmucbaiviet_nhom` */
 
@@ -257,7 +247,7 @@ CREATE TABLE `nhom` (
 
 /*Data for the table `nhom` */
 
-insert  into `nhom`(`MaNhom`,`TenNhom`,`MaTaiKhoan`,`AnhDaiDien`,`MoTa`,`QuyTac`,`ViTriGPS`,`NgayTao`,`SoThanhVien`,`SoBaiViet`) values ('NTD0','DHHH','TKTD0',NULL,'DHHHVN','Meo con long vang ',NULL,'2012-03-23 20:49:25',0,0),('NTD1','Doremon','TKTD0',NULL,'Hoi nhung nguoi thich nuoi meo ','Yeu meo =))',NULL,'2012-03-28 18:13:23',0,0),('NTD2','CNT49','TKTD0',NULL,'Lop CNT49','',NULL,'2012-03-23 17:34:14',0,0);
+insert  into `nhom`(`MaNhom`,`TenNhom`,`MaTaiKhoan`,`AnhDaiDien`,`MoTa`,`QuyTac`,`ViTriGPS`,`NgayTao`,`SoThanhVien`,`SoBaiViet`) values ('NTD1','CNT49 - ĐH1','TKTD0',NULL,'','',NULL,'2012-03-30 12:22:54',0,0),('NTD2','C#','TKTD0',NULL,NULL,NULL,NULL,'2012-03-30 11:04:17',0,0),('NTD3','PHP','TKTD0',NULL,NULL,NULL,NULL,'2012-03-30 11:04:24',0,0),('NTD4','F4','TKTD0',NULL,'Team bắn CS 1.6 ','Play for fun but wanna go pro =)) ',NULL,'2012-03-30 11:08:54',0,0);
 
 /*Table structure for table `quyenhan` */
 
@@ -296,7 +286,7 @@ CREATE TABLE `taikhoan` (
 
 /*Data for the table `taikhoan` */
 
-insert  into `taikhoan`(`MaTaiKhoan`,`TaiKhoan`,`MatKhau`,`HoDem`,`Ten`,`NgaySinh`,`GioiTinh`,`Email`,`DienThoai`,`DiaChi`,`AnhDaiDien`,`NgayTao`,`TrangThai`,`NgayVaoTruong`,`MaQuyen`) values ('TKTD0','34061','670b14728ad9902aecba32e22fa4f6bd','','','',0,NULL,NULL,NULL,NULL,'2012-02-09 01:50:06',1,NULL,NULL),('TKTD1','kid','7de007e43f108e4b54b079f66e4285d8','','','',0,NULL,NULL,NULL,NULL,'2012-03-12 22:46:20',1,NULL,NULL),('TKTD2','vibzz','3a3d5a3861bc2ffeedb3e3d75ad35761','','','',0,NULL,NULL,NULL,NULL,'2012-03-12 22:46:56',1,NULL,NULL);
+insert  into `taikhoan`(`MaTaiKhoan`,`TaiKhoan`,`MatKhau`,`HoDem`,`Ten`,`NgaySinh`,`GioiTinh`,`Email`,`DienThoai`,`DiaChi`,`AnhDaiDien`,`NgayTao`,`TrangThai`,`NgayVaoTruong`,`MaQuyen`) values ('TKTD0','Kid','0e4e946668cf2afc4299b462b812caca','','','',0,NULL,NULL,NULL,NULL,'2012-03-30 11:02:58',1,NULL,NULL),('TKTD1','Picasso','6693c7fd8c2e5d734210724001b0bd46','','','',0,NULL,NULL,NULL,NULL,'2012-03-30 11:05:20',1,NULL,NULL);
 
 /*Table structure for table `taikhoan_nhom` */
 
@@ -310,11 +300,11 @@ CREATE TABLE `taikhoan_nhom` (
   `TrangThai` tinyint(1) NOT NULL DEFAULT '1',
   `NgayVaoNhom` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`MaTaiKhoan_Nhom`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `taikhoan_nhom` */
 
-insert  into `taikhoan_nhom`(`MaTaiKhoan_Nhom`,`MaTaiKhoan`,`MaNhom`,`QuyenHan`,`TrangThai`,`NgayVaoNhom`) values (1,'TKTD0','NTD0',NULL,1,'2012-03-23 10:14:34'),(2,'TKTD0','NTD1',NULL,1,'2012-03-23 10:14:44'),(3,'TKTD1','NTD0',NULL,1,'2012-03-28 19:29:29'),(4,'TKTD2','NTD1',NULL,1,'2012-03-28 19:29:38'),(5,'TKTD2','NTD0',NULL,1,'2012-03-28 19:30:09');
+insert  into `taikhoan_nhom`(`MaTaiKhoan_Nhom`,`MaTaiKhoan`,`MaNhom`,`QuyenHan`,`TrangThai`,`NgayVaoNhom`) values (1,'TKTD0','NTD0',NULL,1,'2012-03-30 11:03:21'),(2,'TKTD0','NTD1',NULL,1,'2012-03-30 11:03:44'),(3,'TKTD0','NTD2',NULL,1,'2012-03-30 11:04:17'),(4,'TKTD0','NTD3',NULL,1,'2012-03-30 11:04:24'),(5,'TKTD1','NTD0',NULL,1,'2012-03-30 12:21:34'),(6,'TKTD1','NTD1',NULL,1,'2012-03-30 12:21:30'),(7,'TKTD0','NTD4',NULL,1,'2012-03-30 11:06:13'),(8,'TKTD1','NTD4',NULL,1,'2012-03-30 11:06:54');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

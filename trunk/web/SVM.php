@@ -991,8 +991,8 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 		break;
 	}
 	
-	case "DanhSachBaiVietTheoNhom": {
-		$MaTaiKhoan = $_REQUEST["xMaNhom"];
+	case "DanhSachBaiVietMoi": {
+		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
 			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
 							FROM baiviet_nhom bvn 
@@ -1037,7 +1037,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
 			echo $false;
 		break;
 	}
-	case "DanhSachBaiVietMoi": {
+	case "DanhSachBaiVietTheoNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		if ($MaNhom != "") {
 			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
