@@ -130,6 +130,10 @@
 	icon-image: url(topic_icon.png);
 	layout: left | expand;
 }
+.requestItem {
+	icon-image: url(user_icon.png);
+	layout: left | expand;
+}
 
 /**********************************************************************/
 
