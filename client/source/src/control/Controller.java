@@ -28,6 +28,7 @@ package control;
 import java.io.IOException;
 import javax.microedition.lcdui.Image;
 
+import util.UtilString;
 import view.*;
 import model.*;
 import app.App;
@@ -36,6 +37,8 @@ import app.App;
 import de.enough.polish.event.ThreadedCommandListener;
 import de.enough.polish.io.RmsStorage;
 import de.enough.polish.ui.Alert;
+import de.enough.polish.ui.ChoiceTextField;
+import de.enough.polish.ui.DateField;
 import de.enough.polish.ui.AlertType;
 import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.Command;
@@ -69,19 +72,36 @@ implements ApplicationInitializer, CommandListener
 	private RmsStorage storage;
 	
 	private TextField txtUsername = new TextField("Tên đăng nhập: ","", 50,TextField.ANY);
-	private TextField txtPassword = new TextField("Mật khẩu: ","",50, TextField.PASSWORD);
-	private TextField txtConfirm = new TextField("Xác nhận mật khẩu: ","",50, TextField.PASSWORD);
+	private TextField txtPassword = new TextField("Mật khẩu: ","",32, TextField.PASSWORD);
+	private TextField txtOldPassword = new TextField("Mật khẩu cũ: ","",32, TextField.PASSWORD);
+	private TextField txtNewPassword = new TextField("Mật khẩu mới: ","",32, TextField.PASSWORD);
+	private TextField txtConfirm = new TextField("Xác nhận mật khẩu: ","",32, TextField.PASSWORD);
+	private TextField txtFirstName = new TextField("Họ đệm: ","", 32,TextField.ANY);
+	private TextField txtLastName = new TextField("Tên: ","", 32,TextField.ANY);
+	private TextField txtAddress = new TextField("Địa chỉ: ","", 100,TextField.ANY);
+	private TextField txtPhone = new TextField("Điện thoại: ","", 20,TextField.PHONENUMBER);
+	
 	private TextField txtSearch = new TextField("Từ khóa: ","", 50,TextField.ANY);
 	private TextField txtTopicTitle = new TextField("Tiêu đề: ","", 100,TextField.ANY);
 	private TextField txtTopicContent = new TextField("Nội dung: ","", 512,TextField.ANY);
 	private TextField txtGroupName = new TextField("Tên nhóm: ","", 50,TextField.ANY);
 	private TextField txtDescription = new TextField("Mô tả: ","", 150,TextField.ANY);
 	private TextField txtGroupRule = new TextField("Quy tắc: ","", 300,TextField.ANY);
+	
+	private StringItem strCreateDate;
+	
 	private CommandListener commandListener;
+	
 	private ChoiceGroup cgRemember = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
+	private ChoiceGroup cgGender = new ChoiceGroup("Giới tính: ", ChoiceGroup.MULTIPLE);
+	
+	private ChoiceTextField email;
+	private DateField dateBirthday = new DateField("Ngày sinh: ", DateField.DATE);
 	
 	private Command cmdLogin = new Command("Đăng nhập",Command.SCREEN,1);
+	private Command cmdLogout = new Command("Đăng xuất",Command.SCREEN,1);
 	private Command cmdRegister = new Command("Đăng ký", Command.SCREEN,1);
+	private Command cmdChangePassword = new Command("Đổi mật khẩu", Command.SCREEN,1);
 	private Command cmdExit = new Command(Locale.get("cmd.exit"), Command.EXIT, 10);
 	private Command cmdBack = new Command(Locale.get("cmd.back"), Command.BACK, 2);
 	private Command cmdCreateGroup=new Command("Tạo nhóm mới",Command.SCREEN,1);
@@ -92,10 +112,8 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdConfirm=new Command("Xác nhận",Command.SCREEN,1);
 	private Command cmdReject=new Command("Từ chối",Command.SCREEN,1);
 	private Command cmdMyGroup=new Command("Nhóm của bạn",Command.SCREEN,1);
-	private Command cmdShareTopic=new Command("Chia sẻ bài viết",Command.SCREEN,1);
-	private Command cmdUpdateGroup=new Command("Cập nhật thông tin",Command.SCREEN,1);
-	private Command cmdUpdateTopic=new Command("Chỉnh sửa",Command.SCREEN,1);
-	private Command cmdGroupDetail=new Command("Chi tiết",Command.SCREEN,1);
+	private Command cmdUpdate=new Command("Cập nhật",Command.SCREEN,1);
+	private Command cmdDetail=new Command("Chi tiết",Command.SCREEN,1);
 	private Command cmdGroup =new Command("Nhóm",Command.SCREEN,1);
 	private Command cmdSendRequest =new Command("Tham gia",Command.OK,1);
 	
@@ -103,6 +121,8 @@ implements ApplicationInitializer, CommandListener
 	private SimpleScreenHistory screenHistory;
 	private UserForm frmLogin;
 	private UserForm frmRegister;
+	private UserForm frmProfile;
+	private UserForm frmChangePassword;
 	private User user;
 	private UserList frmGroup;
 	private UserForm frmCreateGroup;
@@ -117,7 +137,62 @@ implements ApplicationInitializer, CommandListener
 	private UserForm frmSearch;
 	private UserList frmSearchGroup;
 	
-
+	private void openProfileForm() {
+		// TODO Auto-generated method stub
+		user.GetInfo();
+		frmProfile=new UserForm("Tài khoản",null);
+		
+		frmProfile.addTextField(txtFirstName);
+		frmProfile.addTextField(txtLastName);
+		//frmProfile.addDateField(dateBirthday);
+		frmProfile.addEmailField(email,user.email);
+		
+		//#style checkBoxItem
+		cgGender = new ChoiceGroup("Giới tính", ChoiceGroup.MULTIPLE);
+		cgGender.append(" Nữ", null);
+		
+		frmProfile.addCheckBox(cgGender);
+		frmProfile.addTextField(txtPhone);
+		frmProfile.addTextField(txtAddress);
+		frmProfile.addTextLabel(strCreateDate, user.createDate);
+		
+		txtFirstName.setString(user.firstName);
+		txtLastName.setString(user.lastName);
+		if(user.gender.equals("0"))
+		{
+			cgGender.setSelectedIndex(0,false);
+		}
+		else
+		{
+			cgGender.setSelectedIndex(0,true);
+		}
+		txtPhone.setString(user.phone);
+		txtAddress.setString(user.address);
+		
+		frmProfile.addMenu(cmdUpdate);
+		frmProfile.addMenu(cmdChangePassword);
+		frmProfile.addMenu(cmdLogout);
+		frmProfile.addMenu(cmdBack);
+		frmProfile.setCommandListener(this.commandListener);
+		screenHistory.show(frmProfile);
+	}
+	
+	private void openChangePasswordForm() {
+		// TODO Auto-generated method stub
+		txtOldPassword.setString("");
+		txtNewPassword.setString("");
+		txtConfirm.setString("");
+		frmChangePassword=new UserForm("Đổi mật khẩu",null);
+		frmChangePassword.addTextField(txtOldPassword);
+		frmChangePassword.addTextField(txtNewPassword);
+		frmChangePassword.addTextField(txtConfirm);
+		frmChangePassword.addMenu(cmdConfirm);
+		frmChangePassword.addMenu(cmdBack);
+		frmChangePassword.setCommandListener(this.commandListener);
+		
+		screenHistory.show(frmChangePassword);
+	}
+	
 	/**
 	 * Creates a new controller.
 	 * @param midlet the main application
@@ -132,6 +207,7 @@ implements ApplicationInitializer, CommandListener
 	/**
 	 * Lifecycle: starts the application for the first time.
 	 */
+
 	public void appStart() {
 		String splashUrl = "/Splash.png";
 		Image splashImage = null;
@@ -152,6 +228,24 @@ implements ApplicationInitializer, CommandListener
 		Alert alert=new Alert("",content,null,type);
 		this.display.setCurrent(alert,disp);
 	}
+	
+	public void openLoginForm()
+	{
+		frmLogin=new UserForm("Đăng nhập",null);
+		frmLogin.addTextField(txtUsername);
+		frmLogin.addTextField(txtPassword);
+		//#style checkBoxItem
+		cgRemember.append("Ghi nhớ mật khẩu", null);
+		frmLogin.addCheckBox(cgRemember);
+		
+		frmLogin.addMenu(cmdLogin);
+		frmLogin.addMenu(cmdRegister);
+		frmLogin.addMenu(cmdExit);
+		frmLogin.setCommandListener(this.commandListener);
+		
+		screenHistory.show(frmLogin);
+	}
+	
 	public void openRegisterForm()
 	{
 		frmRegister = new UserForm("Đăng ký tài khoản",null);
@@ -163,17 +257,18 @@ implements ApplicationInitializer, CommandListener
 		frmRegister.setCommandListener(this.commandListener);
 		screenHistory.show(frmRegister);
 	}
+	
 	public void openGroupForm(ArrayList groups)
 	{
 		frmGroup=new UserList("Nhóm tham gia");
 		frmGroup.addCommand(cmdGroup);
-		UiAccess.addSubCommand(cmdGroupDetail, cmdGroup,frmGroup);
-		UiAccess.addSubCommand(cmdUpdateGroup, cmdGroup,frmGroup);
+		UiAccess.addSubCommand(cmdDetail, cmdGroup,frmGroup);
+		UiAccess.addSubCommand(cmdUpdate, cmdGroup,frmGroup);
 		UiAccess.addSubCommand(cmdDeleteGroup, cmdGroup,frmGroup);
 		frmGroup.addCommand(cmdCreateGroup);
 		frmGroup.addCommand(cmdMyGroup);
 		frmGroup.addCommand(cmdBack);
-		showMessage("S", screenMainMenu, AlertType.INFO);
+		//showMessage("S", screenMainMenu, AlertType.INFO);
 		for(int i=0;i<groups.size();i++)
 		{
 			Group group=(Group)groups.get(i);
@@ -188,7 +283,7 @@ implements ApplicationInitializer, CommandListener
 		frmSearchGroup=new UserList("Nhóm tham gia");
 		frmSearchGroup.addCommand(cmdSendRequest);
 		frmSearchGroup.addCommand(cmdBack);
-		showMessage("S", screenMainMenu, AlertType.INFO);
+		//showMessage("S", screenMainMenu, AlertType.INFO);
 		for(int i=0;i<groups.size();i++)
 		{
 			Group group=(Group)groups.get(i);
@@ -238,29 +333,13 @@ implements ApplicationInitializer, CommandListener
 		long initStartTime = System.currentTimeMillis();
 		this.storage = new RmsStorage();
 		this.configuration = configurationLoad();
-		// create main menu:
-		
-		this.screenMainMenu = createMainMenu();
-		//screenHistory.show( this.screenMainMenu );
-		//user = new User("34061","000000");	
-		//user.Login();
-
-		frmLogin=new UserForm("Đăng nhập",null);
-		frmLogin.addTextField(txtUsername);
-		frmLogin.addTextField(txtPassword);
-		//#style checkBoxItem
-		cgRemember.append("Ghi nhớ mật khẩu", null);
-		frmLogin.addCheckBox(cgRemember);
-		
-		frmLogin.addMenu(cmdLogin);
-		frmLogin.addMenu(cmdRegister);
-		frmLogin.addMenu(cmdExit);
-		frmLogin.setCommandListener(this.commandListener);
-		
-		
-		screenHistory.show(frmLogin);
-		/*LoginForm form = new LoginForm(midlet);
-		screenHistory.show(form);*/
+		user = new User("34057", "000000");
+		if(user.Login())
+		{
+			this.screenMainMenu = createMainMenu();
+			screenHistory.show(screenMainMenu);
+		}
+		//openLoginForm();
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - initStartTime < 2000) { // show the splash at least for 2000 ms / 2 seconds:
 			try {
@@ -270,10 +349,11 @@ implements ApplicationInitializer, CommandListener
 			}
 		}
 	}
+	
 	private MainMenuList createMainMenu() {
 		MainMenuList list = new MainMenuList();
 		list.setCommandListener(this.commandListener);
-		list.addCommand(this.cmdExit);
+		list.addCommand(this.cmdBack);
 		list.addEntry("Tin mới");
 		list.addEntry("Nhóm");
 		list.addEntry("Yêu cầu");
@@ -323,12 +403,15 @@ implements ApplicationInitializer, CommandListener
 		//showMessage("Please wait...", disp, AlertType.INFO);
 		if (cmd == this.cmdExit) {
 			if (this.configuration.isDirty()) {
-				configurationSave();
+			configurationSave();
 			}
 			this.midlet.exit();
 		} else if (disp == this.screenMainMenu) {
 			if (handleCommandMainMenu()) {
 				return;
+			}
+			if (cmd == this.cmdBack){
+				screenHistory.show(frmLogin);
 			}
 		} else if (cmd == this.cmdBack) {
 			if (this.screenHistory.hasPrevious()) {
@@ -337,7 +420,7 @@ implements ApplicationInitializer, CommandListener
 				screenHistory.show(this.screenMainMenu);
 			}
 		} else if(cmd == this.cmdLogin) {
-			Gauge load=new Gauge("Loading...",false,10,0);
+			/*Gauge load=new Gauge("Loading...",false,10,0);
 			frmLogin.append(load);
 			try
 			{
@@ -349,23 +432,34 @@ implements ApplicationInitializer, CommandListener
 			}
 			catch(Exception ex)
 			{
-				showMessage("failed!", frmLogin, AlertType.INFO);
-			}
-			/*String username = txtUsername.getString();
+				showMessage("Đăng nhập thất bại!", frmLogin, AlertType.INFO);
+			}*/
+			String username = txtUsername.getString();
 			String password = txtPassword.getString();
 			this.user=new User(username,password);
 			if(user.Login())
 			{
+				this.screenMainMenu = createMainMenu();
 				screenHistory.show(screenMainMenu);
 			}
 			else
 			{
-				showMessage("Đăng nhập thất bại! Lỗi: "+user.userId, frmLogin, AlertType.INFO);
-			}*/
-		} else if(cmd == this.cmdRegister)
+				showMessage("Đăng nhập thất bại!", frmLogin, AlertType.ERROR);
+			}
+		} 
+		else if(cmd == this.cmdRegister)
 		{
 			openRegisterForm();
-		} else if(cmd == cmdConfirm)
+		} 
+		else if(cmd == this.cmdLogout)
+		{
+			openLoginForm();
+		}
+		else if(cmd == this.cmdChangePassword)
+		{
+			openChangePasswordForm();
+		}
+		else if(cmd == cmdConfirm)
 		{
 			if(disp==frmRegister){
 				if(txtPassword.getString().equals(txtConfirm.getString()))
@@ -374,7 +468,7 @@ implements ApplicationInitializer, CommandListener
 					String rs = user.Register();
 					if(rs.equals("true"))
 					{
-						showMessage("Bạn đã đăng ký thành công!", frmLogin, AlertType.INFO);
+						showMessage("Bạn đã đăng ký thành công!", frmRegister, AlertType.INFO);
 					}
 					else if(rs.equals("TonTai"))
 					{
@@ -382,12 +476,40 @@ implements ApplicationInitializer, CommandListener
 					}
 					else
 					{
-						showMessage("Đăng ký tài khoản thất bại!", frmRegister, AlertType.INFO);
+						showMessage("Đăng ký tài khoản thất bại!", frmRegister, AlertType.ERROR);
 					}
 				}
 				else
 				{
-					showMessage("Xác nhận mật khẩu không khớp", frmRegister, AlertType.INFO);
+					showMessage("Xác nhận mật khẩu không khớp", frmRegister, AlertType.ERROR);
+				}
+			}
+			else if(disp==frmChangePassword)
+			{
+				if(txtOldPassword.getString().equals(user.password))
+				{
+					if(txtNewPassword.getString().equals(txtConfirm.getString()))
+					{
+						User u = new User(user.userId, "", txtNewPassword.getString());
+						if(u.ChangePassword())
+						{
+							showMessage("Bạn đã thay đổi mật khẩu thành công!", frmChangePassword, AlertType.INFO);
+							user.password = txtNewPassword.getString();
+							txtPassword.setString(user.password);
+						}
+						else
+						{
+							showMessage("Thay đổi mật khẩu thất bại!", frmChangePassword, AlertType.ERROR);
+						}
+					}
+					else
+					{
+						showMessage("Xác nhận mật khẩu mới không khớp", frmChangePassword, AlertType.ERROR);
+					}
+				}
+				else
+				{
+					showMessage("Nhập mật khẩu cũ không chính xác!", frmChangePassword, AlertType.ERROR);
 				}
 			}
 			else if(disp==frmJoinRequest)
@@ -395,7 +517,7 @@ implements ApplicationInitializer, CommandListener
 				UserItem item=(UserItem)frmJoinRequest.getCurrentItem();
 				Request r=(Request)item.data;
 				if(!user.ConfirmRequest(r))
-					showMessage("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!", frmJoinRequest, AlertType.INFO);
+					showMessage("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!", frmJoinRequest, AlertType.ERROR);
 				else
 					showMessage("Đã chấp nhận yêu cầu tham gia nhóm!", frmJoinRequest, AlertType.INFO);
 			}
@@ -416,7 +538,7 @@ implements ApplicationInitializer, CommandListener
 				}
 				else
 				{
-					showMessage("Không thể tạo nhóm mới!", frmCreateGroup, AlertType.INFO);
+					showMessage("Không thể tạo nhóm mới!", frmCreateGroup, AlertType.ERROR);
 				}
 			}
 			else if(disp==frmConfirmDelGroup)
@@ -429,7 +551,7 @@ implements ApplicationInitializer, CommandListener
 				}
 				else
 				{
-					showMessage("Không thể xóa nhóm!", frmGroup, AlertType.INFO);	
+					showMessage("Không thể xóa nhóm!", frmGroup, AlertType.ERROR);	
 				}
 					
 			}
@@ -506,7 +628,7 @@ implements ApplicationInitializer, CommandListener
 			Group g=(Group)item.data;
 			if(!g.leader.userId.equals(user.userId))
 			{
-				showMessage("Không thể xóa nhóm không phải do bạn tạo!", frmGroup, AlertType.INFO);
+				showMessage("Không thể xóa nhóm không phải do bạn tạo!", frmGroup, AlertType.ERROR);
 				return;
 			}
 			frmConfirmDelGroup=MessageBox.Show("Bạn có chắc chắn muốn xóa nhóm "+g.groupName+" không?",AlertType.CONFIRMATION);
@@ -515,9 +637,27 @@ implements ApplicationInitializer, CommandListener
 			frmConfirmDelGroup.setCommandListener(this.commandListener);
 			screenHistory.show(frmConfirmDelGroup);
 		}
-		else if(cmd==cmdUpdateGroup)
+		else if(cmd==cmdUpdate)
 		{
-			openUpdateGroupForm();
+			if(disp==frmProfile)
+			{
+				//showMessage("Cap nhat", frmProfile, AlertType.INFO);
+				//String gender = cgGender.isSelected(0)?"0":"1";
+				//User u = new User(user.userId, txtFirstName.getString(), txtLastName.getString()
+						//, email.getString(), gender, txtPhone.getString(), txtAddress.getString());
+				//if(u.Update())
+				//{
+					//showMessage("Bạn đã cập nhật thông tin tài khoản thành công!", frmProfile, AlertType.INFO);
+				//}
+				//else
+				//{
+					//showMessage("Cập nhật thông tin tài khoản thất bại!", frmProfile, AlertType.ERROR);
+				//}
+			}
+			else
+			{
+				openUpdateGroupForm();
+			}
 			
 		}
 		else if(cmd==cmdSendRequest)
@@ -525,7 +665,7 @@ implements ApplicationInitializer, CommandListener
 			UserItem item=(UserItem)frmSearchGroup.getCurrentItem();
 			Group g=(Group)item.data;
 			if(!user.CreateRequest(g))
-				showMessage("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!", frmSearchGroup, AlertType.INFO);
+				showMessage("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!", frmSearchGroup, AlertType.ERROR);
 			else
 				showMessage("Đã gửi yêu cầu thành công!", frmSearchGroup, AlertType.INFO);
 		}
@@ -534,7 +674,7 @@ implements ApplicationInitializer, CommandListener
 			UserItem item=(UserItem)frmJoinRequest.getCurrentItem();
 			Request r=(Request)item.data;
 			if(!user.DeleteRequest(r))
-				showMessage("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!", frmJoinRequest, AlertType.INFO);
+				showMessage("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!", frmJoinRequest, AlertType.ERROR);
 			else
 				showMessage("Đã từ chối yêu cầu tham gia nhóm!", frmJoinRequest, AlertType.INFO);
 		}
@@ -550,7 +690,7 @@ implements ApplicationInitializer, CommandListener
 		Group g=(Group)item.data;
 		if(!g.leader.userId.equals(user.userId))
 		{
-			showMessage("Không thể sửa nhóm không phải do bạn tạo!", frmGroup, AlertType.INFO);
+			showMessage("Không thể sửa nhóm không phải do bạn tạo!", frmGroup, AlertType.ERROR);
 			return;
 		}
 		g.GetDetails(display,frmGroup);
@@ -633,7 +773,7 @@ implements ApplicationInitializer, CommandListener
 			openSearchForm();
 			break;
 		case 4:
-			
+			showMessage("Chức năng đang xây dựng", screenMainMenu, AlertType.INFO);
 			break;
 		case 5:
 			openProfileForm();
@@ -649,10 +789,7 @@ implements ApplicationInitializer, CommandListener
 		
 	}
 
-	private void openProfileForm() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	private void openSearchForm() {
 		// TODO Auto-generated method stub

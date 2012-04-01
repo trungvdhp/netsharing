@@ -15,7 +15,7 @@ public class User {
 	public String firstName;
 	public String lastName;
 	public String birthday;
-	public String sex;
+	public String gender;
 	public String email;
 	public String phone;
 	public String address;
@@ -34,13 +34,31 @@ public class User {
 		this.username=username;
 		this.password=password;
 	}
-
+	
+	public User(String id, String username, String password)
+	{
+		this.userId = id;
+		this.username = username;
+		this.password = password;
+	}
+	
 	public User(String id,String username,String firstName,String lastName)
 	{
 		this.userId = id;
 		this.username=username;
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+	
+	public User(String id, String firstName, String lastName, String email, String gender, String phone, String address)
+	{
+		this.userId = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.gender = gender;
+		this.phone = phone;
+		this.address = address;
 	}
 	
 	public User(ArrayList data)
@@ -51,7 +69,7 @@ public class User {
 		this.firstName = data.get(3).toString();
 		this.lastName = data.get(4).toString();
 		this.birthday = data.get(5).toString();
-		this.sex = data.get(6).toString();
+		this.gender = data.get(6).toString();
 		this.email = data.get(7).toString();
 		this.phone = data.get(8).toString();
 		this.address = data.get(9).toString();
@@ -117,11 +135,12 @@ public class User {
 			this.lastName = data.get(2).toString();
 			this.birthday =data.get(3).toString();
 			this.email = data.get(4).toString();
-			this.sex = data.get(5).toString();
+			this.gender = data.get(5).toString();
 			this.phone = data.get(6).toString();
 			this.avatar = data.get(7).toString();
 			this.address = data.get(8).toString();
-			this.startDay = data.get(9).toString();
+			this.createDate = data.get(9).toString();
+			this.startDay = data.get(10).toString();
 			return true;
 		}
 		catch(Exception ex)
@@ -384,14 +403,29 @@ public class User {
 		try
 		{
 			String data=Html.SendRequest("",
-					new String[] {"CVM","xMaTaiKhoan","xMatKhau","xHoDem","xTen","xNgaySinh","xGioiTinh",
-					"xEmail","xDienThoai","xDiaChi","xNgayTao","xNgayVaoTruong"},
-					new String[] {"CapNhatTaiKhoan",userId,password,firstName,lastName,birthday,sex,email,phone,
-					address,createDate,startDay}
+					new String[] {"CVM","xMaTaiKhoan","xHoDem","xTen","xEmail","xGioiTinh","xDienThoai","xDiaChi"},
+					new String[] {"CapNhatTaiKhoan",userId,firstName,lastName,email, gender,phone,address}
 					);
 			if(data.indexOf("false") >= 0)
 				return false;
-			userId=data;
+			return true;
+		}
+		catch(Exception ex)		{
+			//return "";
+			return false;
+		}
+	}
+	//Đổi mật khẩu
+	public boolean ChangePassword()
+	{
+		try
+		{
+			String data=Html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan","xMatKhau"},
+					new String[] {"DoiMatKhau",userId,password}
+					);
+			if(data.indexOf("false") >= 0)
+				return false;
 			return true;
 		}
 		catch(Exception ex)		{

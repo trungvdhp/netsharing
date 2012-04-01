@@ -86,7 +86,6 @@
 	padding-left: 5;
 	margin:3;
 	width: 98%;
-	
 }
 .checkBoxItem {
 }
@@ -339,6 +338,65 @@ rightcommand extends leftcommand
 	layout: right;
 }
 
+.addressInput {
+	text-wrap: false;
+	margin-left: 5;
+	margin-right:5;
+	padding-vertical: 1;
+	include-label: true;
+	choicetextfield-choicestyle: .addressChoice;
+	choicetextfield-containerstyle: .addressChoicesContainer;
+	layout: left | expand;
+	border-color: #8699a9;
+	background-color: #FFF;
+	label-style: textFieldLabel;
+}
 
+.addressInput:hover {
+	font-color:#FFF;
+	border-color: #0087fa;
+	background {
+		color: #00c8fa;
+	}
 
+	layout: left | expand;	
+}
+
+.addressChoice {
+	padding: 2;
+	font-size: small;
+	font-style: plain;
+	font-color: #000;
+	layout: left | expand;
+	background-color: #FFF;
+}
+
+.addressChoice:hover {
+	padding: 2;
+	font-size: small;
+	font-style: plain;
+	font-color: red;
+	layout: left | expand;
+	background-color: #FFF;
+}
+
+.addressChoicesContainer {
+	background-color: #FFF;
+	layout: left | expand;
+}
+
+.dateInput {
+	margin-left: 5;
+	margin-right:5;
+	font-size: small;
+	font-color: fontColor;
+	background-color: #FFF;
+	border-color: #8699a9;
+}
+
+.dateInput:hover {
+	padding: 3;
+	border-width: 2;
+	background-color: #FFF;
+}
 
