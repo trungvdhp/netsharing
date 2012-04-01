@@ -567,46 +567,28 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' and tkn.TrangThai = 1";
 	}
 	
     case "CapNhatTaiKhoan": {
-        $MatKhau = $_REQUEST["xMatKhau"];
+		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+        $HoDem = $_REQUEST["xHoDem"];
+		$Ten = $_REQUEST["xTen"];
         $Email = $_REQUEST["xEmail"];
+		$GioiTinh = $_REQUEST["xGioiTinh"];
         $DienThoai = $_REQUEST["xDienThoai"];
-        $AnhDaiDien = $_REQUEST["xAnhDaiDienTK"];
-        $MaTaiKhoan = $_REQUEST["xMaTaiKhoanPK"];
-        if ($MaTaiKhoan != "") {
-            if ($MatKhau == "" && $Email == "" && $DienThoai == "" && $AnhDaiDien == "") 
-                echo $false;
-            else {
-                $sql = "UPDATE taikhoan SET ";
-                if ($MatKhau != "") 
-                    $sql .= "MatKhau = '".md5($MatKhau)."', ";
-                if ($Email != "") 
-                    $sql .= "Email = '".$Email."', ";
-                if ($DienThoai != "") 
-                    $sql .= "DienThoai = '".$DienThoai."', ";
-                if ($AnhDaiDien != "") {
-                    // $AnhDaiDien đã có random
-                	$AnhDaiDien = $ThuMucAnhGocAvatar . $AnhDaiDien;
-                    $sql .= "AnhDaiDien = '".$AnhDaiDien."', ";
-                }
-                $sql = substr($sql, 0, strlen($sql)-2);
-                $sql .= " WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
-                $result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
-                if ($result != null) {
-                	if ($AnhDaiDien != "") {
-                		$image = new SimpleImage();
-                		$image->load($AnhDaiDien);
-	                	if ($image->getWidth() > $WidthAvatar) {
-							$image->resizeToWidth($WidthAvatar);
-							// Tạo đường dẫn tới Mobile
-							$NewLink = $AvatarMobile . $image->getImageName($AnhDaiDien);
-							$image->save($NewLink);	
-						}
-                	}
-                    echo $true;
-                }
-                else
-                    echo $false;
-            }
+		$DiaChi = $REQUEST["xDiaChi"];
+        if ($MaTaiKhoan != ""){
+			$sql = "UPDATE taikhoan SET "
+			."HoDem= '".$HoDem."', "
+			."Ten = '".$Ten."', "
+			."Email = '".$Email."', "
+			."GioiTinh = '".$GioiTinh."', "
+			."DienThoai = '".$DienThoai."', "
+			."DiaChi = '".$DiaChi."' "
+			."WHERE MaTaiKhoan = ".$MaTaiKhoan."'"
+			;
+			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+			if ($result != null)
+				echo $true;
+			else
+				echo $false;
         } else
             echo $false;
         break;
@@ -1370,11 +1352,10 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' and tkn.TrangThai = 1";
 	}
 	
 	case "ThongTinTaiKhoan": {
-		$MaAlbumChiaSe = $_REQUEST["xMaAlbumChiaSePK"];
-		if ($MaAlbumChiaSe != "") {
-			$sql = "SELECT tk.TaiKhoan, tk.HoDem, tk.Ten, tk.NgaySinh, tk.Email, tk.GioiTinh, tk.DienThoai, tk.AnhDaiDien, tk.DiaChi, tk.NgayVaoTruong
-					FROM albumchiase acs INNER JOIN taikhoan tk ON acs.MaTaiKhoan = tk.MaTaiKhoan 
-					WHERE acs.MaAlbumChiaSe = '".$MaAlbumChiaSe."'";
+		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+		if ($MaTaiKhoan != "") {
+			$sql = "SELECT tk.TaiKhoan, tk.HoDem, tk.Ten, tk.NgaySinh, tk.Email, tk.GioiTinh, tk.DienThoai, tk.AnhDaiDien, tk.DiaChi, tk.NgayTao, tk.NgayVaoTruong
+					FROM TaiKhoan tk WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			$row = mysql_fetch_array($result);
 			
@@ -1390,6 +1371,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' and tkn.TrangThai = 1";
 				. $row["DienThoai"] . $KyTuChiaTruongDL
 				. $AnhDaiDien . $KyTuChiaTruongDL
 				. $row["DiaChi"] . $KyTuChiaTruongDL
+				. $row["NgayTao"]. $KyTuChiaTruongDL
 				. $row["NgayVaoTruong"]
 				;
 		} else 
@@ -1680,6 +1662,24 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' and tkn.TrangThai = 1";
         break;
     }
     
+	case "DoiMatKhau": {
+		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+        $MatKhau = $_REQUEST["xMatKhau"];
+        if ($MaTaiKhoan != "") {
+                $sql = "UPDATE taikhoan SET "
+				."MatKhau = '".md5($MatKhau)."' "
+				."WHERE MaTaiKhoan = '".$MaTaiKhoan."'"
+				;
+                $result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+                if ($result != null)
+                    echo $true;
+                else
+                    echo $false;
+        } else
+            echo $false;
+        break;
+    }
+	
 	default: echo "<h1 style=\"font-family: 'Times New Roman';\">Not Found</h1>
 			<p style=\"font-family: 'Times New Roman'; font-size: medium;\">The requested URL was not found on this server.</p>
 			<hr />
