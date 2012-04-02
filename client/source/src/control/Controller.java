@@ -88,7 +88,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtDescription = new TextField("Mô tả: ","", 150,TextField.ANY);
 	private TextField txtGroupRule = new TextField("Quy tắc: ","", 300,TextField.ANY);
 	
-	private StringItem strCreateDate;
+	private StringItem strCreateDate = new StringItem("Ngày chỉnh sửa cuối: ","");
 	
 	private CommandListener commandListener;
 	
@@ -96,7 +96,7 @@ implements ApplicationInitializer, CommandListener
 	private ChoiceGroup cgGender = new ChoiceGroup("Giới tính: ", ChoiceGroup.MULTIPLE);
 	
 	private ChoiceTextField email;
-	private DateField dateBirthday = new DateField("Ngày sinh: ", DateField.DATE);
+	//private DateField dateBirthday = new DateField("Ngày sinh: ", DateField.DATE);
 	
 	private Command cmdLogin = new Command("Đăng nhập",Command.SCREEN,1);
 	private Command cmdLogout = new Command("Đăng xuất",Command.SCREEN,1);
@@ -145,8 +145,8 @@ implements ApplicationInitializer, CommandListener
 		frmProfile.addTextField(txtFirstName);
 		frmProfile.addTextField(txtLastName);
 		//frmProfile.addDateField(dateBirthday);
-		frmProfile.addEmailField(email,user.email);
-		
+		initEmailField();
+		frmProfile.addEmailField(email);
 		//#style checkBoxItem
 		cgGender = new ChoiceGroup("Giới tính", ChoiceGroup.MULTIPLE);
 		cgGender.append(" Nữ", null);
@@ -154,10 +154,12 @@ implements ApplicationInitializer, CommandListener
 		frmProfile.addCheckBox(cgGender);
 		frmProfile.addTextField(txtPhone);
 		frmProfile.addTextField(txtAddress);
-		frmProfile.addTextLabel(strCreateDate, user.createDate);
+		frmProfile.addTextLabel(strCreateDate);
 		
 		txtFirstName.setString(user.firstName);
 		txtLastName.setString(user.lastName);
+		strCreateDate.setText(user.createDate);
+		email.setString(user.email);
 		if(user.gender.equals("0"))
 		{
 			cgGender.setSelectedIndex(0,false);
@@ -175,6 +177,19 @@ implements ApplicationInitializer, CommandListener
 		frmProfile.addMenu(cmdBack);
 		frmProfile.setCommandListener(this.commandListener);
 		screenHistory.show(frmProfile);
+	}
+	
+	private void initEmailField()
+	{
+		String[] mailServices = new String[] {"gmail.com", "yahoo.com", "vimaru.edu.vn", "msn.com", "somewhere.com" };
+		boolean allowFreeText = true;
+		boolean appendSelectedChoice = true;
+		String appendDelimiter = ";";
+		email = new ChoiceTextField("Email: " , "", 100, TextField.EMAILADDR, 
+			mailServices, allowFreeText, appendSelectedChoice, appendDelimiter );
+		char choiceTriggerChar = '@';
+		boolean allowChoicesBeforeChoiceTriggerHasBeenEntered = false;
+		email.setChoiceTrigger( choiceTriggerChar, allowChoicesBeforeChoiceTriggerHasBeenEntered );
 	}
 	
 	private void openChangePasswordForm() {
@@ -641,18 +656,17 @@ implements ApplicationInitializer, CommandListener
 		{
 			if(disp==frmProfile)
 			{
-				//showMessage("Cap nhat", frmProfile, AlertType.INFO);
-				//String gender = cgGender.isSelected(0)?"0":"1";
-				//User u = new User(user.userId, txtFirstName.getString(), txtLastName.getString()
-						//, email.getString(), gender, txtPhone.getString(), txtAddress.getString());
-				//if(u.Update())
-				//{
-					//showMessage("Bạn đã cập nhật thông tin tài khoản thành công!", frmProfile, AlertType.INFO);
-				//}
-				//else
-				//{
-					//showMessage("Cập nhật thông tin tài khoản thất bại!", frmProfile, AlertType.ERROR);
-				//}
+				String gender = cgGender.isSelected(0)?"1":"0";
+				User u = new User(user.userId, txtFirstName.getString(), txtLastName.getString()
+						, email.getString(), gender, txtPhone.getString(), txtAddress.getString());
+				if(u.Update())
+				{
+					showMessage("Bạn đã cập nhật thông tin tài khoản thành công!", frmProfile, AlertType.INFO);
+				}
+				else
+				{
+					showMessage("Cập nhật thông tin tài khoản thất bại!", frmProfile, AlertType.ERROR);
+				}
 			}
 			else
 			{

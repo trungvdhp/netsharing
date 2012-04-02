@@ -25,10 +25,9 @@ public class UserForm extends Form
 		append(text);
 	}
 	
-	public void addTextLabel(StringItem string, String text)
+	public void addTextLabel(StringItem string)
 	{
 		//#style textField
-		string = new StringItem("Ngày chỉnh sửa cuối: ", text);
 		append(string);
 	}
 	
@@ -38,17 +37,8 @@ public class UserForm extends Form
 		append(choice);
 	}
 
-	public void addEmailField(ChoiceTextField email, String address)
+	public void addEmailField(ChoiceTextField email)
 	{
-		String[] mailServices = new String[] { "gmail.com", "yahoo.com", "msn.com", "somewhere.com" };
-		boolean allowFreeText = false;
-		boolean appendSelectedChoice = true;
-		String appendDelimiter = ";";
-		email = new ChoiceTextField("Email: " , address, 100, TextField.EMAILADDR, 
-			mailServices, allowFreeText, appendSelectedChoice, appendDelimiter );
-		char choiceTriggerChar = '@';
-		boolean allowChoicesBeforeChoiceTriggerHasBeenEntered = false;
-		email.setChoiceTrigger( choiceTriggerChar, allowChoicesBeforeChoiceTriggerHasBeenEntered );
 		//#style addressInput
 		append(email);
 	}

@@ -408,6 +408,7 @@ public class User {
 					);
 			if(data.indexOf("false") >= 0)
 				return false;
+			this.avatar = data;
 			return true;
 		}
 		catch(Exception ex)		{
