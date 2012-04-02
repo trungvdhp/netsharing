@@ -37,6 +37,7 @@
 	border-color: #8699a9;
 	margin-left: 5;
 	margin-right:5;
+	padding: 2px;
 	font-color:#000;
 	min-height: 20%;
 	background {
@@ -56,6 +57,7 @@
 	border-color: #8699a9;
 	margin-left: 5;
 	margin-right:5;
+	padding: 2px;
 	font-color:#000;
 	background {
 		color: #FFF;
@@ -70,6 +72,10 @@
 	layout: newline-after;
 }
 
+.fieldLabel{
+	margin-left:5;
+	font-color: #000;
+}
 .userForm {
 	background-color: screenBackgroundColor;
 }
@@ -83,9 +89,9 @@
 }
 
 .checkBox {
-	padding-left: 5;
-	margin:3;
+	margin-left: 5;
 	width: 98%;
+	label-style: fieldLabel;
 }
 .checkBoxItem {
 }
@@ -342,7 +348,7 @@ rightcommand extends leftcommand
 	text-wrap: false;
 	margin-left: 5;
 	margin-right:5;
-	padding-vertical: 1;
+	padding: 2px;
 	include-label: true;
 	choicetextfield-choicestyle: .addressChoice;
 	choicetextfield-containerstyle: .addressChoicesContainer;
@@ -358,30 +364,31 @@ rightcommand extends leftcommand
 	background {
 		color: #00c8fa;
 	}
-
 	layout: left | expand;	
 }
 
 .addressChoice {
-	padding: 2;
+	margin-right:5;
 	font-size: small;
 	font-style: plain;
 	font-color: #000;
-	layout: left | expand;
+	layout: right | expand;
 	background-color: #FFF;
 }
 
 .addressChoice:hover {
-	padding: 2;
-	font-size: small;
+	margin-right:10;
+	font-size: medium;
 	font-style: plain;
 	font-color: red;
-	layout: left | expand;
+	layout: right | expand;
 	background-color: #FFF;
 }
 
 .addressChoicesContainer {
+	width: 100px;
 	background-color: #FFF;
+	border-color: #0087fa;
 	layout: left | expand;
 }
 

@@ -29,6 +29,7 @@ public class Html {
 		String params="";
 		for(int i=0;i<args.length;i++)
 			params+=args[i]+"="+values[i]+(i==args.length-1?"":"&");
+		
 		if(args.length>0)
 		{
 			OutputStream os =  connection.openOutputStream();
