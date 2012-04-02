@@ -573,7 +573,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' and tkn.TrangThai = 1";
         $Email = $_REQUEST["xEmail"];
 		$GioiTinh = $_REQUEST["xGioiTinh"];
         $DienThoai = $_REQUEST["xDienThoai"];
-		$DiaChi = $REQUEST["xDiaChi"];
+		$DiaChi = $_REQUEST["xDiaChi"];
         if ($MaTaiKhoan != ""){
 			$sql = "UPDATE taikhoan SET "
 			."HoDem= '".$HoDem."', "
@@ -582,7 +582,7 @@ WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' and tkn.TrangThai = 1";
 			."GioiTinh = '".$GioiTinh."', "
 			."DienThoai = '".$DienThoai."', "
 			."DiaChi = '".$DiaChi."' "
-			."WHERE MaTaiKhoan = ".$MaTaiKhoan."'"
+			."WHERE MaTaiKhoan = '".$MaTaiKhoan."'"
 			;
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			if ($result != null)
