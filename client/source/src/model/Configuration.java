@@ -104,6 +104,7 @@ public class Configuration implements Externalizable {
 		for(int i=0;i<name.length();i++)
 		{
 			if(name.equals(keys[i])){
+				isDirty=true;
 				values[i]=value;
 				break;
 			}
