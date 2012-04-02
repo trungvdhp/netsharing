@@ -359,15 +359,14 @@ implements ApplicationInitializer, CommandListener
 		this.configuration = configurationLoad();
 		
 		long currentTime = System.currentTimeMillis();
-		if (currentTime - initStartTime < 2000) { // show the splash at least for 2000 ms / 2 seconds:
+		if (currentTime - initStartTime < 1000) { // show the splash at least for 1000 ms / 1 seconds:
 			try {
-				Thread.sleep(2000 - currentTime + initStartTime);
+				Thread.sleep(1000 - currentTime + initStartTime);
 			} catch (InterruptedException e) {
 				// ignore
 			}
 		}
 		openLoginForm();
-		
 	}
 	
 	private MainMenuList createMainMenu() {
@@ -471,7 +470,7 @@ implements ApplicationInitializer, CommandListener
 		} 
 		else if(cmd == this.cmdLogout)
 		{
-			openLoginForm();
+			screenHistory.show(frmLogin);
 		}
 		else if(cmd == this.cmdChangePassword)
 		{
