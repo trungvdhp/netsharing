@@ -1,4 +1,4 @@
-/** 
+/**
   * This polish.css file contains all
   * design information about this project.
   * It can be customized for specific devices
@@ -349,7 +349,7 @@ rightcommand extends leftcommand
 	margin-left: 5;
 	margin-right:5;
 	padding: 2px;
-	include-label: true;
+	include-label: false;
 	choicetextfield-choicestyle: .addressChoice;
 	choicetextfield-containerstyle: .addressChoicesContainer;
 	layout: left | expand;
@@ -386,7 +386,8 @@ rightcommand extends leftcommand
 }
 
 .addressChoicesContainer {
-	width: 100px;
+    margin-left: 30%;
+    margin-right: 5px;
 	background-color: #FFF;
 	border-color: #0087fa;
 	layout: left | expand;
