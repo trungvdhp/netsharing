@@ -10,10 +10,14 @@ import de.enough.polish.io.PostRedirectHttpConnection;
 import de.enough.polish.util.URL;
 
 public class Html {
-	//private String sessionId;
+	private static String _sessionId = "";
 	public static boolean isBusy = false;
-	private static String path="http://vimaru.byethost7.com/SVM.php";
-	//private static String path="http://localhost/VM_Server/SVM.php";
+	//private static String path="http://vimaru.byethost7.com/SVM.php";
+	private static String path="http://localhost/VM_Server/SVM.php";
+	public static void setSessionId(String sessionId)
+	{
+		_sessionId=sessionId;
+	}
 	public static String SendRequest(String url,String[] args,String[] values)
 	{
 		try{
@@ -28,9 +32,9 @@ public class Html {
 		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		connection.setRequestProperty("Accept", "text/txt" );
 		
-		String params="";
+		String params="sid="+_sessionId;
 		for(int i=0;i<args.length;i++)
-			params+=args[i]+"="+values[i]+(i==args.length-1?"":"&");
+			params+="&"+args[i]+"="+values[i];
 		
 		if(args.length>0)
 		{
