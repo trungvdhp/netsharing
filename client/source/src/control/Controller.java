@@ -149,7 +149,8 @@ implements ApplicationInitializer, CommandListener
 		initEmailField();
 		frmProfile.addEmailField(email);
 		//#style checkBoxItem
-		cgGender = new ChoiceGroup("Giới tính", ChoiceGroup.MULTIPLE);
+		cgGender = new ChoiceGroup("Giới tính", ChoiceGroup.EXCLUSIVE);
+		cgGender.append(" Nam", null);
 		cgGender.append(" Nữ", null);
 		
 		frmProfile.addCheckBox(cgGender);
@@ -163,7 +164,7 @@ implements ApplicationInitializer, CommandListener
 		email.setString(user.email);
 		if(user.gender.equals("0"))
 		{
-			cgGender.setSelectedIndex(0,false);
+			cgGender.setSelectedIndex(1,true);
 		}
 		else
 		{
@@ -320,6 +321,7 @@ implements ApplicationInitializer, CommandListener
 		
 		frmGroupDetail = new UserList(group.groupName);
 		ArrayList topics=group.GetTopics();
+		
 		for(int i=0;i<topics.size();i++)
 		{
 			TopicGroup t=(TopicGroup)topics.get(i);
@@ -603,7 +605,6 @@ implements ApplicationInitializer, CommandListener
 				
 				UserItem item=(UserItem)frmGroupDetail.getCurrentItem();
 				TopicGroup t=(TopicGroup)item.data;
-				//MessageBox.Show("A", screenMainMenu, AlertType.INFO);
 				openTopicDetailForm(t);
 			}
 			else if(disp==frmNewTopic)

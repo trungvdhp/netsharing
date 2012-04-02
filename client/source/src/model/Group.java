@@ -135,7 +135,7 @@ public class Group {
 	}
 	public ArrayList GetTopics(boolean refresh)
 	{
-		if(topics!=null||!refresh) return topics;
+		if(topics!=null&&!refresh) return topics;
 		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
