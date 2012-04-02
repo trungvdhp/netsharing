@@ -11,11 +11,13 @@ import de.enough.polish.util.URL;
 
 public class Html {
 	//private String sessionId;
-	//private static String path="http://vimaru.byethost7.com/SVM.php";
-	private static String path="http://localhost/VM_Server/SVM.php";
-	//private static String path="http://hanghaicnt.net/mediafire.xml";
-	public static String SendRequest(String url,String[] args,String[] values) throws Exception
+	public static boolean isBusy = false;
+	private static String path="http://vimaru.byethost7.com/SVM.php";
+	//private static String path="http://localhost/VM_Server/SVM.php";
+	public static String SendRequest(String url,String[] args,String[] values)
 	{
+		try{
+		isBusy = true;
 		url=path+url;
 		HttpConnection connection = (HttpConnection) Connector.open(url);
 		connection.setRequestMethod(HttpConnection.POST);
@@ -38,7 +40,14 @@ public class Html {
 		InputStream is = connection.openDataInputStream();
 		byte[] data=new byte[is.available()];
 		is.read(data);
+		isBusy = false;
 		return new String(data);
+		}
+		catch(Exception ex)
+		{
+			isBusy=false;
+			return "";
+		}
 	}
 	/*public static String SendRequest(String url,String[] args,String[] values) throws Exception
 	{

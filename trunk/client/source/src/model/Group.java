@@ -129,9 +129,13 @@ public class Group {
 			return data;
 		}
 	}
-	
-	public ArrayList GetTopics(Display display,Displayable disp)
+	public ArrayList GetTopics()
 	{
+		return GetTopics(false);
+	}
+	public ArrayList GetTopics(boolean refresh)
+	{
+		if(topics!=null||!refresh) return topics;
 		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
@@ -165,7 +169,6 @@ public class Group {
 		}
 		catch(Exception ex)
 		{
-			MessageBox.Show(ex.toString(), display, disp);
 			return topics;
 		}
 	}

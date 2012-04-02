@@ -276,13 +276,15 @@ public class User {
 		}
 	}
 	//Lấy danh sách tất cả các nhóm có bạn tham gia
-	public ArrayList GetMyGroups(Display display, Displayable disp)
+	public ArrayList GetMyGroups()
 	{
-		//MessageBox.Show("SS", display, disp);
-		//if(groups!=null) return groups;
+		return this.GetMyGroups(false);
+	}
+	public ArrayList GetMyGroups(boolean refresh)
+	{
+		if(groups!=null&&!refresh) return groups;
 		groups=new ArrayList();
-		ArrayList data = new ArrayList();
-		
+		ArrayList data = new ArrayList();	
 		try
 		{
 			
@@ -318,7 +320,7 @@ public class User {
 		}
 	}
 	//Lấy danh sách các yêu cầu tham gia
-	public ArrayList GetJoinRequests(Display display,Displayable disp)
+	public ArrayList GetJoinRequests()
 	{
 		requests=new ArrayList();
 		ArrayList data = new ArrayList();		
@@ -347,7 +349,7 @@ public class User {
 		}
 		catch(Exception ex)
 		{
-			MessageBox.Show(ex.toString(), display, disp);
+			MessageBox.Show(ex.toString());
 			return requests;
 		}
 	}
