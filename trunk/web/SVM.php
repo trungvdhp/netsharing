@@ -239,7 +239,7 @@ switch ($Case){
 		break;
 	}
 	
-	case "NhomBanThamGia": {
+	case "NhomBanLaThanhVien": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
 			$sqlTaiKhoan_Nhom = "SELECT tkn.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' and TrangThai = 1) tkn INNER JOIN nhom n ON n.MaNhom = tkn.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan";
@@ -275,7 +275,7 @@ switch ($Case){
 		break;
 	}
 	
-	case "NhomBanLaThanhVien": {
+	case "NhomBanThamGia": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
 			$sqlTaiKhoan_Nhom = "SELECT tkn.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' and TrangThai = 1 and MaNhom NOT IN(SELECT MaNhom FROM nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."'))tkn INNER JOIN nhom n ON n.MaNhom = tkn.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan";
@@ -1662,7 +1662,7 @@ switch ($Case){
 	case "DoiMatKhau": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
         $MatKhau = $_REQUEST["xMatKhau"];
-        if ($MaTaiKhoan != "") {
+        if ($MaTaiKhoan != "" && $MatKhau != "") {
                 $sql = "UPDATE taikhoan SET "
 				."MatKhau = '".md5($MatKhau)."' "
 				."WHERE MaTaiKhoan = '".$MaTaiKhoan."'"
