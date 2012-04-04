@@ -630,7 +630,7 @@ switch ($Case){
 					.$rowTaiKhoan_Nhom["TenNhom"] . $KyTuChiaTruongDL
 					.$rowTaiKhoan_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
 					.$rowTaiKhoan_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
-					.$rowTaiKhoan_Nhom["NgayTao"]
+					.$rowTaiKhoan_Nhom["NgayTao"] . $KyTuChiaTruongDL
 					;
 			}
 		}else
@@ -658,7 +658,7 @@ switch ($Case){
     				. $AnhDaiDien . $KyTuChiaTruongDL
     				. $rowNhom["MoTa"] . $KyTuChiaTruongDL
     				. $rowNhom["NgayTao"] . $KyTuChiaTruongDL
-    				. $CountThanhVien
+    				. $CountThanhVien . $KyTuChiaTruongDL
     				;
     		} else 
     			echo $false;
