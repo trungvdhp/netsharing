@@ -785,11 +785,8 @@ switch ($Case){
     		if (mysql_num_rows($resultNhom) > 0) {
     			while ($rowNhom = mysql_fetch_array($resultNhom)) {
     				$MaNhom = $rowNhom["MaNhom"];
-    				$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.TaiKhoan, tk.MaTaiKhoan, n.MaNhom, n.TenNhom, tkn.NgayVaoNhom 
-    							FROM taikhoan_nhom tkn 
-    								INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan 
-    								INNER JOIN nhom n ON tkn.MaNhom = n.MaNhom 
-    							WHERE tkn.TrangThai = 0 AND tkn.MaNhom = '".$MaNhom."'";
+					echo $MaNhom." $$$ ";
+    				$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.TaiKhoan, tk.MaTaiKhoan, n.MaNhom, n.TenNhom, tkn.NgayVaoNhom FROM taikhoan_nhom tkn INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan INNER JOIN nhom n ON tkn.MaNhom = n.MaNhom WHERE tkn.TrangThai = 0 AND tkn.MaNhom = '".$MaNhom."' AND tkn.MaTaiKhoan <>'".$MaTaiKhoan."'";
     				$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
     				if (mysql_num_rows($resultTaiKhoan_Nhom) > 0) {
 	    				$CountTaiKhoan_Nhom += mysql_num_rows($resultTaiKhoan_Nhom);
