@@ -352,7 +352,7 @@ rightcommand extends leftcommand
 }
 
 .addressInput {
-	text-wrap: false;
+	text-wrap: true;
 	margin-left: 5;
 	margin-right:5;
 	padding: 2px;
