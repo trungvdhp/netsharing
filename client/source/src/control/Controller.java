@@ -801,9 +801,9 @@ implements ApplicationInitializer, CommandListener
 			this.user=new User(username,password);
 			if(user.Login())
 			{
-				boolean[] gets=new boolean[1];
-				cgRemember.getSelectedFlags(gets);
-				if(gets[0]){
+				//boolean[] gets=new boolean[1];
+				//cgRemember.getSelectedFlags(gets);
+				if(cgRemember.isSelected(0)){
 					configuration.set("remember", "true");
 					configuration.set("username", txtUsername.getString());
 					configuration.set("password", txtPassword.getString());
@@ -961,9 +961,10 @@ implements ApplicationInitializer, CommandListener
 		{
 			if(disp==screenMainMenu)
 				handleCommandMainMenu();
-			else if(disp==frmGroup)
+			else if(disp==frmGroup || disp==frmMyGroup || disp==frmJoinGroup)
 			{
-				UserItem item=(UserItem)frmGroup.getCurrentItem();
+				UserList ul = (UserList)disp;
+				UserItem item=(UserItem)ul.getCurrentItem();
 				openGroupTopicList((Group)item.data);
 			}
 			else if(disp==frmGroupTopic)
