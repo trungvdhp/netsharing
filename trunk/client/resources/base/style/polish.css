@@ -136,10 +136,17 @@
 	layout: left | expand;
 }
 .requestItem {
+	icon-image: url(request_icon.png);
+	layout: left | expand;
+}
+.userItem {
 	icon-image: url(user_icon.png);
 	layout: left | expand;
 }
-
+.leaderItem{
+	icon-image: url(group_leader_icon.png);
+	layout: left | expand;
+}
 /**********************************************************************/
 
 label {
