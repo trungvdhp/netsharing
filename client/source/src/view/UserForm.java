@@ -25,7 +25,13 @@ public class UserForm extends Form
 		append(text);
 	}
 	
-	public void addStringItem(StringItem string)
+	public void addStringItemField(StringItem string)
+	{
+		//#style textField
+		append(string);
+	}
+	
+	public void addStringItemBox(StringItem string)
 	{
 		//#style textBox
 		append(string);

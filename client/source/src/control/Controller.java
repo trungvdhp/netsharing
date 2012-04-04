@@ -190,7 +190,7 @@ implements ApplicationInitializer, CommandListener
 			frmUpdateProfile.addCheckBox(cgGender);
 			frmUpdateProfile.addTextField(txtPhone);
 			frmUpdateProfile.addTextBox(txtAddress);
-			frmUpdateProfile.addStringItem(strCreateDate);
+			frmUpdateProfile.addStringItemField(strCreateDate);
 			
 			txtFirstName.setString(user.firstName);
 			txtLastName.setString(user.lastName);
@@ -228,15 +228,15 @@ implements ApplicationInitializer, CommandListener
 		{
 			frmMemberProfile=new UserForm(u.username,null);
 			
-			frmMemberProfile.addStringItem(strFirstName);
-			frmMemberProfile.addStringItem(strLastName);
+			frmMemberProfile.addStringItemField(strFirstName);
+			frmMemberProfile.addStringItemField(strLastName);
 			//frmProfile.addDateField(dateBirthday);
-			frmMemberProfile.addStringItem(strEmail);
+			frmMemberProfile.addStringItemBox(strEmail);
 			String gender = u.gender.equals("0")?"Nữ":"Nam";
-			frmMemberProfile.addStringItem(strGender);
-			frmMemberProfile.addStringItem(strPhone);
-			frmMemberProfile.addStringItem(strAddress);
-			frmMemberProfile.addStringItem(strCreateDate);
+			frmMemberProfile.addStringItemField(strGender);
+			frmMemberProfile.addStringItemField(strPhone);
+			frmMemberProfile.addStringItemBox(strAddress);
+			frmMemberProfile.addStringItemField(strCreateDate);
 			
 			strFirstName.setText(u.firstName);
 			strLastName.setText(u.lastName);
@@ -257,13 +257,13 @@ implements ApplicationInitializer, CommandListener
 		if(g.GetInfo())
 		{
 			frmGroupInfo=new UserForm(g.groupName,null);
-			frmGroupInfo.addStringItem(strGroupLeader);
-			frmGroupInfo.addStringItem(strGroupName);
-			frmGroupInfo.addStringItem(strDescription);
-			frmGroupInfo.addStringItem(strRule);
-			frmGroupInfo.addStringItem(strCreateDate);
-			frmGroupInfo.addStringItem(strTopicsCount);
-			frmGroupInfo.addStringItem(strMembersCount);
+			frmGroupInfo.addStringItemField(strGroupLeader);
+			frmGroupInfo.addStringItemField(strGroupName);
+			frmGroupInfo.addStringItemBox(strDescription);
+			frmGroupInfo.addStringItemBox(strRule);
+			frmGroupInfo.addStringItemField(strCreateDate);
+			frmGroupInfo.addStringItemField(strTopicsCount);
+			frmGroupInfo.addStringItemField(strMembersCount);
 			strGroupLeader.setText(g.leader.username);
 			strGroupName.setText(g.groupName);
 			strDescription.setText(g.description);
@@ -359,8 +359,8 @@ implements ApplicationInitializer, CommandListener
 			frmUpdateGroup.addTextField(txtGroupName);
 			frmUpdateGroup.addTextBox(txtDescription);
 			frmUpdateGroup.addTextBox(txtGroupRule);
-			frmUpdateGroup.addStringItem(strTopicsCount);
-			frmUpdateGroup.addStringItem(strMembersCount);
+			frmUpdateGroup.addStringItemField(strTopicsCount);
+			frmUpdateGroup.addStringItemField(strMembersCount);
 			frmUpdateGroup.addCommand(cmdConfirm);
 			frmUpdateGroup.addCommand(cmdBack);
 			frmUpdateGroup.setCommandListener(this.commandListener);
