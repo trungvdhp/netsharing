@@ -25,9 +25,9 @@ public class UserForm extends Form
 		append(text);
 	}
 	
-	public void addTextLabel(StringItem string)
+	public void addStringItem(StringItem string)
 	{
-		//#style textField
+		//#style textBox
 		append(string);
 	}
 	

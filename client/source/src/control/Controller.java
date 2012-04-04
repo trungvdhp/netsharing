@@ -79,7 +79,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtConfirm = new TextField("Xác nhận mật khẩu: ","",32, TextField.PASSWORD);
 	private TextField txtFirstName = new TextField("Họ đệm: ","", 32,TextField.ANY);
 	private TextField txtLastName = new TextField("Tên: ","", 32,TextField.ANY);
-	private TextField txtAddress = new TextField("Địa chỉ: ","", 100,TextField.ANY);
+	private TextField txtAddress = new TextField("Địa chỉ: ","", 150,TextField.ANY);
 	private TextField txtPhone = new TextField("Điện thoại: ","", 20,TextField.PHONENUMBER);
 	
 	private TextField txtSearch = new TextField("Từ khóa: ","", 50,TextField.ANY);
@@ -189,8 +189,8 @@ implements ApplicationInitializer, CommandListener
 			
 			frmUpdateProfile.addCheckBox(cgGender);
 			frmUpdateProfile.addTextField(txtPhone);
-			frmUpdateProfile.addTextField(txtAddress);
-			frmUpdateProfile.addTextLabel(strCreateDate);
+			frmUpdateProfile.addTextBox(txtAddress);
+			frmUpdateProfile.addStringItem(strCreateDate);
 			
 			txtFirstName.setString(user.firstName);
 			txtLastName.setString(user.lastName);
@@ -228,15 +228,15 @@ implements ApplicationInitializer, CommandListener
 		{
 			frmMemberProfile=new UserForm(u.username,null);
 			
-			frmMemberProfile.addTextLabel(strFirstName);
-			frmMemberProfile.addTextLabel(strLastName);
+			frmMemberProfile.addStringItem(strFirstName);
+			frmMemberProfile.addStringItem(strLastName);
 			//frmProfile.addDateField(dateBirthday);
-			frmMemberProfile.addTextLabel(strEmail);
+			frmMemberProfile.addStringItem(strEmail);
 			String gender = u.gender.equals("0")?"Nữ":"Nam";
-			frmMemberProfile.addTextLabel(strGender);
-			frmMemberProfile.addTextLabel(strPhone);
-			frmMemberProfile.addTextLabel(strAddress);
-			frmMemberProfile.addTextLabel(strCreateDate);
+			frmMemberProfile.addStringItem(strGender);
+			frmMemberProfile.addStringItem(strPhone);
+			frmMemberProfile.addStringItem(strAddress);
+			frmMemberProfile.addStringItem(strCreateDate);
 			
 			strFirstName.setText(u.firstName);
 			strLastName.setText(u.lastName);
@@ -257,13 +257,13 @@ implements ApplicationInitializer, CommandListener
 		if(g.GetInfo())
 		{
 			frmGroupInfo=new UserForm(g.groupName,null);
-			frmGroupInfo.addTextLabel(strGroupLeader);
-			frmGroupInfo.addTextLabel(strGroupName);
-			frmGroupInfo.addTextLabel(strDescription);
-			frmGroupInfo.addTextLabel(strRule);
-			frmGroupInfo.addTextLabel(strCreateDate);
-			frmGroupInfo.addTextLabel(strTopicsCount);
-			frmGroupInfo.addTextLabel(strMembersCount);
+			frmGroupInfo.addStringItem(strGroupLeader);
+			frmGroupInfo.addStringItem(strGroupName);
+			frmGroupInfo.addStringItem(strDescription);
+			frmGroupInfo.addStringItem(strRule);
+			frmGroupInfo.addStringItem(strCreateDate);
+			frmGroupInfo.addStringItem(strTopicsCount);
+			frmGroupInfo.addStringItem(strMembersCount);
 			strGroupLeader.setText(g.leader.username);
 			strGroupName.setText(g.groupName);
 			strDescription.setText(g.description);
@@ -357,10 +357,10 @@ implements ApplicationInitializer, CommandListener
 			strTopicsCount.setText(g.topicsCount);
 			strMembersCount.setText(g.membersCount);
 			frmUpdateGroup.addTextField(txtGroupName);
-			frmUpdateGroup.addTextField(txtDescription);
+			frmUpdateGroup.addTextBox(txtDescription);
 			frmUpdateGroup.addTextBox(txtGroupRule);
-			frmUpdateGroup.addTextLabel(strTopicsCount);
-			frmUpdateGroup.addTextLabel(strMembersCount);
+			frmUpdateGroup.addStringItem(strTopicsCount);
+			frmUpdateGroup.addStringItem(strMembersCount);
 			frmUpdateGroup.addCommand(cmdConfirm);
 			frmUpdateGroup.addCommand(cmdBack);
 			frmUpdateGroup.setCommandListener(this.commandListener);
