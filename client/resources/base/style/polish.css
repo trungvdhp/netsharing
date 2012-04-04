@@ -53,7 +53,7 @@
 }
 .textField {
 	layout: left | expand;
-	text-wrap: true;
+	text-wrap: false;
 	border-color: #8699a9;
 	margin-left: 5;
 	margin-right:5;
