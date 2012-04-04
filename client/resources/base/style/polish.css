@@ -53,7 +53,7 @@
 }
 .textField {
 	layout: left | expand;
-	text-wrap: false;
+	text-wrap: true;
 	border-color: #8699a9;
 	margin-left: 5;
 	margin-right:5;
@@ -136,7 +136,7 @@
 	layout: left | expand;
 }
 .requestItem {
-	icon-image: url(request_icon.png);
+	icon-image: url(join_request_icon.png);
 	layout: left | expand;
 }
 .userItem {

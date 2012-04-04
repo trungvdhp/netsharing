@@ -14,4 +14,4 @@ cmd.back=Trở về
 ##############################
 # main menu list screen:
 ##############################
-main.title=Net Sharing
+main.title=Net Share
