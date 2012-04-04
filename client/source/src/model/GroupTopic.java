@@ -3,7 +3,7 @@ import util.UtilString;
 import base.Constants;
 import de.enough.polish.util.ArrayList;
 
-public class TopicGroup {
+public class GroupTopic {
 	public String topicGroupId;
 	public Topic topic;
 	public User shareUser;
@@ -11,11 +11,11 @@ public class TopicGroup {
 	public String commentsCount;
 	public ArrayList comments;
 	
-	public TopicGroup(String topicGroupId)
+	public GroupTopic(String topicGroupId)
 	{
 		this.topicGroupId = topicGroupId;
 	}
-	public TopicGroup(String topicGroupId, Topic topic, User shareUser, 
+	public GroupTopic(String topicGroupId, Topic topic, User shareUser, 
 			String shareDate, String commentsCount)
 	{
 		this.topicGroupId = topicGroupId;
@@ -53,7 +53,7 @@ public class TopicGroup {
 			return false;
 		}
 	}
-	public static boolean Delete(TopicGroup t)
+	public static boolean Delete(GroupTopic t)
 	{
 		try
 		{

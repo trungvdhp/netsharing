@@ -3,7 +3,7 @@ package view;
 import model.Group;
 import model.Request;
 import model.Topic;
-import model.TopicGroup;
+import model.GroupTopic;
 import control.MessageBox;
 import control.UserItem;
 import de.enough.polish.ui.Display;
@@ -27,6 +27,10 @@ public class UserList extends List{
 		this.append(item, null);
 		
 	}
+	public void removeAllEntry()
+	{
+		this.deleteAll();
+	}
 	public void addEntry(UserItem item,String type)
 	{
 		items.add(item);
@@ -38,13 +42,23 @@ public class UserList extends List{
 		}
 		else if(type.equals("topic"))
 		{
-			TopicGroup t=(TopicGroup)item.data;
+			GroupTopic t=(GroupTopic)item.data;
 			//#style topicItem
 			this.append(t.topic.title,null);
 		}
 		else if(type.equals("request"))
 		{
 			//#style requestItem
+			this.append(item.getText(), null);
+		}
+		else if(type.equals("user"))
+		{
+			//#style userItem
+			this.append(item.getText(), null);
+		}
+		else if(type.equals("leader"))
+		{
+			//#style leaderItem
 			this.append(item.getText(), null);
 		}
 	}
