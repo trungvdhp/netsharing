@@ -24,6 +24,7 @@ public class User {
 	public String state;
 	public String startDay;
 	public String permission;
+	public String joinDate;
 	
 	ArrayList topics;
 	ArrayList groups;
@@ -42,12 +43,12 @@ public class User {
 		this.password = password;
 	}
 	
-	public User(String id,String username,String firstName,String lastName)
+	public User(String id,String username,String createDate,String joinDate)
 	{
 		this.userId = id;
 		this.username=username;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.createDate = createDate;
+		this.joinDate = joinDate;
 	}
 	
 	public User(String id, String firstName, String lastName, String email, String gender, String phone, String address)
@@ -130,17 +131,14 @@ public class User {
 			if(s.indexOf("false")>=0)
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
-			this.username = data.get(0).toString();
-			this.firstName = data.get(1).toString();
-			this.lastName = data.get(2).toString();
-			this.birthday =data.get(3).toString();
-			this.email = data.get(4).toString();
-			this.gender = data.get(5).toString();
-			this.phone = data.get(6).toString();
-			this.avatar = data.get(7).toString();
-			this.address = data.get(8).toString();
-			this.createDate = data.get(9).toString();
-			this.startDay = data.get(10).toString();
+			this.firstName = data.get(0).toString();
+			this.lastName = data.get(1).toString();
+			this.birthday =data.get(2).toString();
+			this.email = data.get(3).toString();
+			this.gender = data.get(4).toString();
+			this.phone = data.get(5).toString();
+			this.address = data.get(6).toString();
+			this.createDate = data.get(7).toString();
 			return true;
 		}
 		catch(Exception ex)
@@ -168,7 +166,7 @@ public class User {
 			
 			while(i<len)
 			{
-				TopicGroup t=new TopicGroup(
+				GroupTopic t=new GroupTopic(
 						data.get(i).toString(), 
 						new Topic(new User(data.get(i+5).toString(),data.get(i+9).toString(),"",""),
 								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
@@ -191,7 +189,8 @@ public class User {
 	//Lấy danh sách các bài viết của bạn
 	public ArrayList GetMyTopics()
 	{
-		ArrayList data = new ArrayList();		
+		ArrayList data = new ArrayList();	
+		topics = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
@@ -220,14 +219,15 @@ public class User {
 		}
 	}
 	//Lấy danh sách các nhóm mà bạn là nhóm trưởng
-	public ArrayList GetOwnerGroups()
+	public ArrayList GetMyGroups()
 	{
-		ArrayList data = new ArrayList();		
+		ArrayList data = new ArrayList();
+		groups=new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"NhomBanLaTruongNhom", userId}
+					new String[] {"NhomBanTao", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -236,9 +236,12 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Group t = null;
+				Group t=new Group(data.get(i).toString(),
+						data.get(i+1).toString(),
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
+						);
 				groups.add(t);
-				i += 7;
+				i += 4;
 			}
 			return groups;
 		}
@@ -248,9 +251,10 @@ public class User {
 		}
 	}
 	//Lấy danh sách các nhóm có bạn là thành viên
-	public ArrayList GetMemberGroups()
+	public ArrayList GetJoinGroups()
 	{
-		ArrayList data = new ArrayList();		
+		ArrayList data = new ArrayList();
+		groups=new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
@@ -264,10 +268,12 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Group t=null;
-				
+				Group t=new Group(data.get(i).toString(),
+						data.get(i+1).toString(),
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
+						);
 				groups.add(t);
-				i += 7;
+				i += 4;
 			}
 			return groups;
 		}
@@ -277,11 +283,11 @@ public class User {
 		}
 	}
 	//Lấy danh sách tất cả các nhóm có bạn tham gia
-	public ArrayList GetMyGroups()
+	public ArrayList GetGroups()
 	{
-		return this.GetMyGroups(false);
+		return this.GetGroups(true);
 	}
-	public ArrayList GetMyGroups(boolean refresh)
+	public ArrayList GetGroups(boolean refresh)
 	{
 		if(groups!=null&&!refresh) return groups;
 		groups=new ArrayList();
@@ -304,13 +310,10 @@ public class User {
 			{
 				Group t=new Group(data.get(i).toString(),
 						data.get(i+1).toString(),
-						new User(data.get(i+2).toString(),data.get(i+3).toString(),"",""),
-						data.get(i+4).toString(),
-						data.get(i+5).toString(),
-						data.get(i+6).toString()
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
 						);
 				groups.add(t);
-				i += 7;
+				i += 4;
 			}
 			return groups;
 		}
@@ -321,7 +324,7 @@ public class User {
 		}
 	}
 	//Lấy danh sách các yêu cầu tham gia
-	public ArrayList GetJoinRequests()
+	public ArrayList GetMemberRequests()
 	{
 		requests=new ArrayList();
 		ArrayList data = new ArrayList();		
@@ -329,7 +332,7 @@ public class User {
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"DanhSachYeuCauThamGia", userId}
+					new String[] {"DSYeuCauThamGiaNhomCuaBan", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -355,9 +358,10 @@ public class User {
 		}
 	}
 	//Lấy danh sách các yêu cầu tham gia nhóm của bạn
-	public ArrayList GetMyJoinRequests()
+	public ArrayList GetMyRequests()
 	{
-		ArrayList data = new ArrayList();		
+		ArrayList data = new ArrayList();
+		requests = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
@@ -477,7 +481,7 @@ public class User {
 		return topicgroup;
 	}*/
 	//Chia sẻ bài viết
-	public TopicGroup ShareTopic(Topic t,Group g)
+	public GroupTopic ShareTopic(Topic t,Group g)
 	{
 		try
 		{
@@ -485,7 +489,7 @@ public class User {
 					new String[]{"CVM","xMaBaiViet","xMaNhom","xTaiKhoan"},
 					new String[]{"ChiaSeBaiViet",t.topicId,g.groupId,this.username}
 					);
-			return new TopicGroup(topicGroupId);
+			return new GroupTopic(topicGroupId);
 		}
 		catch(Exception ex)
 		{
@@ -495,10 +499,10 @@ public class User {
 	//Xóa chía sẻ bài viết
 	public boolean DeleteShareTopic(String topicGroupId)
 	{
-		return TopicGroup.Delete(new TopicGroup(topicGroupId));
+		return GroupTopic.Delete(new GroupTopic(topicGroupId));
 	}
 	//Tạo bình luận
-	public Comment CreateComment(TopicGroup t, String commentContent)
+	public Comment CreateComment(GroupTopic t, String commentContent)
 	{
 		return Comment.Create(t, this, commentContent);
 	}
@@ -534,12 +538,10 @@ public class User {
 				Group t=new Group(data.get(i).toString(),
 						data.get(i+1).toString(),
 						new User(data.get(i+2).toString(),data.get(i+3).toString(),"",""),
-						data.get(i+4).toString(),
-						data.get(i+5).toString(),
-						data.get(i+6).toString()
+						data.get(i+4).toString()
 						);
 				groups.add(t);
-				i += 7;
+				i += 5;
 			}
 		}
 		catch(Exception ex)
@@ -549,7 +551,7 @@ public class User {
 		return groups;
 	}
 
-	public boolean ViewedNewTopic(TopicGroup t) {
+	public boolean ViewedNewTopic(GroupTopic t) {
 		try
 		{
 			String s=Html.SendRequest("", 

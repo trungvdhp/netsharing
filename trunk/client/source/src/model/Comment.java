@@ -20,7 +20,7 @@ public class Comment {
 	}
 	
 	
-	public static Comment Create(TopicGroup t,User u,String content)
+	public static Comment Create(GroupTopic t,User u,String content)
 	{
 		try
 		{

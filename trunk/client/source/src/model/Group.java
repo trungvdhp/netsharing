@@ -1,6 +1,7 @@
 package model;
 
 import control.MessageBox;
+import control.UserItem;
 import util.UtilString;
 import de.enough.polish.ui.Display;
 import de.enough.polish.ui.Displayable;
@@ -33,6 +34,21 @@ public class Group {
             this.description = description;
             this.rule = rule;
     }
+    public Group(String groupId, String groupName, User leader)
+    {
+            this.groupId = groupId;
+            this.groupName = groupName;
+            this.leader = leader;
+    }
+  //for the action that show the list of group
+    public Group(String groupId, String groupName, User leader, String createDate)
+	{
+		this.groupId = groupId;
+		this.groupName = groupName;
+		this.leader = leader;
+		this.createDate = createDate;
+	}
+    
     //for the action that show the list and detail of group
 	public Group(String groupId, String groupName, User leader, String createDate,
 			String topicsCount, String membersCount)
@@ -44,7 +60,7 @@ public class Group {
 		this.topicsCount = topicsCount;
 		this.membersCount = membersCount;
 	}
-	public boolean GetDetails(Display display,Displayable disp)
+	public boolean GetInfo()
 	{
 		ArrayList data = new ArrayList();
 		try
@@ -53,29 +69,26 @@ public class Group {
 					new String[] {Constants.Case,"xMaNhom"},
 					new String[] {"ChiTietNhom", groupId}
 					);
-			//MessageBox.Show(s, display, disp);
 			if(s.equals("false"))
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
-			this.groupName = data.get(0).toString();
-			this.leader.username =data.get(6).toString();
-			this.description = data.get(1).toString();
-			this.rule = data.get(2).toString();
-			this.createDate = data.get(3).toString();
-			this.topicsCount = data.get(5).toString();
+			this.description = data.get(0).toString();
+			this.rule = data.get(1).toString();
+			this.createDate = data.get(2).toString();
+			this.topicsCount = data.get(3).toString();
 			this.membersCount = data.get(4).toString();
 			return true;
 		}
 		catch(Exception ex)
 		{
-			//MessageBox.Show(ex.toString(), display, disp);
 			return false;
 		}
 	}
 	
 	public ArrayList GetMembers()
 	{
-		ArrayList data = new ArrayList();		
+		ArrayList data = new ArrayList();
+		members = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
@@ -90,26 +103,27 @@ public class Group {
 			while(i<len)
 			{
 				User t = new User(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString());
+						"", data.get(i+2).toString());
 				members.add(t);
-				i += 4;
+				i += 3;
 			}
 			return members;
 		}
 		catch(Exception ex)
 		{
-			return data;
+			return members;
 		}
 	}
 	
 	public ArrayList GetRequests()
 	{
-		ArrayList data = new ArrayList();		
+		ArrayList data = new ArrayList();
+		requests = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaNhom"},
-					new String[] {"DanhSachYeuCauThamGiaNhom", groupId}
+					new String[] {"DSYeuCauThamGiaNhom", groupId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -118,7 +132,10 @@ public class Group {
 			int i=0;
 			while(i<len)
 			{
-				Request t = null;//new Request(data.get(i).toString(),data.get(i+1).toString(),data.get(i+2).toString(),data.get(i+3).toString(),data.get(i+4).toString(),data.get(i+5).toString());
+				Request t = new Request(data.get(i).toString(),
+						 new Group(data.get(i+3).toString(),data.get(i+4).toString(),"",""),
+						 new User(data.get(i+1).toString(),data.get(i+2).toString(),"",""),
+						 data.get(i+5).toString());
 				requests.add(t);
 				i += 6;
 			}
@@ -126,7 +143,7 @@ public class Group {
 		}
 		catch(Exception ex)
 		{
-			return data;
+			return requests;
 		}
 	}
 	public ArrayList GetTopics()
@@ -152,7 +169,7 @@ public class Group {
 			
 			while(i<len)
 			{
-				TopicGroup t=new TopicGroup(
+				GroupTopic t=new GroupTopic(
 						data.get(i).toString(),
 						new Topic(new User(data.get(i+5).toString(),data.get(i+9).toString(),"",""),
 								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
