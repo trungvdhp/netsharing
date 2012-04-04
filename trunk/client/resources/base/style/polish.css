@@ -81,10 +81,9 @@
 }
 	
 .textField:hover {
-	font-color:#FFF;
 	border-color: #0087fa;
 	background {
-		color: #00c8fa;
+		color: #FFF;
 	}
 }
 
@@ -366,10 +365,9 @@ rightcommand extends leftcommand
 }
 
 .addressInput:hover {
-	font-color:#FFF;
 	border-color: #0087fa;
 	background {
-		color: #00c8fa;
+		color: #FFF;
 	}
 	layout: left | expand;	
 }
