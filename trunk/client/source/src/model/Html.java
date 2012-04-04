@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
-import de.enough.polish.io.PostRedirectHttpConnection;
-import de.enough.polish.util.URL;
+//import de.enough.polish.io.PostRedirectHttpConnection;
+//import de.enough.polish.util.URL;
 
 public class Html {
 	private static String _sessionId = "";

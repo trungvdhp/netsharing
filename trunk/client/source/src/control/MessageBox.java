@@ -3,7 +3,7 @@ package control;
 import de.enough.polish.ui.Alert;
 import de.enough.polish.ui.AlertType;
 import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Displayable;
+//import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.SimpleScreenHistory;
 
 public class MessageBox {

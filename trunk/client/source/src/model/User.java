@@ -1,8 +1,8 @@
 package model;
 
 import control.MessageBox;
-import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Displayable;
+//import de.enough.polish.ui.Display;
+//import de.enough.polish.ui.Displayable;
 import de.enough.polish.util.ArrayList;
 
 import util.UtilString;
@@ -250,7 +250,7 @@ public class User {
 			return null;
 		}
 	}
-	//Lấy danh sách các nhóm có bạn là thành viên
+	//Lấy danh sách các nhóm có bạn tham gia
 	public ArrayList GetJoinGroups()
 	{
 		ArrayList data = new ArrayList();
@@ -259,7 +259,7 @@ public class User {
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"NhomBanLaThanhVien", userId}
+					new String[] {"NhomBanThamGia", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -282,7 +282,7 @@ public class User {
 			return null;
 		}
 	}
-	//Lấy danh sách tất cả các nhóm có bạn tham gia
+	//Lấy danh sách tất cả các nhóm có bạn la thanh vien
 	public ArrayList GetGroups()
 	{
 		return this.GetGroups(true);
@@ -297,7 +297,7 @@ public class User {
 			
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"NhomBanThamGia", userId}
+					new String[] {"NhomBanLaThanhVien", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -353,7 +353,6 @@ public class User {
 		}
 		catch(Exception ex)
 		{
-			MessageBox.Show(ex.toString());
 			return requests;
 		}
 	}
@@ -419,7 +418,6 @@ public class User {
 			return true;
 		}
 		catch(Exception ex)		{
-			//return "";
 			return false;
 		}
 	}
@@ -437,7 +435,6 @@ public class User {
 			return true;
 		}
 		catch(Exception ex)		{
-			//return "";
 			return false;
 		}
 	}

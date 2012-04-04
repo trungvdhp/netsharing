@@ -1,6 +1,6 @@
 package view;
 
-import de.enough.polish.ui.Choice;
+//import de.enough.polish.ui.Choice;
 import de.enough.polish.ui.ChoiceTextField;
 import de.enough.polish.ui.DateField;
 import de.enough.polish.ui.Form;
