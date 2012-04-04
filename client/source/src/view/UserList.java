@@ -1,13 +1,13 @@
 package view;
 
 import model.Group;
-import model.Request;
-import model.Topic;
+//import model.Request;
+//import model.Topic;
 import model.GroupTopic;
-import control.MessageBox;
+//import control.MessageBox;
 import control.UserItem;
-import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Displayable;
+//import de.enough.polish.ui.Display;
+//import de.enough.polish.ui.Displayable;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.List;
 import de.enough.polish.util.ArrayList;

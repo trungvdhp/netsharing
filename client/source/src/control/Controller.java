@@ -28,7 +28,7 @@ package control;
 import java.io.IOException;
 import javax.microedition.lcdui.Image;
 
-import util.UtilString;
+//import util.UtilString;
 import view.*;
 import model.*;
 import app.App;
@@ -38,15 +38,15 @@ import de.enough.polish.event.ThreadedCommandListener;
 import de.enough.polish.io.RmsStorage;
 import de.enough.polish.ui.Alert;
 import de.enough.polish.ui.ChoiceTextField;
-import de.enough.polish.ui.DateField;
+//import de.enough.polish.ui.DateField;
 import de.enough.polish.ui.AlertType;
 import de.enough.polish.ui.ChoiceGroup;
 import de.enough.polish.ui.Command;
 import de.enough.polish.ui.CommandListener;
 import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Gauge;
+//import de.enough.polish.ui.Gauge;
 import de.enough.polish.ui.List;
-import de.enough.polish.ui.ScreenInfo;
+//import de.enough.polish.ui.ScreenInfo;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextField;
 import de.enough.polish.ui.Displayable;
@@ -128,12 +128,12 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdViewTopic=new Command("Xem bài viết",Command.OK,1);
 	private Command cmdConfirm=new Command("Xác nhận",Command.SCREEN,1);
 	private Command cmdReject=new Command("Từ chối",Command.SCREEN,1);
-	private Command cmdConfirmAll=new Command("Xác nhận hết",Command.SCREEN,1);
-	private Command cmdRejectAll=new Command("Từ chối hết",Command.SCREEN,1);
+	//private Command cmdConfirmAll=new Command("Xác nhận hết",Command.SCREEN,1);
+	//private Command cmdRejectAll=new Command("Từ chối hết",Command.SCREEN,1);
 	private Command cmdViewGroupRequest=new Command("Danh sách yêu cầu",Command.SCREEN,1);
 	private Command cmdViewGroupMember=new Command("Danh sách thành viên",Command.SCREEN,1);
 	private Command cmdViewMyGroup=new Command("Nhóm bạn tạo",Command.SCREEN,1);
-	private Command cmdViewJoinGroup=new Command("Nhóm là thành viên",Command.SCREEN,1);
+	private Command cmdViewJoinGroup=new Command("Nhóm bạn tham gia",Command.SCREEN,1);
 	private Command cmdViewUpdateGroup=new Command("Sửa nhóm",Command.SCREEN,1);
 	private Command cmdUpdate=new Command("Cập nhật",Command.SCREEN,1);
 	private Command cmdDetail=new Command("Chi tiết",Command.SCREEN,1);
@@ -173,99 +173,109 @@ implements ApplicationInitializer, CommandListener
 	
 	private void openUpdateProfileForm() {
 		// TODO Auto-generated method stub
-		user.GetInfo();
-		frmUpdateProfile=new UserForm("Tài khoản",null);
-		
-		frmUpdateProfile.addTextField(txtFirstName);
-		frmUpdateProfile.addTextField(txtLastName);
-		//frmProfile.addDateField(dateBirthday);
-		initEmailField();
-		frmUpdateProfile.addEmailField(email);
-		//#style checkBoxItem
-		cgGender = new ChoiceGroup("Giới tính", ChoiceGroup.EXCLUSIVE);
-		cgGender.append(" Nam", null);
-		cgGender.append(" Nữ", null);
-		
-		frmUpdateProfile.addCheckBox(cgGender);
-		frmUpdateProfile.addTextField(txtPhone);
-		frmUpdateProfile.addTextField(txtAddress);
-		frmUpdateProfile.addTextLabel(strCreateDate);
-		
-		txtFirstName.setString(user.firstName);
-		txtLastName.setString(user.lastName);
-		strCreateDate.setText(user.createDate);
-		email.setString(user.email);
-		if(user.gender.equals("0"))
+		if(user.GetInfo())
 		{
-			cgGender.setSelectedIndex(0,true);
+			frmUpdateProfile=new UserForm("Tài khoản",null);
+			
+			frmUpdateProfile.addTextField(txtFirstName);
+			frmUpdateProfile.addTextField(txtLastName);
+			//frmProfile.addDateField(dateBirthday);
+			initEmailField();
+			frmUpdateProfile.addEmailField(email);
+			//#style checkBoxItem
+			cgGender = new ChoiceGroup("Giới tính", ChoiceGroup.EXCLUSIVE);
+			cgGender.append(" Nam", null);
+			cgGender.append(" Nữ", null);
+			
+			frmUpdateProfile.addCheckBox(cgGender);
+			frmUpdateProfile.addTextField(txtPhone);
+			frmUpdateProfile.addTextField(txtAddress);
+			frmUpdateProfile.addTextLabel(strCreateDate);
+			
+			txtFirstName.setString(user.firstName);
+			txtLastName.setString(user.lastName);
+			strCreateDate.setText(user.createDate);
+			email.setString(user.email);
+			if(user.gender.equals("0"))
+			{
+				cgGender.setSelectedIndex(0,true);
+			}
+			else
+			{
+				cgGender.setSelectedIndex(1,true);
+			}
+			txtPhone.setString(user.phone);
+			txtAddress.setString(user.address);
+			
+			frmUpdateProfile.addMenu(cmdUpdate);
+			frmUpdateProfile.addMenu(cmdChangePassword);
+			frmUpdateProfile.addMenu(cmdLogout);
+			frmUpdateProfile.addMenu(cmdBack);
+			frmUpdateProfile.setCommandListener(this.commandListener);
+			screenHistory.show(frmUpdateProfile);
 		}
-		else
-		{
-			cgGender.setSelectedIndex(1,true);
-		}
-		txtPhone.setString(user.phone);
-		txtAddress.setString(user.address);
-		
-		frmUpdateProfile.addMenu(cmdUpdate);
-		frmUpdateProfile.addMenu(cmdChangePassword);
-		frmUpdateProfile.addMenu(cmdLogout);
-		frmUpdateProfile.addMenu(cmdBack);
-		frmUpdateProfile.setCommandListener(this.commandListener);
-		screenHistory.show(frmUpdateProfile);
+		else ShowError();
+	}
+	
+	private void ShowError()
+	{
+		MessageBox.Show("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!",  AlertType.ERROR);
 	}
 	
 	private void openMemberProfileForm(User u) {
 		// TODO Auto-generated method stub
-		u.GetInfo();
-		frmMemberProfile=new UserForm(u.username,null);
-		
-		frmMemberProfile.addTextLabel(strFirstName);
-		frmMemberProfile.addTextLabel(strLastName);
-		//frmProfile.addDateField(dateBirthday);
-		frmMemberProfile.addTextLabel(strEmail);
-		String gender = u.gender.equals("0")?"Nữ":"Nam";
-		frmMemberProfile.addTextLabel(strGender);
-		frmMemberProfile.addTextLabel(strPhone);
-		frmMemberProfile.addTextLabel(strAddress);
-		frmMemberProfile.addTextLabel(strCreateDate);
-		
-		strFirstName.setText(u.firstName);
-		strLastName.setText(u.lastName);
-		strEmail.setText(u.email);
-		strGender.setText(gender);
-		strPhone.setText(u.phone);
-		strAddress.setText(u.address);
-		strCreateDate.setText(u.createDate);
-		frmMemberProfile.addMenu(cmdBack);
-		frmMemberProfile.setCommandListener(this.commandListener);
-		screenHistory.show(frmMemberProfile);
+		if(u.GetInfo())
+		{
+			frmMemberProfile=new UserForm(u.username,null);
+			
+			frmMemberProfile.addTextLabel(strFirstName);
+			frmMemberProfile.addTextLabel(strLastName);
+			//frmProfile.addDateField(dateBirthday);
+			frmMemberProfile.addTextLabel(strEmail);
+			String gender = u.gender.equals("0")?"Nữ":"Nam";
+			frmMemberProfile.addTextLabel(strGender);
+			frmMemberProfile.addTextLabel(strPhone);
+			frmMemberProfile.addTextLabel(strAddress);
+			frmMemberProfile.addTextLabel(strCreateDate);
+			
+			strFirstName.setText(u.firstName);
+			strLastName.setText(u.lastName);
+			strEmail.setText(u.email);
+			strGender.setText(gender);
+			strPhone.setText(u.phone);
+			strAddress.setText(u.address);
+			strCreateDate.setText(u.createDate);
+			frmMemberProfile.addMenu(cmdBack);
+			frmMemberProfile.setCommandListener(this.commandListener);
+			screenHistory.show(frmMemberProfile);
+		}
+		else ShowError();
 	}
 	
 	private void openGroupInfoForm(Group g) {
 		// TODO Auto-generated method stub
-		g.GetInfo();
-		frmGroupInfo=new UserForm(g.groupName,null);
-		
-		frmGroupInfo.addTextLabel(strGroupLeader);
-		frmGroupInfo.addTextLabel(strGroupName);
-		frmGroupInfo.addTextLabel(strDescription);
-		frmGroupInfo.addTextLabel(strRule);
-		frmGroupInfo.addTextLabel(strCreateDate);
-		frmGroupInfo.addTextLabel(strTopicsCount);
-		frmGroupInfo.addTextLabel(strMembersCount);
-		
-		strGroupLeader.setText(g.leader.username);
-		strGroupName.setText(g.groupName);
-		strDescription.setText(g.description);
-		strRule.setText(g.rule);
-		strTopicsCount.setText(g.topicsCount);
-		strMembersCount.setText(g.membersCount);
-		
-		strCreateDate.setText(g.createDate);
-		
-		frmGroupInfo.addMenu(cmdBack);
-		frmGroupInfo.setCommandListener(this.commandListener);
-		screenHistory.show(frmGroupInfo);
+		if(g.GetInfo())
+		{
+			frmGroupInfo=new UserForm(g.groupName,null);
+			frmGroupInfo.addTextLabel(strGroupLeader);
+			frmGroupInfo.addTextLabel(strGroupName);
+			frmGroupInfo.addTextLabel(strDescription);
+			frmGroupInfo.addTextLabel(strRule);
+			frmGroupInfo.addTextLabel(strCreateDate);
+			frmGroupInfo.addTextLabel(strTopicsCount);
+			frmGroupInfo.addTextLabel(strMembersCount);
+			strGroupLeader.setText(g.leader.username);
+			strGroupName.setText(g.groupName);
+			strDescription.setText(g.description);
+			strRule.setText(g.rule);
+			strTopicsCount.setText(g.topicsCount);
+			strMembersCount.setText(g.membersCount);
+			strCreateDate.setText(g.createDate);
+			frmGroupInfo.addMenu(cmdBack);
+			frmGroupInfo.setCommandListener(this.commandListener);
+			screenHistory.show(frmGroupInfo);
+		}
+		else ShowError();
 	}
 	
 	private void initEmailField()
@@ -293,8 +303,324 @@ implements ApplicationInitializer, CommandListener
 		frmChangePassword.addMenu(cmdConfirm);
 		frmChangePassword.addMenu(cmdBack);
 		frmChangePassword.setCommandListener(this.commandListener);
-		
 		screenHistory.show(frmChangePassword);
+	}
+	
+	public void openLoginForm()
+	{
+		frmLogin=new UserForm("Đăng nhập",null);
+		frmLogin.addTextField(txtUsername);
+		frmLogin.addTextField(txtPassword);
+		//#style checkBoxItem
+		cgRemember.append("Ghi nhớ mật khẩu", null);
+		frmLogin.addCheckBox(cgRemember);
+		frmLogin.addMenu(cmdLogin);
+		frmLogin.addMenu(cmdRegister);
+		frmLogin.addMenu(cmdExit);
+		frmLogin.setCommandListener(this.commandListener);
+		if(configuration.get("remember").equals("true"))
+		{
+			txtUsername.setString(configuration.get("username"));
+			txtPassword.setString(configuration.get("password"));
+			cgRemember.setSelectedFlags(new boolean[]{true});
+		}
+		screenHistory.show(frmLogin);
+	}
+	
+	public void openRegisterForm()
+	{
+		frmRegister = new UserForm("Đăng ký tài khoản",null);
+		frmRegister.addTextField(txtUsername);
+		frmRegister.addTextField(txtPassword);
+		frmRegister.addTextField(txtConfirm);
+		frmRegister.addMenu(cmdConfirm);
+		frmRegister.addMenu(cmdBack);
+		frmRegister.setCommandListener(this.commandListener);
+		screenHistory.show(frmRegister);
+	}
+	
+	private void openUpdateGroupForm() {
+		// TODO Auto-generated method stub
+		UserItem item=(UserItem)frmGroup.getCurrentItem();
+		Group g=(Group)item.data;
+		if(!g.leader.userId.equals(user.userId))
+		{
+			MessageBox.Show("Không thể sửa nhóm không phải do bạn tạo!",  AlertType.ERROR);
+			return;
+		}
+		if(g.GetInfo())
+		{
+			frmUpdateGroup = new UserForm(g.groupName,g);
+			txtGroupName.setString(g.groupName);
+			txtDescription.setString(g.description);
+			txtGroupRule.setString(g.rule);
+			strTopicsCount.setText(g.topicsCount);
+			strMembersCount.setText(g.membersCount);
+			frmUpdateGroup.addTextField(txtGroupName);
+			frmUpdateGroup.addTextField(txtDescription);
+			frmUpdateGroup.addTextBox(txtGroupRule);
+			frmUpdateGroup.addTextLabel(strTopicsCount);
+			frmUpdateGroup.addTextLabel(strMembersCount);
+			frmUpdateGroup.addCommand(cmdConfirm);
+			frmUpdateGroup.addCommand(cmdBack);
+			frmUpdateGroup.setCommandListener(this.commandListener);
+			screenHistory.show(frmUpdateGroup);
+		}
+		else ShowError();
+	}
+
+	/*private void openJoinRequestDetailForm(Request request) {
+		// TODO Auto-generated method stub
+		frmJoinRequestDetail = new UserForm("Yêu cầu " + request.requestId + " của " + request.user.username,request);
+		if(request.user.GetInfo())
+		{
+			
+		}
+		frmJoinRequestDetail.addMenu(cmdConfirm);
+		frmJoinRequestDetail.addMenu(cmdReject);
+		frmJoinRequestDetail.setCommandListener(this.commandListener);
+		screenHistory.show(frmJoinRequestDetail);
+	}*/
+
+	private void openCreateTopicForm() {
+		// TODO Auto-generated method stub
+		UserItem item=(UserItem)frmGroup.getCurrentItem();
+		Group g=(Group)item.data;
+		frmCreateTopic=new UserForm("Viết bài mới",g);
+		frmCreateTopic.addTextField(txtTopicTitle);
+		frmCreateTopic.addTextBox(txtTopicContent);
+		frmCreateTopic.addCommand(cmdConfirm);
+		frmCreateTopic.addCommand(cmdBack);
+		frmCreateTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmCreateTopic);
+	}
+
+	private void openCreateGroupForm() {
+		// TODO Auto-generated method stub
+		frmCreateGroup = new UserForm("Tạo nhóm mới",null);
+		txtGroupName.setString("");
+		frmCreateGroup.addTextField(txtGroupName);
+		frmCreateGroup.addMenu(cmdConfirm);
+		frmCreateGroup.addMenu(cmdBack);
+		frmCreateGroup.setCommandListener(this.commandListener);
+		screenHistory.show(frmCreateGroup);
+	}
+
+	//private void openSettingForm() {
+		// TODO Auto-generated method stub
+		
+	//}
+
+	private void openSearchForm() {
+		// TODO Auto-generated method stub
+		frmSearch=new UserForm("Tìm kiếm",null);
+		
+		frmSearch.addTextField(txtSearch);
+		frmSearch.addMenu(cmdConfirm);
+		frmSearch.addMenu(cmdBack);
+		screenHistory.show(frmSearch);
+		frmSearch.setCommandListener(this.commandListener);
+	}
+
+	public void openGroupList()
+	{
+		ArrayList groups = user.GetGroups();
+		frmGroup=new UserList("Nhóm bạn là thành viên");
+		frmGroup.addCommand(cmdGroupDetail);
+		UiAccess.addSubCommand(cmdViewGroupInfo, cmdGroupDetail,frmGroup);
+		UiAccess.addSubCommand(cmdViewGroupMember, cmdGroupDetail,frmGroup);
+		UiAccess.addSubCommand(cmdViewGroupRequest, cmdGroupDetail,frmGroup);
+		frmGroup.addCommand(cmdUpdateGroup);
+		UiAccess.addSubCommand(cmdCreateGroup, cmdUpdateGroup,frmGroup);
+		UiAccess.addSubCommand(cmdViewUpdateGroup, cmdUpdateGroup,frmGroup);
+		UiAccess.addSubCommand(cmdDeleteGroup, cmdUpdateGroup,frmGroup);
+		frmGroup.addCommand(cmdViewMyGroup);
+		frmGroup.addCommand(cmdViewJoinGroup);
+		frmGroup.addCommand(cmdBack);
+		if(groups != null)
+		{
+			for(int i=0;i<groups.size();i++)
+			{
+				Group group=(Group)groups.get(i);
+				frmGroup.addEntry(new UserItem(group.groupName,group),"group");
+			}
+		}
+		frmGroup.setCommandListener(this.commandListener);
+		screenHistory.show(frmGroup);
+	}
+	
+	public void openMyGroupList()
+	{
+		ArrayList groups = user.GetMyGroups();
+		frmMyGroup=new UserList("Nhóm bạn tạo");
+		frmMyGroup.addCommand(cmdUpdateGroup);
+		UiAccess.addSubCommand(cmdCreateGroup, cmdUpdateGroup,frmMyGroup);
+		UiAccess.addSubCommand(cmdViewUpdateGroup, cmdUpdateGroup,frmMyGroup);
+		UiAccess.addSubCommand(cmdDeleteGroup, cmdUpdateGroup,frmMyGroup);
+		frmMyGroup.addCommand(cmdGroupDetail);
+		UiAccess.addSubCommand(cmdViewGroupInfo, cmdGroupDetail,frmMyGroup);
+		UiAccess.addSubCommand(cmdViewGroupMember, cmdGroupDetail,frmMyGroup);
+		UiAccess.addSubCommand(cmdViewGroupRequest, cmdGroupDetail,frmMyGroup);
+		frmMyGroup.addCommand(cmdBack);
+		if(groups!=null)
+		{
+			for(int i=0;i<groups.size();i++)
+			{
+				Group group=(Group)groups.get(i);
+				frmMyGroup.addEntry(new UserItem(group.groupName,group),"group");
+			}
+		}
+		
+		frmMyGroup.setCommandListener(this.commandListener);
+		screenHistory.show(frmMyGroup);
+	}
+	
+	public void openJoinGroupList()
+	{
+		ArrayList groups = user.GetJoinGroups();
+		frmJoinGroup=new UserList("Nhóm bạn tham gia");
+		frmJoinGroup.addCommand(cmdViewGroupInfo);
+		frmJoinGroup.addCommand(cmdViewGroupMember);
+		frmJoinGroup.addCommand(cmdBack);
+		if(groups!=null)
+		{
+			for(int i=0;i<groups.size();i++)
+			{
+				Group group=(Group)groups.get(i);
+				frmJoinGroup.addEntry(new UserItem(group.groupName,group),"group");
+			}
+		}
+		frmJoinGroup.setCommandListener(this.commandListener);
+		screenHistory.show(frmJoinGroup);
+	}
+	
+	public void openSearchGroupList()
+	{
+		ArrayList groups = user.SearchGroup(txtSearch.getString());
+		frmSearchGroup=new UserList("Nhóm bạn chưa tham gia");
+		frmSearchGroup.addCommand(cmdSendRequest);
+		frmSearchGroup.addCommand(cmdBack);
+		if(groups!=null)
+		{
+			for(int i=0;i<groups.size();i++)
+			{
+				Group group=(Group)groups.get(i);
+				frmSearchGroup.addEntry(new UserItem(group.groupName,group),"group");
+			}
+		}
+		frmSearchGroup.setCommandListener(this.commandListener);
+		screenHistory.show(frmSearchGroup);
+	}
+	
+	public void openGroupMemberList(Group group)
+	{
+		ArrayList members = group.GetMembers();
+		frmGroupMember=new UserList("" + members.size() + " thành viên nhóm: " + group.groupName);
+		frmGroupMember.addCommand(cmdBack);
+		User u=(User)members.get(0);
+		frmGroupMember.addEntry(new UserItem(u.username + " - Trưởng nhóm",u),"leader");
+		for(int i=1;i<members.size();i++)
+		{
+			u=(User)members.get(i);
+			frmGroupMember.addEntry(new UserItem(u.username,u),"user");
+		}
+		
+		frmGroupMember.setCommandListener(this.commandListener);
+		screenHistory.show(frmGroupMember);
+	}
+	
+	public void openGroupTopicList(Group group)
+	{
+		frmGroupTopic = new UserList(group.groupName);
+		ArrayList topics=group.GetTopics();
+		if(topics!=null)
+		{
+			for(int i=0;i<topics.size();i++)
+			{
+				GroupTopic t=(GroupTopic)topics.get(i);
+				UserItem topic=new UserItem(t.topic.title,t);
+				frmGroupTopic.addEntry(topic,"topic");
+			}
+		}
+		//frmGroupTopic.addCommand(cmdViewTopic);
+		frmGroupTopic.addCommand(cmdCreateTopic);
+		frmGroupTopic.addCommand(cmdDeleteTopic);
+		frmGroupTopic.addCommand(cmdBack);
+		frmGroupTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmGroupTopic);
+	}
+	
+	public void openGroupRequestList(Group group)
+	{
+		ArrayList requests = group.GetRequests();
+		frmGroupRequest=new UserList("Yêu cầu tham gia nhóm: " + group.groupName);
+		if(requests!=null)
+		{
+			for(int i=0;i<requests.size();i++)
+			{
+				Request r=(Request)requests.get(i);
+				frmGroupRequest.addEntry(new UserItem("Tài khoản: " + r.user.username + " - Ngày: " + r.requestDate,r),"request");
+			}
+		}
+		frmGroupRequest.addCommand(cmdConfirm);
+		frmGroupRequest.addCommand(cmdReject);
+		frmGroupRequest.addCommand(cmdBack);
+		frmGroupRequest.setCommandListener(this.commandListener);
+		screenHistory.show(frmGroupRequest);
+	}
+	
+	private void openMemberRequestList() {
+		// TODO Auto-generated method stub
+		ArrayList requests=user.GetMemberRequests();
+		frmMemberRequest=new UserList("Danh sách yêu cầu");
+		if(requests!=null)
+		{
+			for(int i=0;i<requests.size();i++)
+			{
+				Request r = (Request)requests.get(i);
+				frmMemberRequest.addEntry(new UserItem("Tài khoản: " + r.user.username + " - Nhóm: " 
+				+r.group.groupName + " - Ngày: " + r.requestDate,r),"request");
+			}
+		}
+		frmMemberRequest.addCommand(cmdConfirm);
+		frmMemberRequest.addCommand(cmdReject);
+		//frmMemberRequest.addCommand(cmdConfirmAll);
+		//frmMemberRequest.addCommand(cmdRejectAll);
+		frmMemberRequest.addCommand(cmdBack);
+		frmMemberRequest.setCommandListener(this.commandListener);
+		screenHistory.show(frmMemberRequest);
+	}
+
+	private void openNewTopicList() {
+		// TODO Auto-generated method stub
+		ArrayList topics=user.GetNewTopics();
+		frmNewTopic = new UserList("Bài viết mới");
+		if(topics!=null)
+		{
+			for(int i=0;i<topics.size();i++)
+			{
+				GroupTopic t=(GroupTopic)topics.get(i);
+				UserItem topic=new UserItem(t.topic.title,t);
+				frmNewTopic.addEntry(topic,"topic");
+			}
+		}
+		//frmNewTopic.addCommand(cmdViewTopic);
+		frmNewTopic.addCommand(cmdBack);
+		frmNewTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmNewTopic);
+	}
+	private void openTopicDetailForm(GroupTopic t)
+	{
+		frmTopicDetail = new UserForm(t.topic.title,t);
+		String body="";
+		body+="Chia sẻ bởi: "+t.shareUser.username+"\n"+
+				"Ngày chia sẻ: "+t.shareDate+"\n"+
+				t.topic.content+"\n"+
+				t.commentsCount+" bình luận\n";
+		frmTopicDetail.append(new StringItem("Đăng bởi: "+t.topic.author.username, body));
+		frmTopicDetail.addCommand(cmdBack);
+		frmTopicDetail.setCommandListener(this.commandListener);
+		screenHistory.show(frmTopicDetail);
 	}
 	
 	/**
@@ -328,177 +654,45 @@ implements ApplicationInitializer, CommandListener
 		
 	}
 	
-	public void openLoginForm()
+	/**
+	 * Handles commands for the main menu
+	 * @return true when a command was handled
+	 */
+	private boolean handleCommandMainMenu()
 	{
-		frmLogin=new UserForm("Đăng nhập",null);
-		frmLogin.addTextField(txtUsername);
-		frmLogin.addTextField(txtPassword);
-		//#style checkBoxItem
-		cgRemember.append("Ghi nhớ mật khẩu", null);
-		frmLogin.addCheckBox(cgRemember);
-		
-		frmLogin.addMenu(cmdLogin);
-		frmLogin.addMenu(cmdRegister);
-		frmLogin.addMenu(cmdExit);
-		frmLogin.setCommandListener(this.commandListener);
-		if(configuration.get("remember").equals("true"))
+		int selectedItem = screenMainMenu.getSelectedIndex();
+		/*		list.addEntry("Tin mới");
+		list.addEntry("Nhóm");
+		list.addEntry("Yêu cầu");
+		list.addEntry("Tìm kiếm");
+		list.addEntry("Hộp thư");
+		list.addEntry("Cá nhân");
+		list.addEntry("Cài đặt");*/
+		switch(selectedItem)
 		{
-			txtUsername.setString(configuration.get("username"));
-			txtPassword.setString(configuration.get("password"));
-			cgRemember.setSelectedFlags(new boolean[]{true});
+		case 0:
+			openNewTopicList();
+			break;
+		case 1:
+			openGroupList();
+			break;
+		case 2:
+			openMemberRequestList();
+			break;
+		case 3:
+			openSearchForm();
+			break;
+		case 4:
+			MessageBox.Show("Chức năng đang xây dựng", AlertType.INFO);
+			break;
+		case 5:
+			openUpdateProfileForm();
+			break;
+		case 6:
+			MessageBox.Show("Chức năng đang xây dựng", AlertType.INFO);
+			//openSettingForm();
 		}
-		screenHistory.show(frmLogin);
-	}
-	
-	public void openRegisterForm()
-	{
-		frmRegister = new UserForm("Đăng ký tài khoản",null);
-		frmRegister.addTextField(txtUsername);
-		frmRegister.addTextField(txtPassword);
-		frmRegister.addTextField(txtConfirm);
-		frmRegister.addMenu(cmdConfirm);
-		frmRegister.addMenu(cmdBack);
-		frmRegister.setCommandListener(this.commandListener);
-		screenHistory.show(frmRegister);
-	}
-	
-	public void openGroupList()
-	{
-		ArrayList groups = user.GetGroups();
-		frmGroup=new UserList("Nhóm bạn tham gia");
-		
-		frmGroup.addCommand(cmdGroupDetail);
-		UiAccess.addSubCommand(cmdViewGroupInfo, cmdGroupDetail,frmGroup);
-		UiAccess.addSubCommand(cmdViewGroupMember, cmdGroupDetail,frmGroup);
-		UiAccess.addSubCommand(cmdViewGroupRequest, cmdGroupDetail,frmGroup);
-		
-		frmGroup.addCommand(cmdUpdateGroup);
-		UiAccess.addSubCommand(cmdCreateGroup, cmdUpdateGroup,frmGroup);
-		UiAccess.addSubCommand(cmdViewUpdateGroup, cmdUpdateGroup,frmGroup);
-		UiAccess.addSubCommand(cmdDeleteGroup, cmdUpdateGroup,frmGroup);
-		
-		frmGroup.addCommand(cmdViewMyGroup);
-		frmGroup.addCommand(cmdViewJoinGroup);
-		frmGroup.addCommand(cmdBack);
-		for(int i=0;i<groups.size();i++)
-		{
-			Group group=(Group)groups.get(i);
-			frmGroup.addEntry(new UserItem(group.groupName,group),"group");
-		}
-		
-		frmGroup.setCommandListener(this.commandListener);
-		screenHistory.show(frmGroup);
-	}
-	
-	public void openMyGroupList()
-	{
-		ArrayList groups = user.GetMyGroups();
-		frmMyGroup=new UserList("Nhóm bạn tạo");
-		
-		frmMyGroup.addCommand(cmdUpdateGroup);
-		UiAccess.addSubCommand(cmdCreateGroup, cmdUpdateGroup,frmMyGroup);
-		UiAccess.addSubCommand(cmdViewUpdateGroup, cmdUpdateGroup,frmMyGroup);
-		UiAccess.addSubCommand(cmdDeleteGroup, cmdUpdateGroup,frmMyGroup);
-		
-		frmMyGroup.addCommand(cmdGroupDetail);
-		UiAccess.addSubCommand(cmdViewGroupInfo, cmdGroupDetail,frmMyGroup);
-		UiAccess.addSubCommand(cmdViewGroupMember, cmdGroupDetail,frmMyGroup);
-		UiAccess.addSubCommand(cmdViewGroupRequest, cmdGroupDetail,frmMyGroup);
-		frmMyGroup.addCommand(cmdBack);
-		for(int i=0;i<groups.size();i++)
-		{
-			Group group=(Group)groups.get(i);
-			frmMyGroup.addEntry(new UserItem(group.groupName,group),"group");
-		}
-		
-		frmMyGroup.setCommandListener(this.commandListener);
-		screenHistory.show(frmMyGroup);
-	}
-	
-	public void openJoinGroupList()
-	{
-		ArrayList groups = user.GetJoinGroups();
-		frmJoinGroup=new UserList("Nhóm bạn là thành viên");
-		frmJoinGroup.addCommand(cmdViewGroupInfo);
-		frmJoinGroup.addCommand(cmdViewGroupMember);
-		frmJoinGroup.addCommand(cmdBack);
-		for(int i=0;i<groups.size();i++)
-		{
-			Group group=(Group)groups.get(i);
-			frmJoinGroup.addEntry(new UserItem(group.groupName,group),"group");
-		}
-		
-		frmJoinGroup.setCommandListener(this.commandListener);
-		screenHistory.show(frmJoinGroup);
-	}
-	
-	public void openSearchGroupList()
-	{
-		ArrayList groups = user.SearchGroup(txtSearch.getString());
-		frmSearchGroup=new UserList("Nhóm bạn chưa tham gia");
-		frmSearchGroup.addCommand(cmdSendRequest);
-		frmSearchGroup.addCommand(cmdBack);
-		for(int i=0;i<groups.size();i++)
-		{
-			Group group=(Group)groups.get(i);
-			frmSearchGroup.addEntry(new UserItem(group.groupName,group),"group");
-		}
-		
-		frmSearchGroup.setCommandListener(this.commandListener);
-		screenHistory.show(frmSearchGroup);
-	}
-	
-	public void openGroupMemberList(Group group)
-	{
-		ArrayList members = group.GetMembers();
-		frmGroupMember=new UserList("" + members.size() + " thành viên nhóm: " + group.groupName);
-		frmGroupMember.addCommand(cmdBack);
-		User u=(User)members.get(0);
-		frmGroupMember.addEntry(new UserItem(u.username + " - Trưởng nhóm",u),"leader");
-		for(int i=1;i<members.size();i++)
-		{
-			u=(User)members.get(i);
-			frmGroupMember.addEntry(new UserItem(u.username,u),"user");
-		}
-		
-		frmGroupMember.setCommandListener(this.commandListener);
-		screenHistory.show(frmGroupMember);
-		
-	}
-	
-	public void openGroupRequestList(Group group)
-	{
-		ArrayList requests = group.GetRequests();
-		frmGroupRequest=new UserList("Yêu cầu tham gia nhóm: " + group.groupName);
-		frmGroupRequest.addCommand(cmdBack);
-		for(int i=0;i<requests.size();i++)
-		{
-			Request r=(Request)requests.get(i);
-			frmGroupRequest.addEntry(new UserItem("Tài khoản: " + r.user.username + " - Ngày: " + r.requestDate,r),"request");
-		}
-		
-		frmGroupRequest.setCommandListener(this.commandListener);
-		screenHistory.show(frmGroupRequest);
-	}
-	
-	public void openGroupTopicList(Group group)
-	{
-		frmGroupTopic = new UserList(group.groupName);
-		ArrayList topics=group.GetTopics();
-		
-		for(int i=0;i<topics.size();i++)
-		{
-			GroupTopic t=(GroupTopic)topics.get(i);
-			UserItem topic=new UserItem(t.topic.title,t);
-			frmGroupTopic.addEntry(topic,"topic");
-		}
-		
-		//frmGroupTopic.addCommand(cmdViewTopic);
-		frmGroupTopic.addCommand(cmdCreateTopic);
-		frmGroupTopic.addCommand(cmdDeleteTopic);
-		frmGroupTopic.addCommand(cmdBack);
-		frmGroupTopic.setCommandListener(this.commandListener);
-		screenHistory.show(frmGroupTopic);
+		return false;
 	}
 	/**
 	 * Lifecycle: pauses the application, e.g. when there is an incoming call.
@@ -643,7 +837,11 @@ implements ApplicationInitializer, CommandListener
 		else if(cmd == cmdConfirm)
 		{
 			if(disp==frmRegister){
-				if(txtPassword.getString().equals(txtConfirm.getString()))
+				if(txtPassword.getString().equals(""))
+				{
+					MessageBox.Show("Mật khẩu không được bỏ trống!",  AlertType.INFO);
+				}
+				else if(txtPassword.getString().equals(txtConfirm.getString()))
 				{
 					user = new User(txtUsername.getString(),txtPassword.getString());
 					String rs = user.Register();
@@ -669,7 +867,11 @@ implements ApplicationInitializer, CommandListener
 			{
 				if(txtOldPassword.getString().equals(user.password))
 				{
-					if(txtNewPassword.getString().equals(txtConfirm.getString()))
+					if(txtNewPassword.getString().equals(""))
+					{
+						MessageBox.Show("Mật khẩu mới không được bỏ trống!",  AlertType.INFO);
+					}
+					else if(txtNewPassword.getString().equals(txtConfirm.getString()))
 					{
 						User u = new User(user.userId, "", txtNewPassword.getString());
 						if(u.ChangePassword())
@@ -693,20 +895,23 @@ implements ApplicationInitializer, CommandListener
 					MessageBox.Show("Nhập mật khẩu cũ không chính xác!",  AlertType.ERROR);
 				}
 			}
-			else if(disp==frmMemberRequest)
+			else if(disp==frmMemberRequest || disp==frmGroupRequest)
 			{
-				UserItem item=(UserItem)frmMemberRequest.getCurrentItem();
+				UserList ul = (UserList)disp;
+				UserItem item=(UserItem)ul.getCurrentItem();
 				Request r=(Request)item.data;
 				if(!user.ConfirmRequest(r))
-					MessageBox.Show("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!",  AlertType.ERROR);
+					ShowError();
 				else
 					MessageBox.Show("Đã chấp nhận yêu cầu tham gia nhóm!",  AlertType.INFO);
 			}
 			else if(disp==frmCreateTopic)
 			{
 				
-				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString(),(Group)frmCreateTopic.data)!=null);
-				MessageBox.Show("Đã tạo topic",  AlertType.INFO);
+				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString(),(Group)frmCreateTopic.data)!=null)
+				{
+					MessageBox.Show("Đã tạo topic " + txtTopicContent.getString(),  AlertType.INFO);
+				}
 			}
 			else if(disp==frmCreateGroup)
 			{
@@ -734,7 +939,6 @@ implements ApplicationInitializer, CommandListener
 				{
 					MessageBox.Show("Không thể xóa nhóm!",  AlertType.ERROR);	
 				}
-					
 			}
 			else if(disp==frmUpdateGroup)
 			{
@@ -750,7 +954,6 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmSearch)
 			{
-				
 				openSearchGroupList();
 			}
 		}
@@ -765,7 +968,6 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmGroupTopic)
 			{
-				
 				UserItem item=(UserItem)frmGroupTopic.getCurrentItem();
 				GroupTopic t=(GroupTopic)item.data;
 				openTopicDetailForm(t);
@@ -884,16 +1086,17 @@ implements ApplicationInitializer, CommandListener
 			UserItem item=(UserItem)frmSearchGroup.getCurrentItem();
 			Group g=(Group)item.data;
 			if(!user.CreateRequest(g))
-				MessageBox.Show("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!",  AlertType.ERROR);
+				ShowError();
 			else
 				MessageBox.Show("Đã gửi yêu cầu thành công!",  AlertType.INFO);
 		}
 		else if(cmd==cmdReject)
 		{
-			UserItem item=(UserItem)frmMemberRequest.getCurrentItem();
+			UserList ul = (UserList)disp;
+			UserItem item=(UserItem)ul.getCurrentItem();
 			Request r=(Request)item.data;
 			if(!user.DeleteRequest(r))
-				MessageBox.Show("Có lỗi xảy ra. Yêu cầu tạm thời không thể thực hiện!",  AlertType.ERROR);
+				ShowError();
 			else
 				MessageBox.Show("Đã từ chối yêu cầu tham gia nhóm!",  AlertType.INFO);
 		}
@@ -901,181 +1104,5 @@ implements ApplicationInitializer, CommandListener
 		{
 			commandAction(List.SELECT_COMMAND,disp);
 		}
-		
-	}
-
-	private void openUpdateGroupForm() {
-		// TODO Auto-generated method stub
-		UserItem item=(UserItem)frmGroup.getCurrentItem();
-		Group g=(Group)item.data;
-		if(!g.leader.userId.equals(user.userId))
-		{
-			MessageBox.Show("Không thể sửa nhóm không phải do bạn tạo!",  AlertType.ERROR);
-			return;
-		}
-		g.GetInfo();
-		frmUpdateGroup = new UserForm(g.groupName,g);
-		txtGroupName.setString(g.groupName);
-		txtDescription.setString(g.description);
-		txtGroupRule.setString(g.rule);
-		strTopicsCount.setText(g.topicsCount);
-		strMembersCount.setText(g.membersCount);
-		
-		frmUpdateGroup.addTextField(txtGroupName);
-		frmUpdateGroup.addTextField(txtDescription);
-		frmUpdateGroup.addTextBox(txtGroupRule);
-		frmUpdateGroup.addTextLabel(strTopicsCount);
-		frmUpdateGroup.addTextLabel(strMembersCount);
-		
-		frmUpdateGroup.addCommand(cmdConfirm);
-		frmUpdateGroup.addCommand(cmdBack);
-		frmUpdateGroup.setCommandListener(this.commandListener);
-		screenHistory.show(frmUpdateGroup);
-	}
-
-	/*private void openJoinRequestDetailForm(Request request) {
-		// TODO Auto-generated method stub
-		frmJoinRequestDetail = new UserForm("Yêu cầu " + request.requestId + " của " + request.user.username,request);
-		if(request.user.GetInfo())
-		{
-			
-		}
-		frmJoinRequestDetail.addMenu(cmdConfirm);
-		frmJoinRequestDetail.addMenu(cmdReject);
-		frmJoinRequestDetail.setCommandListener(this.commandListener);
-		screenHistory.show(frmJoinRequestDetail);
-	}*/
-
-	private void openCreateTopicForm() {
-		// TODO Auto-generated method stub
-		UserItem item=(UserItem)frmGroup.getCurrentItem();
-		Group g=(Group)item.data;
-		frmCreateTopic=new UserForm("Viết bài mới",g);
-		frmCreateTopic.addTextField(txtTopicTitle);
-		frmCreateTopic.addTextBox(txtTopicContent);
-		frmCreateTopic.addCommand(cmdConfirm);
-		frmCreateTopic.addCommand(cmdBack);
-		frmCreateTopic.setCommandListener(this.commandListener);
-		screenHistory.show(frmCreateTopic);
-	}
-
-	private void openCreateGroupForm() {
-		// TODO Auto-generated method stub
-		frmCreateGroup = new UserForm("Tạo nhóm mới",null);
-		txtGroupName.setString("");
-		frmCreateGroup.addTextField(txtGroupName);
-		frmCreateGroup.addMenu(cmdConfirm);
-		frmCreateGroup.addMenu(cmdBack);
-		frmCreateGroup.setCommandListener(this.commandListener);
-		screenHistory.show(frmCreateGroup);
-	}
-
-	/**
-	 * Handles commands for the main menu
-	 * @return true when a command was handled
-	 */
-	private boolean handleCommandMainMenu()
-	{
-		int selectedItem = screenMainMenu.getSelectedIndex();
-		/*		list.addEntry("Tin mới");
-		list.addEntry("Nhóm");
-		list.addEntry("Yêu cầu");
-		list.addEntry("Tìm kiếm");
-		list.addEntry("Hộp thư");
-		list.addEntry("Cá nhân");
-		list.addEntry("Cài đặt");*/
-		switch(selectedItem)
-		{
-		case 0:
-			openNewTopicList();
-			break;
-		case 1:
-			openGroupList();
-			break;
-		case 2:
-			openMemberRequestList();
-			break;
-		case 3:
-			openSearchForm();
-			break;
-		case 4:
-			MessageBox.Show("Chức năng đang xây dựng", AlertType.INFO);
-			break;
-		case 5:
-			openUpdateProfileForm();
-			break;
-		case 6:
-			MessageBox.Show("Chức năng đang xây dựng", AlertType.INFO);
-			//openSettingForm();
-		}
-		return false;
-	}
-
-	//private void openSettingForm() {
-		// TODO Auto-generated method stub
-		
-	//}
-
-	private void openSearchForm() {
-		// TODO Auto-generated method stub
-		frmSearch=new UserForm("Tìm kiếm",null);
-		
-		frmSearch.addTextField(txtSearch);
-		frmSearch.addMenu(cmdConfirm);
-		frmSearch.addMenu(cmdBack);
-		screenHistory.show(frmSearch);
-		frmSearch.setCommandListener(this.commandListener);
-	}
-
-	private void openMemberRequestList() {
-		// TODO Auto-generated method stub
-		ArrayList requests=user.GetMemberRequests();
-		frmMemberRequest=new UserList("Danh sách yêu cầu");
-		for(int i=0;i<requests.size();i++)
-		{
-			Request r = (Request)requests.get(i);
-			frmMemberRequest.addEntry(new UserItem("Tài khoản: " + r.user.username + " - Nhóm: " 
-			+r.group.groupName + " - Ngày: " + r.requestDate,r),"request");
-		}
-		
-		frmMemberRequest.addCommand(cmdConfirm);
-		frmMemberRequest.addCommand(cmdReject);
-		frmMemberRequest.addCommand(cmdConfirmAll);
-		frmMemberRequest.addCommand(cmdRejectAll);
-		frmMemberRequest.addCommand(cmdBack);
-		frmMemberRequest.setCommandListener(this.commandListener);
-		screenHistory.show(frmMemberRequest);
-	}
-
-	private void openNewTopicList() {
-		// TODO Auto-generated method stub
-		ArrayList topics=user.GetNewTopics();
-		frmNewTopic = new UserList("Bài viết mới");
-		
-		for(int i=0;i<topics.size();i++)
-		{
-			GroupTopic t=(GroupTopic)topics.get(i);
-			UserItem topic=new UserItem(t.topic.title,t);
-			frmNewTopic.addEntry(topic,"topic");
-		}
-		
-		//frmNewTopic.addCommand(cmdViewTopic);
-		frmNewTopic.addCommand(cmdBack);
-		frmNewTopic.setCommandListener(this.commandListener);
-		screenHistory.show(frmNewTopic);
-	}
-	private void openTopicDetailForm(GroupTopic t)
-	{
-		
-		frmTopicDetail = new UserForm(t.topic.title,t);
-		String body="";
-		body+="Chia sẻ bởi: "+t.shareUser.username+"\n"+
-				"Ngày chia sẻ: "+t.shareDate+"\n"+
-				t.topic.content+"\n"+
-				t.commentsCount+" bình luận\n";
-		frmTopicDetail.append(new StringItem("Đăng bởi: "+t.topic.author.username, body));
-		frmTopicDetail.addCommand(cmdBack);
-		frmTopicDetail.setCommandListener(this.commandListener);
-		screenHistory.show(frmTopicDetail);
 	}
 }

@@ -1,10 +1,10 @@
 package model;
 
-import control.MessageBox;
-import control.UserItem;
+//import control.MessageBox;
+//import control.UserItem;
 import util.UtilString;
-import de.enough.polish.ui.Display;
-import de.enough.polish.ui.Displayable;
+//import de.enough.polish.ui.Display;
+//import de.enough.polish.ui.Displayable;
 import de.enough.polish.util.ArrayList;
 import base.Constants;
 
@@ -148,7 +148,7 @@ public class Group {
 	}
 	public ArrayList GetTopics()
 	{
-		return GetTopics(false);
+		return GetTopics(true);
 	}
 	public ArrayList GetTopics(boolean refresh)
 	{
