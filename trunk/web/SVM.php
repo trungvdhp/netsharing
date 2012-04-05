@@ -9,7 +9,6 @@ $namedb = "cnt48dhnet_VM";
 $link = mysql_connect($server,$userdb,$passdb) or die ("Kết nối không thành công!");
 mysql_select_db($namedb,$link) or die ("Không tìm thấy CSDL ".$namedb);
 */
-
 $Case = $_REQUEST["CVM"];
 $false = "false";
 $true = "true";
@@ -31,7 +30,6 @@ function get_user_info($user_id)
 	$row=mysql_fetch_array($result);
 	return $row;
 }
-
 do{
 $re = false;
 switch ($Case){
@@ -70,7 +68,6 @@ switch ($Case){
 			echo $false."3";
 		break;
 	}
-	
 	case "DangNhap": {
 		$TaiKhoan = $_REQUEST["xTaiKhoan"];
 		$MatKhau = $_REQUEST["xMatKhau"];
@@ -89,7 +86,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "TaoBaiViet": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TieuDe = $_REQUEST["xTieuDe"];
@@ -107,14 +103,6 @@ switch ($Case){
 						ORDER BY MaBaiViet DESC LIMIT 0,1";
 				$resultSelect = mysql_query($sqlSelect) or die("Lệnh truy vấn không chính xác!");
 				$row = mysql_fetch_array($resultSelect);
-				
-				/*$sqlThanhVien = "SELECT MaTaiKhoan FROM TaiKhoan_nhom WHERE MaNhom='$MaNhom'";
-				$result=mysql_query($sqlThanhVien);
-				while(($row=mysql_fetch_array($result))
-				{
-				
-				}*/
-				
 				if ($row != null){
 					echo $row["MaBaiViet"].$KyTuChiaTruongDL;
 					$_REQUEST['xMaBaiViet']=$row["MaBaiViet"];
@@ -129,7 +117,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "TaoAnh": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TenFile = $_REQUEST["xTenFile"];
@@ -162,7 +149,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	// CHIA SẺ BÀI VIẾT
 	case "ChiaSeBaiViet": {
 		$MaNhom=$_REQUEST['xMaNhom'];
 		$MaBaiViet=$_REQUEST['xMaBaiViet'];
@@ -194,7 +180,6 @@ switch ($Case){
 		echo $true;
 		break;
 	}
-	// CHIA SẺ ẢNH
 	case "ChiaSeAnh": {
 		$CountNhom = $_REQUEST["CountNhom"];
 		$CountAnh = $_REQUEST["CountAnh"];
@@ -238,7 +223,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "NhomBanLaThanhVien": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
@@ -256,7 +240,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "NhomBanTao": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
@@ -274,7 +257,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "NhomBanThamGia": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
@@ -292,7 +274,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "KhoBaiViet": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
@@ -313,7 +294,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "KhoAnh": {
         $MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
         if ($MaTaiKhoan != "") {
@@ -336,7 +316,6 @@ switch ($Case){
             echo $false;
         break;
 	}
-	
 	case "ChiTietBaiVietCaNhan": {
 		$MaBaiViet = $_REQUEST["xMaBaiViet"];
 		if ($MaBaiViet != "") {
@@ -353,46 +332,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
-	/*
-	case "LayVeBaiVietMoi": {
-		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
-		if ($MaTaiKhoan != "") {
-			$sqlMaBaiViet_Nhom = "SELECT MaBaiVietMoi, MaBaiViet_Nhom FROM baivietmoi WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
-			$resultMaBaiViet_Nhom = mysql_query($sqlMaBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
-			while ($row = mysql_fetch_array($resultMaBaiViet_Nhom)) {
-				// TỪ MaBaiVietNhom LẤY VỀ THÔNG TIN CỦA ChiaSeBaiViet (BaiViet_Nhom)
-				$sqlBaiVietNhom = "SELECT MaBaiViet, NgayChiaSe, n.TenNhom 
-									FROM baiviet_nhom bvn INNER JOIN nhom n ON bvn.MaNhom = n.MaNhom 
-									WHERE MaBaiViet_Nhom = '".$row["MaBaiViet_Nhom"]."'";
-				$resultBaiVietNhom = mysql_query($sqlBaiVietNhom) or die("Lệnh truy vấn không chính xác!");
-				$rowBaiVietNhom = mysql_fetch_array($resultBaiVietNhom);
-				// TỪ MaBaiViet LẤY VỀ THÔNG TIN CỦA BÀI VIẾT ĐÓ
-				if ($rowBaiVietNhom != null) { 
-					$sqlBaiViet = "SELECT TieuDe, NoiDung, tk.TaiKhoan FROM baiviet bv
-									INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan 
-									WHERE MaBaiViet = '".$rowBaiVietNhom["MaBaiViet"]."'";
-					$resultBaiViet = mysql_query($sqlBaiViet) or die("Lệnh truy vấn không chính xác!");
-					$rowBaiViet = mysql_fetch_array($resultBaiViet);
-					if ($rowBaiVietNhom != null)
-						echo $rowBaiVietNhom["MaBaiViet"] . "-" . $row["MaBaiVietMoi"] . $KyTuChiaTruongDL
-							. $rowBaiVietNhom["NgayChiaSe"] . $KyTuChiaTruongDL 
-							. $rowBaiViet["TieuDe"] . $KyTuChiaTruongDL 
-							//. substr($rowBaiViet["NoiDung"], 0, 50) . $KyTuChiaTruongDL
-							. $rowBaiViet["NoiDung"] . $KyTuChiaTruongDL
-							. $rowBaiViet["TaiKhoan"] . $KyTuChiaTruongDL
-							. $rowBaiVietNhom["TenNhom"] . $KyTuChiaBanGhi;
-					else 
-						echo $false;				
-				}else 
-					echo $false;
-			} 
-		}else 
-			echo $false;
-		break;
-	}
-	*/
-	
 	case "ChiTietTinMoi": {
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
 		$Check = true;
@@ -438,8 +377,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
-	// BÌNH LUẬN BÀI VIẾT
 	case "TaoBinhLuan": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
@@ -455,7 +392,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "DanhSachBinhLuanBaiViet": {
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
 		if ($MaBaiViet_Nhom != null) {
@@ -477,7 +413,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "DanhSachBaiViet_Nhom" : {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
@@ -549,7 +484,6 @@ switch ($Case){
 						;
 				}
 			}
-			
 			// VỚI CÁC NHÓM CÓ QUYỀN TRƯỞNG NHÓM
 			// Nếu có quyền trưởng nhóm thì không có bản ghi dữ liệu trong bảng: TaiKhoan_Nhom
 			$sqlNhom = "SELECT MaNhom, TenNhom FROM nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
@@ -588,7 +522,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
     case "CapNhatTaiKhoan": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
         $HoDem = $_REQUEST["xHoDem"];
@@ -616,14 +549,11 @@ switch ($Case){
             echo $false;
         break;
     }
-    
     case "TimKiemNhom": {
 	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 	$TuKhoa = $_REQUEST['xTuKhoa'];
 		if ($MaTaiKhoan != "") {
-			
 			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, tk.TaiKhoan,n.NgayTao  FROM nhom n INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan WHERE TenNhom LIKE '%$TuKhoa%' AND MaNhom NOT IN (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '$MaTaiKhoan')";
-			
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
 				echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
@@ -637,7 +567,6 @@ switch ($Case){
 			echo $false;
     	break;
     }
-    
     case "ChiTietNhomTimKiem": {
     	$MaNhom = $_REQUEST["xMaNhom"];
     	if ($MaNhom != "") {
@@ -645,14 +574,11 @@ switch ($Case){
     		$resultNhom = mysql_query($sqlNhom) or die("Lệnh truy vấn không chính xác!");
     		if (mysql_num_rows($resultNhom) > 0) {
     			$rowNhom = mysql_fetch_array($resultNhom);
-    			
     			$sqlThanhVien = "SELECT MaTaiKhoan_Nhom FROM taikhoan_nhom WHERE TrangThai = 1 AND MaNhom = '".$rowNhom["MaNhom"]."'";
     			$resultThanhVien = mysql_query($sqlThanhVien) or die("Lệnh truy vấn không chính xác2!");
     			$CountThanhVien = mysql_num_rows($resultThanhVien) + 1; // Cộng thêm Tài khoản trưởng nhóm
-    			
     			$image = new SimpleImage();
             	$AnhDaiDien = $image->checkImage($AvatarMobile, $rowNhom["AnhDaiDien"]);
-    			
     			echo $rowNhom["MaNhom"] . $KyTuChiaTruongDL
     				. $rowNhom["TenNhom"] . $KyTuChiaTruongDL
     				. $AnhDaiDien . $KyTuChiaTruongDL
@@ -666,7 +592,6 @@ switch ($Case){
     		echo $false;
     	break;
     }
-	
     case "ThamGiaNhom": {
     	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
     	$MaNhom = $_REQUEST["xMaNhom"];    	
@@ -707,7 +632,6 @@ switch ($Case){
     		echo $false;
     	break;
     }
-    
     case "DanhSachNhom": {
     	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$Check = true;
@@ -724,7 +648,6 @@ switch ($Case){
 					. "1" . $KyTuChiaBanGhi
 					;
 			}
-			
 			$sqlTaiKhoan_Nhom = "SELECT tv.MaNhom, n.TenNhom, n.AnhDaiDien 
 					FROM taikhoan_nhom tv INNER JOIN nhom n ON tv.MaNhom = n.MaNhom 
 					WHERE tv.TrangThai = 1 AND tv.MaTaiKhoan = '".$MaTaiKhoan."'";
@@ -748,7 +671,6 @@ switch ($Case){
 			echo $false;
 		break;
     }
-    
 	case "DSYeuCauThamGiaNhom": {
     	$MaNhom = $_REQUEST["xMaNhom"];
     	if ($MaTaiKhoan != "") {
@@ -812,7 +734,6 @@ switch ($Case){
     		echo $false;
     	break;
     }
-    
     case "DuyetYeuCauThamGiaNhom": {
     	$MaTaiKhoan_Nhom = $_REQUEST["xMaTaiKhoan_Nhom"];
     	$XuLy = $_REQUEST["xXuLy"];
@@ -833,7 +754,6 @@ switch ($Case){
     		echo $false;
     	break;
     }
-    
     case "ChiTietAnh": {
     	$MaAnh = $_REQUEST["xMaAnh"];
     	$WidthScreen = $_REQUEST["xWidthScreen"];
@@ -855,7 +775,6 @@ switch ($Case){
     		echo $false;
     	break;
     }
-    
     case "AnhTruoc": {
     	$MaAnh = $_REQUEST["xMaAnh"];
     	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
@@ -881,7 +800,6 @@ switch ($Case){
     		echo $false;
     	break;
     }
-    
 	case "AnhSau": {
     	$MaAnh = $_REQUEST["xMaAnh"];
     	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
@@ -906,8 +824,7 @@ switch ($Case){
     	} else 
     		echo $false;
     	break;
-    }
-    
+    }  
 	case "IsTruongNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
     	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
@@ -919,7 +836,6 @@ switch ($Case){
     		echo $false;
 		break;
 	}
-    
 	case "ChiTietNhom": {
     	$MaNhom = $_REQUEST["xMaNhom"];
     	if ($MaNhom != "") {
@@ -951,7 +867,6 @@ switch ($Case){
     		echo $false;
     	break;
     }
-    
 	case "XemAnhTrongAlbumChiaSe": {
 		$MaAlbumChiaSe = $_REQUEST["xMaAlbumChiaSePK"];
 		$WidthScreen = $_REQUEST["xWidthScreen"];
@@ -978,7 +893,6 @@ switch ($Case){
     		echo $false;
 		break;
 	}
-	
 	case "DanhSachBaiVietMoi": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
@@ -1077,7 +991,6 @@ switch ($Case){
 		
 		break;
 	}
-	
 	case "BinhLuanAnh": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$MaAlbumChiaSe = $_REQUEST["xMaAlbumChiaSe"];
@@ -1093,7 +1006,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "XemBinhLuanAnh": {
 		$MaAlbumChiaSe = $_REQUEST["xMaAlbumChiaSe"];
 		if ($MaAlbumChiaSe != null) {
@@ -1115,7 +1027,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "DanhSachAlbumChiaSe": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		$Width = $_REQUEST["xWidth"];
@@ -1162,7 +1073,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "AlbumChiaSeMoi" : {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$Width = $_REQUEST["xWidth"];
@@ -1314,7 +1224,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "ChiTietAlbumChiaSe": {
 		$MaAlbumChiaSe = $_REQUEST["xMaAlbumChiaSePK"];
 		$WidthScreen = $_REQUEST["xWidthScreen"];
@@ -1354,27 +1263,28 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "ThongTinTaiKhoan": {
-		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
-		if ($MaTaiKhoan != "") {
-			$sql = "SELECT HoDem, Ten, NgaySinh, Email, GioiTinh, DienThoai, DiaChi, NgayTao FROM TaiKhoan WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
+		$TaiKhoan = $_REQUEST["xMaTaiKhoan"];
+		if($TaiKhoan != "" ) {
+			$sql = "SELECT * FROM taikhoan WHERE MaTaiKhoan='".$TaiKhoan."'";
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			$row = mysql_fetch_array($result);
-			echo $row["HoDem"] . $KyTuChiaTruongDL
-				. $row["Ten"] . $KyTuChiaTruongDL
-				. $row["NgaySinh"] . $KyTuChiaTruongDL
-				. $row["Email"] . $KyTuChiaTruongDL
-				. $row["GioiTinh"] . $KyTuChiaTruongDL
-				. $row["DienThoai"] . $KyTuChiaTruongDL
-				. $row["DiaChi"] . $KyTuChiaTruongDL
-				. $row["NgayTao"] . $KyTuChiaTruongDL
-				;
-		} else
+			if($row != null) {
+		 		echo $row["HoDem"] . $KyTuChiaTruongDL
+    				. $row["Ten"] . $KyTuChiaTruongDL
+    				. $row["NgaySinh"] . $KyTuChiaTruongDL
+    				. $row["Email"] . $KyTuChiaTruongDL
+    				. $row["GioiTinh"] . $KyTuChiaTruongDL
+    				. $row["DienThoai"] . $KyTuChiaTruongDL
+    				. $row["DiaChi"] . $KyTuChiaTruongDL
+    				. $row["NgayTao"] . $KyTuChiaTruongDL
+    				;
+			}else 
+				echo $false;
+		}else
 			echo $false;
 		break;
 	}
-	
 	case "TaoNhom": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TenNhom = $_REQUEST["xTenNhom"];
@@ -1409,7 +1319,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "ChiaSeBaiVietKhac": {
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
 		$Count = $_REQUEST["Count"];
@@ -1439,7 +1348,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "ChiaSeAnhKhac": {
 		$CountNhom = $_REQUEST["CountNhom"];
 		$MaAlbumChiaSe = $_REQUEST["xMaAlbumChiaSe"];
@@ -1485,7 +1393,6 @@ switch ($Case){
 			echo $false . "2";
 		break;
 	}
-	
 	case "DanhSachThanhVienNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		if ($MaNhom != "") {
@@ -1521,7 +1428,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "TaoTaiKhoan_BaiViet_Nhom": {
 		$MaTaiKhoanChiaSe = $_REQUEST["xMaTaiKhoanChiaSe"];
 		$MaTaiKhoanNhan = $_REQUEST["xMaTaiKhoanNhan"];
@@ -1534,7 +1440,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "TaoTaiKhoan_AlbumChiaSe": {
 		$MaTaiKhoanChiaSe = $_REQUEST["xMaTaiKhoanChiaSe"];
 		$MaTaiKhoanNhan = $_REQUEST["xMaTaiKhoanNhan"];
@@ -1547,7 +1452,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "DanhSachChuDe": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
@@ -1569,7 +1473,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "TaoChuDe": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TenChuDe = $_REQUEST["xTenChuDe"];
@@ -1590,7 +1493,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "TaoBaiViet_ChuDe":{
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
 		$MaChuDe = $_REQUEST["xMaChuDe"];
@@ -1611,7 +1513,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "BaiVietTongHop": {
 		$MaChuDe = $_REQUEST["xMaChuDe"];
 		if ($MaChuDe != "") {
@@ -1633,7 +1534,6 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	
 	case "SuaNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
         $TenNhom = $_REQUEST["xTenNhom"];
@@ -1653,8 +1553,7 @@ switch ($Case){
             echo $false;
         break;
     }
-    
-	case "DoiMatKhau": {
+    case "DoiMatKhau": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
         $MatKhau = $_REQUEST["xMatKhau"];
         if ($MaTaiKhoan != "" && $MatKhau != "") {
@@ -1671,7 +1570,6 @@ switch ($Case){
             echo $false;
         break;
     }
-	
 	default: echo "<h1 style=\"font-family: 'Times New Roman';\">Not Found</h1>
 			<p style=\"font-family: 'Times New Roman'; font-size: medium;\">The requested URL was not found on this server.</p>
 			<hr />
