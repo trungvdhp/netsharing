@@ -340,10 +340,8 @@ implements ApplicationInitializer, CommandListener
 		screenHistory.show(frmRegister);
 	}
 	
-	private void openUpdateGroupForm() {
+	private void openUpdateGroupForm(Group g) {
 		// TODO Auto-generated method stub
-		UserItem item=(UserItem)frmGroup.getCurrentItem();
-		Group g=(Group)item.data;
 		if(!g.leader.userId.equals(user.userId))
 		{
 			MessageBox.Show("Không thể sửa nhóm không phải do bạn tạo!",  AlertType.ERROR);
@@ -383,10 +381,8 @@ implements ApplicationInitializer, CommandListener
 		screenHistory.show(frmJoinRequestDetail);
 	}*/
 
-	private void openCreateTopicForm() {
+	private void openCreateTopicForm(Group g) {
 		// TODO Auto-generated method stub
-		UserItem item=(UserItem)frmGroup.getCurrentItem();
-		Group g=(Group)item.data;
 		frmCreateTopic=new UserForm("Viết bài mới",g);
 		frmCreateTopic.addTextField(txtTopicTitle);
 		frmCreateTopic.addTextBox(txtTopicContent);
@@ -787,9 +783,6 @@ implements ApplicationInitializer, CommandListener
 			if (handleCommandMainMenu()) {
 				return;
 			}
-			if (cmd == this.cmdBack){
-				screenHistory.show(frmLogin);
-			}
 		} else if (cmd == this.cmdBack) {
 			if (this.screenHistory.hasPrevious()) {
 				this.screenHistory.showPrevious();
@@ -908,7 +901,6 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmCreateTopic)
 			{
-				
 				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString(),(Group)frmCreateTopic.data)!=null)
 				{
 					MessageBox.Show("Đã tạo topic " + txtTopicContent.getString(),  AlertType.INFO);
@@ -930,7 +922,8 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmConfirmDelGroup)
 			{
-				UserItem item=(UserItem)frmGroup.getCurrentItem();
+				UserList ul = (UserList)this.screenHistory.getPrevious();
+				UserItem item=(UserItem)ul.getCurrentItem();
 				Group g=(Group)item.data;
 				if(user.DeleteGroup(g))
 				{
@@ -1010,11 +1003,15 @@ implements ApplicationInitializer, CommandListener
 		}
 		else if(cmd==cmdCreateTopic)
 		{
-			openCreateTopicForm();
+			UserList ul = (UserList)disp;
+			UserItem item=(UserItem)ul.getCurrentItem();
+			Group g=(Group)item.data;
+			openCreateTopicForm(g);
 		}
 		else if(cmd==cmdDeleteGroup)
 		{
-			UserItem item=(UserItem)frmGroup.getCurrentItem();
+			UserList ul = (UserList)disp;
+			UserItem item=(UserItem)ul.getCurrentItem();
 			Group g=(Group)item.data;
 			if(!g.leader.userId.equals(user.userId))
 			{
@@ -1033,7 +1030,10 @@ implements ApplicationInitializer, CommandListener
 		}
 		else if(cmd==cmdViewUpdateGroup)
 		{
-			openUpdateGroupForm();
+			UserList ul = (UserList)disp;
+			UserItem item=(UserItem)ul.getCurrentItem();
+			Group g=(Group)item.data;
+			openUpdateGroupForm(g);
 		}
 		else if(cmd==cmdViewGroupInfo)
 		{
