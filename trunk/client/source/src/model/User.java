@@ -1,8 +1,9 @@
 package model;
 
-//import control.MessageBox;
+import control.MessageBox;
 //import de.enough.polish.ui.Display;
 //import de.enough.polish.ui.Displayable;
+//import de.enough.polish.ui.AlertType;
 import de.enough.polish.util.ArrayList;
 
 import util.UtilString;
@@ -125,10 +126,10 @@ public class User {
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"CVM","xMaTaiKhoan"},
 					new String[] {"ThongTinTaiKhoan", userId}
 					);
-			if(s.indexOf("false")>=0)
+			if(s.equals("false"))
 				return false;
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			this.firstName = data.get(0).toString();

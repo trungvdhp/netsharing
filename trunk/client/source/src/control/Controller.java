@@ -214,7 +214,8 @@ implements ApplicationInitializer, CommandListener
 			frmUpdateProfile.setCommandListener(this.commandListener);
 			screenHistory.show(frmUpdateProfile);
 		}
-		else ShowError();
+		else 
+			ShowError();
 	}
 	
 	private void ShowError()
@@ -322,7 +323,7 @@ implements ApplicationInitializer, CommandListener
 		{
 			txtUsername.setString(configuration.get("username"));
 			txtPassword.setString(configuration.get("password"));
-			cgRemember.setSelectedFlags(new boolean[]{true});
+			cgRemember.setSelectedIndex(0, true);
 		}
 		screenHistory.show(frmLogin);
 	}

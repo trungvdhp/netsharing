@@ -6,6 +6,9 @@ import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
+//import control.MessageBox;
+//import de.enough.polish.ui.AlertType;
+
 //import de.enough.polish.io.PostRedirectHttpConnection;
 //import de.enough.polish.util.URL;
 
@@ -35,7 +38,6 @@ public class Html {
 		String params="sid="+_sessionId;
 		for(int i=0;i<args.length;i++)
 			params+="&"+args[i]+"="+values[i];
-		
 		if(args.length>0)
 		{
 			OutputStream os =  connection.openOutputStream();
