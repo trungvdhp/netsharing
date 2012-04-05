@@ -12,8 +12,8 @@ import javax.microedition.io.HttpConnection;
 public class Html {
 	private static String _sessionId = "";
 	public static boolean isBusy = false;
-	//private static String path="http://vimaru.byethost7.com/SVM.php";
-	private static String path="http://localhost/VM_Server/SVM.php";
+	private static String path="http://vimaru.byethost7.com/SVM.php";
+	//private static String path="http://localhost/VM_Server/SVM.php";
 	public static void setSessionId(String sessionId)
 	{
 		_sessionId=sessionId;
