@@ -47,6 +47,7 @@
 }
 .textBox:hover{
 	border-color: #0087fa;
+	border-width: 2;
 	background {
 		color: #FFF;
 	}
@@ -82,6 +83,7 @@
 	
 .textField:hover {
 	border-color: #0087fa;
+	border-width: 2;
 	background {
 		color: #FFF;
 	}
@@ -95,6 +97,7 @@
 .checkBoxItem {
 }
 .checkBox:hover {
+	font-color:#0087fa;;
 }
 .alertBox {
 	font-color: #BC2A4D;
@@ -366,6 +369,7 @@ rightcommand extends leftcommand
 
 .addressInput:hover {
 	border-color: #0087fa;
+	border-width: 2;
 	background {
 		color: #FFF;
 	}
