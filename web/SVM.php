@@ -1362,8 +1362,8 @@ switch ($Case){
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			$row = mysql_fetch_array($result);
 			
-			$image = new SimpleImage();
-    		$AnhDaiDien = $image->checkImage($AvatarMobile, $row["AnhDaiDien"]);
+			/*$image = new SimpleImage();
+    		$AnhDaiDien = $image->checkImage($AvatarMobile, $row["AnhDaiDien"]);*/
 			
 			echo $row["HoDem"] . $KyTuChiaTruongDL
 				. $row["Ten"] . $KyTuChiaTruongDL
@@ -1373,7 +1373,7 @@ switch ($Case){
 				. $row["DienThoai"] . $KyTuChiaTruongDL
 				//. $AnhDaiDien . $KyTuChiaTruongDL
 				. $row["DiaChi"] . $KyTuChiaTruongDL
-				. $row["NgayTao"]. $KyTuChiaTruongDL
+				. $row["NgayTao"] . $KyTuChiaTruongDL
 				;
 		} else 
 			echo $false;
