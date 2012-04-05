@@ -1358,24 +1358,19 @@ switch ($Case){
 	case "ThongTinTaiKhoan": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
-			$sql = "SELECT tk.HoDem, tk.Ten, tk.NgaySinh, tk.Email, tk.GioiTinh, tk.DienThoai, tk.DiaChi, tk.NgayTao FROM TaiKhoan tk WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
+			$sql = "SELECT HoDem, Ten, NgaySinh, Email, GioiTinh, DienThoai, DiaChi, NgayTao FROM TaiKhoan WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			$row = mysql_fetch_array($result);
-			
-			/*$image = new SimpleImage();
-    		$AnhDaiDien = $image->checkImage($AvatarMobile, $row["AnhDaiDien"]);*/
-			
 			echo $row["HoDem"] . $KyTuChiaTruongDL
 				. $row["Ten"] . $KyTuChiaTruongDL
 				. $row["NgaySinh"] . $KyTuChiaTruongDL
 				. $row["Email"] . $KyTuChiaTruongDL
 				. $row["GioiTinh"] . $KyTuChiaTruongDL
 				. $row["DienThoai"] . $KyTuChiaTruongDL
-				//. $AnhDaiDien . $KyTuChiaTruongDL
 				. $row["DiaChi"] . $KyTuChiaTruongDL
 				. $row["NgayTao"] . $KyTuChiaTruongDL
 				;
-		} else 
+		} else
 			echo $false;
 		break;
 	}
