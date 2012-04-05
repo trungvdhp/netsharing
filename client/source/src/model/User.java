@@ -1,6 +1,6 @@
 package model;
 
-import control.MessageBox;
+//import control.MessageBox;
 //import de.enough.polish.ui.Display;
 //import de.enough.polish.ui.Displayable;
 import de.enough.polish.util.ArrayList;
@@ -143,7 +143,6 @@ public class User {
 		}
 		catch(Exception ex)
 		{
-			
 			return false;
 		}
 	}
