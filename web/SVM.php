@@ -395,7 +395,7 @@ switch ($Case){
 	case "DanhSachBinhLuanBaiViet": {
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
 		if ($MaBaiViet_Nhom != null) {
-			$sql = "SELECT NoiDung, tk.TaiKhoan, tk.Ten, tk.AnhDaiDien, blbv.NgayTao 
+			$sql = "SELECT MaBinhLuan, NoiDung, tk.MaTaiKhoan, tk.TaiKhoan, blbv.NgayTao 
 					FROM binhluanbaiviet blbv INNER JOIN taikhoan tk ON blbv.MaTaiKhoan = tk.MaTaiKhoan 
 					WHERE MaBaiViet_Nhom = '".$MaBaiViet_Nhom."' ORDER BY MaBinhLuan DESC";
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
@@ -403,11 +403,12 @@ switch ($Case){
 				//$image = new SimpleImage();
             	//$AnhDaiDien = $image->checkImage($AvatarMobile, $row["AnhDaiDien"]);
             	
-				echo $row["NoiDung"] . $KyTuChiaTruongDL
+				echo $row["MaBinhLuan"] . $KyTuChiaTruongDL
+					. $row["NoiDung"] . $KyTuChiaTruongDL
+					. $row["MaTaiKhoan"] . $KyTuChiaTruongDL
 					. $row["TaiKhoan"] . $KyTuChiaTruongDL
-					. $row["NgayTao"] . $KyTuChiaTruongDL;
-					//. $row["Ten"] . $KyTuChiaTruongDL
-					//. $AnhDaiDien . $KyTuChiaBanGhi;
+					. $row["NgayTao"] . $KyTuChiaTruongDL
+					;
 			} 
 		}else 
 			echo $false;
