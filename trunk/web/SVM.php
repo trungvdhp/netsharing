@@ -673,7 +673,7 @@ switch ($Case){
     }
 	case "DSYeuCauThamGiaNhom": {
     	$MaNhom = $_REQUEST["xMaNhom"];
-    	if ($MaTaiKhoan != "") {
+    	if ($MaNhom != "") {
 			$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.TaiKhoan, tk.MaTaiKhoan, n.MaNhom, n.TenNhom, tkn.NgayVaoNhom 
 						FROM taikhoan_nhom tkn 
 							INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan 
