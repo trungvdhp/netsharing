@@ -27,13 +27,13 @@ public class UserForm extends Form
 	
 	public void addStringItemField(StringItem string)
 	{
-		//#style textField
+		//#style stringField
 		append(string);
 	}
 	
 	public void addStringItemBox(StringItem string)
 	{
-		//#style textBox
+		//#style stringBox
 		append(string);
 	}
 	
