@@ -1,6 +1,6 @@
 package model;
 
-import control.MessageBox;
+//import control.MessageBox;
 //import de.enough.polish.ui.Display;
 //import de.enough.polish.ui.Displayable;
 //import de.enough.polish.ui.AlertType;
@@ -494,9 +494,9 @@ public class User {
 		}
 	}
 	//Xóa chía sẻ bài viết
-	public boolean DeleteShareTopic(String topicGroupId)
+	public boolean DeleteShareTopic(String groupTopicId)
 	{
-		return GroupTopic.Delete(new GroupTopic(topicGroupId));
+		return GroupTopic.Delete(new GroupTopic(groupTopicId));
 	}
 	//Tạo bình luận
 	public Comment CreateComment(GroupTopic t, String commentContent)

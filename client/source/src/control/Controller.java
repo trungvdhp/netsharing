@@ -381,7 +381,7 @@ implements ApplicationInitializer, CommandListener
 		screenHistory.show(frmJoinRequestDetail);
 	}*/
 
-	private void openCreateTopicForm(Group g) {
+	private void openCreateTopicForm(GroupTopic g) {
 		// TODO Auto-generated method stub
 		frmCreateTopic=new UserForm("Viết bài mới",g);
 		frmCreateTopic.addTextField(txtTopicTitle);
@@ -1005,7 +1005,7 @@ implements ApplicationInitializer, CommandListener
 		{
 			UserList ul = (UserList)disp;
 			UserItem item=(UserItem)ul.getCurrentItem();
-			Group g=(Group)item.data;
+			GroupTopic g=(GroupTopic)item.data;
 			openCreateTopicForm(g);
 		}
 		else if(cmd==cmdDeleteGroup)
