@@ -31,13 +31,13 @@
   */
   
  /*******************   UserForm   **************************/
-.textBox {
+ .stringBox {
 	layout: left | expand;
 	text-wrap: true;
-	border-color: #8699a9;
+	border-color: #0087fa;
 	margin-left: 5;
 	margin-right:5;
-	padding: 2px;
+	padding: 4px;
 	font-color:#000;
 	min-height: 20%;
 	background {
@@ -45,6 +45,36 @@
 	}
 	label-style: textFieldLabel;
 }
+
+.stringField {
+	layout: left | expand;
+	text-wrap: false;
+	border-color: #0087fa;
+	margin-left: 5;
+	margin-right:5;
+	padding: 4px;
+	font-color:#000;
+	background {
+		color: #FFF;
+	}
+	label-style: textFieldLabel;
+}
+
+.textBox {
+	layout: left | expand;
+	text-wrap: true;
+	border-color: #8699a9;
+	margin-left: 5;
+	margin-right:5;
+	padding: 4px;
+	font-color:#000;
+	min-height: 20%;
+	background {
+		color: #FFF;
+	}
+	label-style: textFieldLabel;
+}
+
 .textBox:hover{
 	border-color: #0087fa;
 	border-width: 2;
@@ -52,19 +82,19 @@
 		color: #FFF;
 	}
 }
+
 .textField {
 	layout: left | expand;
 	text-wrap: false;
 	border-color: #8699a9;
 	margin-left: 5;
 	margin-right:5;
-	padding: 2px;
+	padding: 4px;
 	font-color:#000;
 	background {
 		color: #FFF;
 	}
 	label-style: textFieldLabel;
-	
 }
 
 .textFieldLabel {
@@ -73,10 +103,6 @@
 	layout: newline-after;
 }
 
-.fieldLabel{
-	margin-left:5;
-	font-color: #000;
-}
 .userForm {
 	background-color: screenBackgroundColor;
 }
@@ -89,10 +115,15 @@
 	}
 }
 
+.checkBoxLabel{
+	margin-left:5;
+	font-color: #000;
+}
+
 .checkBox {
 	margin-left: 5;
 	width: 98%;
-	label-style: fieldLabel;
+	label-style: checkBoxLabel;
 }
 .checkBoxItem {
 }
