@@ -5,18 +5,18 @@ import util.UtilString;
 public class Comment {
 	public String commentId;
 	public String content;
-	public String time;
+	public String createDate;
 	public User user;
 	public Comment(String commentId)
 	{
 		this.commentId=commentId;
 	}
-	public Comment(String commendId,User user,String content,String time)
+	public Comment(String commendId,User user,String content,String createDate)
 	{
 		this.commentId=commendId;
 		this.user = user;
 		this.content = content;
-		this.time=time;		
+		this.createDate=createDate;		
 	}
 	
 	
@@ -47,7 +47,7 @@ public class Comment {
 					new String[] {"SuaBinhLuan", commentId, content}
 					);
 			if(id.indexOf("false")>=0) return false;
-			time = UtilString.GetTimeString();
+			createDate = UtilString.GetTimeString();
 			return true;
 		}
 		catch(Exception ex)

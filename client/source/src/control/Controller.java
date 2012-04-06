@@ -89,7 +89,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtDescription = new TextField("Mô tả: ","", 150,TextField.ANY);
 	private TextField txtGroupRule = new TextField("Quy tắc: ","", 300,TextField.ANY);
 	
-	private StringItem strCreateDate = new StringItem("Ngày cập nhật: ","");
+	private StringItem strCreateDate = new StringItem("","");
 	
 	private StringItem strFirstName = new StringItem("Họ đệm: ","");
 	private StringItem strLastName = new StringItem("Tên: ","");
@@ -97,13 +97,19 @@ implements ApplicationInitializer, CommandListener
 	private StringItem strGender = new StringItem("Giới tính: ","");
 	private StringItem strPhone = new StringItem("Điện thoại: ","");
 	private StringItem strAddress = new StringItem("Địa chỉ: ","");
-	private StringItem strTopicsCount = new StringItem("Số bài viết: ","");
-	private StringItem strMembersCount = new StringItem("Số thành viên: ","");
+	private StringItem strTopicsCount = new StringItem("","");
+	private StringItem strMembersCount = new StringItem("","");
 	
 	private StringItem strGroupLeader = new StringItem("Nhóm trưởng: ","");
 	private StringItem strGroupName = new StringItem("Tên nhóm: ","");
 	private StringItem strDescription = new StringItem("Mô tả: ","");
 	private StringItem strRule = new StringItem("Quy tắc: ","");
+	
+	private StringItem strShareUser = new StringItem("","");
+	private StringItem strAuthor = new StringItem("","");
+	private StringItem strShareDate = new StringItem("","");
+	private StringItem strTopicContent = new StringItem("Nội dung: ","");
+	private StringItem strCommentsCount = new StringItem("","");
 	
 	private CommandListener commandListener;
 	
@@ -194,7 +200,7 @@ implements ApplicationInitializer, CommandListener
 			
 			txtFirstName.setString(user.firstName);
 			txtLastName.setString(user.lastName);
-			strCreateDate.setText(user.createDate);
+			strCreateDate.setText("Ngày cập nhật: " + user.createDate);
 			email.setString(user.email);
 			if(user.gender.equals("0"))
 			{
@@ -245,7 +251,7 @@ implements ApplicationInitializer, CommandListener
 			strGender.setText(gender);
 			strPhone.setText(u.phone);
 			strAddress.setText(u.address);
-			strCreateDate.setText(u.createDate);
+			strCreateDate.setText("Ngày cập nhật: " + u.createDate);
 			frmMemberProfile.addMenu(cmdBack);
 			frmMemberProfile.setCommandListener(this.commandListener);
 			screenHistory.show(frmMemberProfile);
@@ -269,9 +275,9 @@ implements ApplicationInitializer, CommandListener
 			strGroupName.setText(g.groupName);
 			strDescription.setText(g.description);
 			strRule.setText(g.rule);
-			strTopicsCount.setText(g.topicsCount);
-			strMembersCount.setText(g.membersCount);
-			strCreateDate.setText(g.createDate);
+			strTopicsCount.setText(g.topicsCount + " bài viết");
+			strMembersCount.setText(g.membersCount + " thành viên");
+			strCreateDate.setText("Ngày cập nhật: " + g.createDate);
 			frmGroupInfo.addMenu(cmdBack);
 			frmGroupInfo.setCommandListener(this.commandListener);
 			screenHistory.show(frmGroupInfo);
@@ -353,13 +359,13 @@ implements ApplicationInitializer, CommandListener
 			txtGroupName.setString(g.groupName);
 			txtDescription.setString(g.description);
 			txtGroupRule.setString(g.rule);
-			strTopicsCount.setText(g.topicsCount);
-			strMembersCount.setText(g.membersCount);
+			//strTopicsCount.setText(g.topicsCount);
+			//strMembersCount.setText(g.membersCount);
 			frmUpdateGroup.addTextField(txtGroupName);
 			frmUpdateGroup.addTextBox(txtDescription);
 			frmUpdateGroup.addTextBox(txtGroupRule);
-			frmUpdateGroup.addStringItemField(strTopicsCount);
-			frmUpdateGroup.addStringItemField(strMembersCount);
+			//frmUpdateGroup.addStringItemField(strTopicsCount);
+			//frmUpdateGroup.addStringItemField(strMembersCount);
 			frmUpdateGroup.addCommand(cmdConfirm);
 			frmUpdateGroup.addCommand(cmdBack);
 			frmUpdateGroup.setCommandListener(this.commandListener);
@@ -450,14 +456,14 @@ implements ApplicationInitializer, CommandListener
 	{
 		ArrayList groups = user.GetMyGroups();
 		frmMyGroup=new UserList("Nhóm bạn tạo");
-		frmMyGroup.addCommand(cmdUpdateGroup);
-		UiAccess.addSubCommand(cmdCreateGroup, cmdUpdateGroup,frmMyGroup);
-		UiAccess.addSubCommand(cmdViewUpdateGroup, cmdUpdateGroup,frmMyGroup);
-		UiAccess.addSubCommand(cmdDeleteGroup, cmdUpdateGroup,frmMyGroup);
 		frmMyGroup.addCommand(cmdGroupDetail);
 		UiAccess.addSubCommand(cmdViewGroupInfo, cmdGroupDetail,frmMyGroup);
 		UiAccess.addSubCommand(cmdViewGroupMember, cmdGroupDetail,frmMyGroup);
 		UiAccess.addSubCommand(cmdViewGroupRequest, cmdGroupDetail,frmMyGroup);
+		frmMyGroup.addCommand(cmdUpdateGroup);
+		UiAccess.addSubCommand(cmdCreateGroup, cmdUpdateGroup,frmMyGroup);
+		UiAccess.addSubCommand(cmdViewUpdateGroup, cmdUpdateGroup,frmMyGroup);
+		UiAccess.addSubCommand(cmdDeleteGroup, cmdUpdateGroup,frmMyGroup);
 		frmMyGroup.addCommand(cmdBack);
 		if(groups!=null)
 		{
@@ -541,7 +547,7 @@ implements ApplicationInitializer, CommandListener
 		}
 		//frmGroupTopic.addCommand(cmdViewTopic);
 		frmGroupTopic.addCommand(cmdCreateTopic);
-		frmGroupTopic.addCommand(cmdDeleteTopic);
+		//frmGroupTopic.addCommand(cmdDeleteTopic);
 		frmGroupTopic.addCommand(cmdBack);
 		frmGroupTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmGroupTopic);
@@ -556,7 +562,7 @@ implements ApplicationInitializer, CommandListener
 			for(int i=0;i<requests.size();i++)
 			{
 				Request r=(Request)requests.get(i);
-				frmGroupRequest.addEntry(new UserItem("Tài khoản: " + r.user.username + " - Ngày: " + r.requestDate,r),"request");
+				frmGroupRequest.addEntry(new UserItem("Tài khoản: " + r.user.username + " - Vào: " + r.requestDate,r),"request");
 			}
 		}
 		frmGroupRequest.addCommand(cmdConfirm);
@@ -576,7 +582,7 @@ implements ApplicationInitializer, CommandListener
 			{
 				Request r = (Request)requests.get(i);
 				frmMemberRequest.addEntry(new UserItem("Tài khoản: " + r.user.username + " - Nhóm: " 
-				+r.group.groupName + " - Ngày: " + r.requestDate,r),"request");
+				+r.group.groupName + " - Vào: " + r.requestDate,r),"request");
 			}
 		}
 		frmMemberRequest.addCommand(cmdConfirm);
@@ -609,12 +615,23 @@ implements ApplicationInitializer, CommandListener
 	private void openTopicDetailForm(GroupTopic t)
 	{
 		frmTopicDetail = new UserForm(t.topic.title,t);
-		String body="";
+		frmTopicDetail.addStringItemField(strShareUser);
+		frmTopicDetail.addStringItemField(strAuthor);
+		frmTopicDetail.addStringItemField(strShareDate);
+		frmTopicDetail.addStringItemBox(strTopicContent);
+		frmTopicDetail.addStringItemField(strCommentsCount);
+		
+		strShareUser.setText("Chia sẻ bởi: " + t.shareUser.username);
+		strAuthor.setText("Đăng bởi:" + t.topic.author.username);
+		strShareDate.setText("Ngày chia sẻ: " + t.shareDate);
+		strTopicContent.setText(t.topic.content);
+		strCommentsCount.setText(t.commentsCount + " bình luận");
+		/*String body="";
 		body+="Chia sẻ bởi: "+t.shareUser.username+"\n"+
 				"Ngày chia sẻ: "+t.shareDate+"\n"+
 				t.topic.content+"\n"+
 				t.commentsCount+" bình luận\n";
-		frmTopicDetail.append(new StringItem("Đăng bởi: "+t.topic.author.username, body));
+		frmTopicDetail.append(new StringItem("Đăng bởi: " + t.topic.author.username, body));*/
 		frmTopicDetail.addCommand(cmdBack);
 		frmTopicDetail.setCommandListener(this.commandListener);
 		screenHistory.show(frmTopicDetail);
