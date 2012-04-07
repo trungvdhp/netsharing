@@ -35,8 +35,7 @@
 	layout: left | expand;
 	text-wrap: true;
 	border-color: #0087fa;
-	margin-left: 5;
-	margin-right:5;
+	margin: 4px;
 	padding: 4px;
 	font-color:#000;
 	min-height: 20%;
@@ -50,8 +49,7 @@
 	layout: left | expand;
 	text-wrap: false;
 	border-color: #0087fa;
-	margin-left: 5;
-	margin-right:5;
+	margin: 4px;
 	padding: 4px;
 	font-color:#000;
 	background {
@@ -64,8 +62,7 @@
 	layout: left | expand;
 	text-wrap: true;
 	border-color: #8699a9;
-	margin-left: 5;
-	margin-right:5;
+	margin: 4px;
 	padding: 4px;
 	font-color:#000;
 	min-height: 20%;
@@ -87,8 +84,7 @@
 	layout: left | expand;
 	text-wrap: false;
 	border-color: #8699a9;
-	margin-left: 5;
-	margin-right:5;
+	margin: 4px;
 	padding: 4px;
 	font-color:#000;
 	background {
@@ -98,7 +94,7 @@
 }
 
 .textFieldLabel {
-	margin-left:5;
+	margin-left: 4px;
 	font-color: #000;
 	layout: newline-after;
 }
@@ -116,19 +112,22 @@
 }
 
 .checkBoxLabel{
-	margin-left:5;
+	padding: 4px;
 	font-color: #000;
 }
 
 .checkBox {
-	margin-left: 5;
+	padding: 4px;
 	width: 98%;
 	label-style: checkBoxLabel;
 }
 .checkBoxItem {
+	padding: 4px;
+	label-style: checkBoxLabel;
 }
 .checkBox:hover {
-	font-color:#0087fa;;
+	padding: 4px;
+	font-color:#0087fa;
 }
 .alertBox {
 	font-color: #BC2A4D;
@@ -162,23 +161,69 @@
 }
 .groupItem {
 	icon-image: url(group_icon.png);
+	padding: 4px;
 	layout: left | expand;
+}
+.groupItem:hover{
+	background {
+		color: #00c8fa;
+	}
+	font-color: focusedFontColor;
 }
 .topicItem {
 	icon-image: url(topic_icon.png);
+	padding: 4px;
 	layout: left | expand;
+}
+.topicItem:hover{
+	background {
+		color: #00c8fa;
+	}
+	font-color: focusedFontColor;
 }
 .requestItem {
 	icon-image: url(join_request_icon.png);
+	padding: 4px;
 	layout: left | expand;
+}
+.requestItem:hover{
+	background {
+		color: #00c8fa;
+	}
+	font-color: focusedFontColor;
 }
 .userItem {
 	icon-image: url(user_icon.png);
+	padding: 4px;
 	layout: left | expand;
+}
+.userItem:hover{
+	background {
+		color: #00c8fa;
+	}
+	font-color: focusedFontColor;
 }
 .leaderItem{
 	icon-image: url(group_leader_icon.png);
+	padding: 4px;
 	layout: left | expand;
+}
+.leaderItem:hover{
+	background {
+		color: #00c8fa;
+	}
+	font-color: focusedFontColor;
+}
+.commentItem{
+	icon-image: url(comment_icon.png);
+	padding: 4px;
+	layout: left | expand;
+}
+.commentItem:hover{
+	background {
+		color: #00c8fa;
+	}
+	font-color: focusedFontColor;
 }
 /**********************************************************************/
 
@@ -386,9 +431,8 @@ rightcommand extends leftcommand
 
 .addressInput {
 	text-wrap: true;
-	margin-left: 5;
-	margin-right:5;
-	padding: 2px;
+	margin-left: 4px;
+	padding: 4px;
 	include-label: false;
 	choicetextfield-choicestyle: .addressChoice;
 	choicetextfield-containerstyle: .addressChoicesContainer;
@@ -434,8 +478,8 @@ rightcommand extends leftcommand
 }
 
 .dateInput {
-	margin-left: 5;
-	margin-right:5;
+	margin-left: 4px;
+	padding: 4px;
 	font-size: small;
 	font-color: fontColor;
 	background-color: #FFF;
@@ -443,8 +487,8 @@ rightcommand extends leftcommand
 }
 
 .dateInput:hover {
-	padding: 3;
 	border-width: 2;
+	border-color: #0087fa;
 	background-color: #FFF;
 }
 
