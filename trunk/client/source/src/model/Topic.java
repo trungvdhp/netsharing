@@ -113,7 +113,7 @@ public class Topic {
 		{
 			String buf=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMaNhom", "xTieuDe","xNoiDung"},
-					new String[] {"TaoBaiViet",u.userId,g.groupId,title,content}
+					new String[] {"TaoBaiVietNhom",u.userId,g.groupId,title,content}
 					);
 			if(buf.indexOf("false")>=0) return null;
 			ArrayList data=UtilString.Split(buf, Constants.KyTuChiaTruongDL);
