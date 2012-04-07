@@ -5,6 +5,7 @@ import de.enough.polish.ui.ChoiceTextField;
 import de.enough.polish.ui.DateField;
 import de.enough.polish.ui.Form;
 import de.enough.polish.ui.ChoiceGroup;
+import de.enough.polish.ui.ListItem;
 import de.enough.polish.ui.StringItem;
 import de.enough.polish.ui.TextField;
 import de.enough.polish.ui.Command;
@@ -59,9 +60,16 @@ public class UserForm extends Form
 	{
 		addCommand(cmd);
 	}
+	
 	public void addTextBox(TextField text)
 	{
 		//#style textBox
 		append(text);
+	}
+	
+	public void addListItem(ListItem list)
+	{
+		//#style commentItem
+		append(list);
 	}
 }

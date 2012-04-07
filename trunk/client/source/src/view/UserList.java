@@ -42,9 +42,9 @@ public class UserList extends List{
 		}
 		else if(type.equals("topic"))
 		{
-			GroupTopic t=(GroupTopic)item.data;
+			//GroupTopic t=(GroupTopic)item.data;
 			//#style topicItem
-			this.append(t.topic.title,null);
+			this.append(item.getText(),null);
 		}
 		else if(type.equals("request"))
 		{
