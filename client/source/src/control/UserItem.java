@@ -11,5 +11,11 @@ public class UserItem extends ChoiceItem{
 		// TODO Auto-generated constructor stub
 		this.data=data;
 	}
+	
+	public UserItem(String text,  int choiceType, Object data) {
+		super(text, null, choiceType);
+		// TODO Auto-generated constructor stub
+		this.data=data;
+	}
 
 }
