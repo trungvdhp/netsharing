@@ -86,7 +86,7 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	case "TaoBaiViet": {
+	case "TaoBaiVietNhom": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TieuDe = $_REQUEST["xTieuDe"];
 		$NoiDung = $_REQUEST["xNoiDung"];
@@ -116,6 +116,22 @@ switch ($Case){
 		}else 
 			echo $false;
 		break;
+	}
+	case "SuaBaiViet": {
+		$MaBaiViet = $_REQUEST["xMaBaiViet"];
+		$TieuDe = $_REQUEST["xTieuDe"];
+		$NoiDung = $_REQUEST["xNoiDung"];
+		if($MaBaiViet != "" && $TieuDe != "" && $NoiDung != "") {
+			$TieuDe =  addslashes(str_replace("$", "\n", str_replace("|", " ", $TieuDe)));
+			$NoiDung =  addslashes(str_replace("$", "\n", str_replace("|", " ", $NoiDung)));
+			$sql = "UPDATE baiviet SET TieuDe = '".$TieuDe."', ";
+			$sql .= "NoiDung = '".$NoiDung."' ";
+			$sql .= "WHERE MaBaiViet = '".$MaBaiViet."'";
+			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+			echo ($result != null) ? $true : $false;
+        } else
+            echo $false;
+        break;
 	}
 	case "TaoAnh": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
@@ -708,7 +724,6 @@ switch ($Case){
     		if (mysql_num_rows($resultNhom) > 0) {
     			while ($rowNhom = mysql_fetch_array($resultNhom)) {
     				$MaNhom = $rowNhom["MaNhom"];
-					echo $MaNhom." $$$ ";
     				$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.TaiKhoan, tk.MaTaiKhoan, n.MaNhom, n.TenNhom, tkn.NgayVaoNhom FROM taikhoan_nhom tkn INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan INNER JOIN nhom n ON tkn.MaNhom = n.MaNhom WHERE tkn.TrangThai = 0 AND tkn.MaNhom = '".$MaNhom."' AND tkn.MaTaiKhoan <>'".$MaTaiKhoan."'";
     				$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
     				if (mysql_num_rows($resultTaiKhoan_Nhom) > 0) {
@@ -735,7 +750,7 @@ switch ($Case){
     		echo $false;
     	break;
     }
-    case "DuyetYeuCauThamGiaNhom": {
+    case "DuyetYeuCauThamGia": {
     	$MaTaiKhoan_Nhom = $_REQUEST["xMaTaiKhoan_Nhom"];
     	$XuLy = $_REQUEST["xXuLy"];
     	if ($MaTaiKhoan_Nhom != "" && $XuLy != "") {
@@ -1541,7 +1556,6 @@ switch ($Case){
         $MoTa = $_REQUEST['xMoTa'];
         $QuyTac = $_REQUEST["xLuat"];
         if ($TenNhom != "" && $MaNhom != "") {
-            
                 $sql = "UPDATE nhom SET "; 
                 $sql .= "TenNhom = '".$TenNhom."', ";
                 $sql .= "MoTa = '".$MoTa."', ";
