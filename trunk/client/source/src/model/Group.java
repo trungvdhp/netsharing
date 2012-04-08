@@ -176,7 +176,6 @@ public class Group {
 						new User(data.get(i+7).toString(), data.get(i+10).toString(),"",""),
 						data.get(i+6).toString(),
 						data.get(i+8).toString()
-					
 						);
 				topics.add(t);
 				i += 11;

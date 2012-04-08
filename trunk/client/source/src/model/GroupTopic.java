@@ -43,8 +43,8 @@ public class GroupTopic {
 			int i=0;
 			while(i<len)
 			{
-				Comment comment = new Comment(data.get(i).toString(),new User(data.get(i+1).toString(),
-						data.get(i+2).toString()),data.get(i+3).toString(), data.get(i+4).toString());
+				Comment comment = new Comment(data.get(i).toString(),data.get(i+1).toString(),
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),""), data.get(i+4).toString());
 				comments.add(comment);
 				i += 5;
 			}

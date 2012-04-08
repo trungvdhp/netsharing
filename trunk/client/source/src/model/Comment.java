@@ -11,7 +11,7 @@ public class Comment {
 	{
 		this.commentId=commentId;
 	}
-	public Comment(String commendId,User user,String content,String createDate)
+	public Comment(String commendId, String content, User user, String createDate)
 	{
 		this.commentId=commendId;
 		this.user = user;
@@ -25,7 +25,7 @@ public class Comment {
 		try
 		{
 			String id=Html.SendRequest("",
-					new String[] {"CVM","xMaTaiKhoan", "xMaBaiVietNhom", "xNoiDung"},
+					new String[] {"CVM","xMaTaiKhoan", "xMaBaiViet_Nhom", "xNoiDung"},
 					new String[] {"TaoBinhLuan",u.userId,t.topicGroupId,content}
 					);
 			if(id.indexOf("false")>=0) return null;
