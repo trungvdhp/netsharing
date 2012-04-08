@@ -91,22 +91,19 @@ switch ($Case){
 		$TieuDe = $_REQUEST["xTieuDe"];
 		$NoiDung = $_REQUEST["xNoiDung"];
 		$MaNhom=$_REQUEST['xMaNhom'];
-		
 		if($MaTaiKhoan != "" && $TieuDe != "" && $NoiDung != "") {
 			$TieuDe =  addslashes(str_replace("$", "\n", str_replace("|", " ", $TieuDe)));
 			$NoiDung =  addslashes(str_replace("$", "\n", str_replace("|", " ", $NoiDung)));
 			$sqlInsert = "INSERT INTO baiviet(TieuDe, NoiDung, MaTaiKhoan) VALUES ('".$TieuDe."', '".$NoiDung."', '".$MaTaiKhoan."')";
 			$result = mysql_query($sqlInsert) or die("Lệnh truy vấn không chính xác!");
 			if($result != null) {
-				$sqlSelect = "SELECT MaBaiViet FROM baiviet 
-						WHERE MaTaiKhoan = '".$MaTaiKhoan."' 
-						ORDER BY MaBaiViet DESC LIMIT 0,1";
+				$sqlSelect = "SELECT MaBaiViet FROM baiviet WHERE MaTaiKhoan = '".$MaTaiKhoan."' ORDER BY MaBaiViet DESC LIMIT 0,1";
 				$resultSelect = mysql_query($sqlSelect) or die("Lệnh truy vấn không chính xác!");
 				$row = mysql_fetch_array($resultSelect);
 				if ($row != null){
 					echo $row["MaBaiViet"].$KyTuChiaTruongDL;
 					$_REQUEST['xMaBaiViet']=$row["MaBaiViet"];
-					$Case="ChiaSeBaiViet";
+					$Case="ChiaSeBaiVietNhom";
 					$re=true;
 				}
 				else 
@@ -115,6 +112,85 @@ switch ($Case){
 				echo $false;
 		}else 
 			echo $false;
+		break;
+	}
+	case "TaoBaiVietCacNhom": {
+		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+		$TieuDe = $_REQUEST["xTieuDe"];
+		$NoiDung = $_REQUEST["xNoiDung"];
+		$MaNhom=$_REQUEST['xMaNhom'];
+		if($MaTaiKhoan != "" && $TieuDe != "" && $NoiDung != "") {
+			$TieuDe =  addslashes(str_replace("$", "\n", str_replace("|", " ", $TieuDe)));
+			$NoiDung =  addslashes(str_replace("$", "\n", str_replace("|", " ", $NoiDung)));
+			$sqlInsert = "INSERT INTO baiviet(TieuDe, NoiDung, MaTaiKhoan) VALUES ('".$TieuDe."', '".$NoiDung."', '".$MaTaiKhoan."')";
+			$result = mysql_query($sqlInsert) or die("Lệnh truy vấn không chính xác!");
+			if($result != null) {
+				$sqlSelect = "SELECT MaBaiViet FROM baiviet WHERE MaTaiKhoan = '".$MaTaiKhoan."' ORDER BY MaBaiViet DESC LIMIT 0,1";
+				$resultSelect = mysql_query($sqlSelect) or die("Lệnh truy vấn không chính xác!");
+				$row = mysql_fetch_array($resultSelect);
+				if ($row != null){
+					echo $row["MaBaiViet"].$KyTuChiaTruongDL;
+					$_REQUEST['xMaBaiViet']=$row["MaBaiViet"];
+					$Case="ChiaSeBaiVietCacNhom";
+					$re=true;
+				}
+				else 
+					echo $false;
+			}else 
+				echo $false;
+		}else 
+			echo $false;
+		break;
+	}
+	case "ChiaSeBaiVietNhom": {
+		$MaNhom=$_REQUEST['xMaNhom'];
+		$MaBaiViet=$_REQUEST['xMaBaiViet'];
+		$MaTaiKhoan = $_REQUEST['xMaTaiKhoan'];
+		$sql="INSERT INTO baiviet_nhom(MaTaiKhoan,MaBaiViet,MaNhom,TrangThai) VALUES('$MaTaiKhoan',$MaBaiViet,'$MaNhom',1)";
+		$result=mysql_query($sql) or die("Truy vấn ko chính xác!");
+		$sql="SELECT MaBaiViet_Nhom FROM baiviet_nhom ORDER BY MaBaiViet_Nhom DESC LIMIT 0,1";
+		$result = mysql_query($sql);
+		$row=mysql_fetch_array($result);
+		$MaBaiViet_Nhom=$row['MaBaiViet_Nhom'];
+		$sql="SELECT MaTaiKhoan FROM taikhoan_nhom WHERE MaNhom = '".$MaNhom."'";
+		$result=mysql_query($sql);
+		while($row=mysql_fetch_array($result))
+		{
+			if($row["MaTaiKhoan"] != $MaTaiKhoan)
+			{
+				$sql1="INSERT INTO baivietmoi(MaTaiKhoan, MaBaiViet_Nhom) VALUES('".$row["MaTaiKhoan"]."', $MaBaiViet_Nhom)";
+				$result1=mysql_query($sql1);
+			}
+		}
+		echo $true;
+		break;
+	}
+	case "ChiaSeBaiVietCacNhom": {
+		$MaTaiKhoan = $_REQUEST['xMaTaiKhoan'];
+		$MaBaiViet=$_REQUEST['xMaBaiViet'];
+		$DSMaNhom = explode("|", $_REQUEST['xMaNhom']);
+		$len = count($DSMaNhom);
+		for($i=0; $i<$len; $i++)
+		{
+			$MaNhom=$DSMaNhom[$i];
+			$sql="INSERT INTO baiviet_nhom(MaTaiKhoan,MaBaiViet,MaNhom,TrangThai) VALUES('$MaTaiKhoan',$MaBaiViet,'$MaNhom',1)";
+			$result=mysql_query($sql) or die("Truy vấn không chính xác!");
+			$sql="SELECT MaBaiViet_Nhom FROM baiviet_nhom ORDER BY MaBaiViet_Nhom DESC LIMIT 0,1";
+			$result = mysql_query($sql);
+			$row=mysql_fetch_array($result);
+			$MaBaiViet_Nhom=$row['MaBaiViet_Nhom'];
+			$sql="SELECT MaTaiKhoan FROM taikhoan_nhom WHERE MaNhom='$MaNhom'";
+			$result=mysql_query($sql);
+			while($row=mysql_fetch_array($result))
+			{
+				if($row['MaTaiKhoan']!=$MaTaiKhoan)
+				{
+					$sql1="INSERT INTO baivietmoi (MaTaiKhoan, MaBaiViet_Nhom) VALUES('".$row['MaTaiKhoan']."', $MaBaiViet_Nhom)";
+					$result1=mysql_query($sql1);
+				}
+			}
+		}
+		echo $true;
 		break;
 	}
 	case "SuaBaiViet": {
@@ -185,37 +261,6 @@ switch ($Case){
 				echo $false;
 		} else 	
 			echo $false;
-		break;
-	}
-	case "ChiaSeBaiViet": {
-		$MaNhom=$_REQUEST['xMaNhom'];
-		$MaBaiViet=$_REQUEST['xMaBaiViet'];
-		$MaTaiKhoan = $_REQUEST['xMaTaiKhoan'];
-		$sql="INSERT INTO baiviet_nhom(MaTaiKhoan,MaBaiViet,MaNhom,TrangThai)
-				VALUES ('$MaTaiKhoan',$MaBaiViet,'$MaNhom',1)";
-		$result=mysql_query($sql) or die("Truy vấn ko chính xác!");
-		$sql="SELECT MaBaiViet_Nhom FROM baiviet_nhom ORDER BY MaBaiViet_Nhom LIMIT 0,1";
-		$result = mysql_query($sql);
-		$row=mysql_fetch_array($result);
-		$MaBaiViet_Nhom=$row['MaBaiViet_Nhom'];
-		$sql="SELECT MaTaiKhoan FROM TaiKhoan_nhom WHERE MaNhom='$MaNhom'";
-		$result=mysql_query($sql);
-		while($row=mysql_fetch_array($result))
-		{
-			if($row['MaTaiKhoan']!=$MaTaiKhoan)
-			{
-			$sql1="INSERT INTO baivietmoi 
-					(MaTaiKhoan, 
-					MaBaiViet_Nhom
-					)
-					VALUES
-					('".$row['MaTaiKhoan']."', 
-					$MaBaiViet_Nhom
-					)";
-				$result1=mysql_query($sql1);
-			}
-		}
-		echo $true;
 		break;
 	}
 	case "ChiaSeAnh": {
