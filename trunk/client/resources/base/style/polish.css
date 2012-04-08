@@ -152,7 +152,7 @@
 	}
 }
 .alertBoxTitle {
-	layout: left;
+	layout: center;
 	font-size:small;
 	height: 0;
 }

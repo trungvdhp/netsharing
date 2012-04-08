@@ -111,16 +111,20 @@ implements ApplicationInitializer, CommandListener
 	private StringItem strShareDate = new StringItem("","");
 	private StringItem strTopicContent = new StringItem("Nội dung: ","");
 	private StringItem strCommentsCount = new StringItem("","");
+	private StringItem strSharedGroupsCount = new StringItem("","");
+	private StringItem strNonSharedGroupsCount = new StringItem("","");
 	
 	private CommandListener commandListener;
 	
 	private ChoiceGroup cgRemember;
 	private ChoiceGroup cgGender;
+	private ChoiceGroup cgNonSharedGroup;
 	
 	private ChoiceTextField email;
 	//private DateField dateBirthday = new DateField("Ngày sinh: ", DateField.DATE);
 	
 	private ListItem lstComment;
+	private ListItem lstSharedGroup;
 	
 	private Command cmdLogin = new Command("Đăng nhập",Command.SCREEN,1);
 	private Command cmdLogout = new Command("Đăng xuất",Command.SCREEN,1);
@@ -132,10 +136,12 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdCreateGroup=new Command("Tạo nhóm mới",Command.SCREEN,1);
 	private Command cmdViewGroupInfo=new Command("Thông tin nhóm",Command.OK,1);
 	private Command cmdViewCreateTopic=new Command("Đăng bài mới",Command.SCREEN,1);
-	//private Command cmdDeleteTopic=new Command("Xóa bài viết",Command.SCREEN,1);
+	private Command cmdDeleteTopic=new Command("Xóa bài viết",Command.SCREEN,1);
 	private Command cmdViewUpdateTopic=new Command("Sửa bài viết",Command.SCREEN,1);
-	private Command cmdDeleteGroup=new Command("Xóa nhóm",Command.SCREEN,1);
-	private Command cmdViewTopic=new Command("Xem bài viết",Command.OK,1);
+	//private Command cmdDeleteGroup=new Command("Xóa nhóm",Command.SCREEN,1);
+	//private Command cmdViewTopic=new Command("Xem bài viết",Command.OK,1);
+	private Command cmdViewSharedTopic=new Command("Bài viết đã chia sẻ",Command.SCREEN,1);
+	private Command cmdViewNonSharedTopic=new Command("Bài viết chưa chia sẻ",Command.SCREEN,1);
 	private Command cmdConfirm=new Command("Xác nhận",Command.SCREEN,1);
 	private Command cmdReject=new Command("Từ chối",Command.SCREEN,1);
 	//private Command cmdConfirmAll=new Command("Xác nhận hết",Command.SCREEN,1);
@@ -171,6 +177,7 @@ implements ApplicationInitializer, CommandListener
 	private UserForm frmUpdateGroup;
 	private UserForm frmTopicDetail;
 	private UserForm frmCreateTopic;
+	private UserForm frmCreateAndShareTopic;
 	private UserForm frmUpdateTopic;
 	private UserForm frmCreateComment;
 	private UserForm frmUpdateComment;
@@ -188,6 +195,8 @@ implements ApplicationInitializer, CommandListener
 	private UserList frmGroupMember;
 	private UserList frmGroupTopic;
 	private UserList frmNewTopic;
+	private UserList frmSharedTopic;
+	private UserList frmNonSharedTopic;
 	private UserList frmMemberRequest;
 	
 	private void openUpdateProfileForm() {
@@ -435,12 +444,41 @@ implements ApplicationInitializer, CommandListener
 		frmCreateTopic=new UserForm("Viết bài mới",g);
 		frmCreateTopic.addTextField(txtTitle);
 		frmCreateTopic.addTextBox(txtContent);
+		txtTitle.setString("");
+		txtContent.setString("");
 		frmCreateTopic.addCommand(cmdConfirm);
 		frmCreateTopic.addCommand(cmdBack);
 		frmCreateTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmCreateTopic);
 	}
 
+	private void openCreateAndShareTopicForm() {
+		// TODO Auto-generated method stub
+		frmCreateAndShareTopic=new UserForm("Viết bài mới",null);
+		frmCreateAndShareTopic.addTextField(txtTitle);
+		frmCreateAndShareTopic.addTextBox(txtContent);
+		frmCreateAndShareTopic.addStringItemField(strNonSharedGroupsCount);
+		txtTitle.setString("");
+		txtContent.setString("");
+		frmCreateAndShareTopic.addCommand(cmdConfirm);
+		frmCreateAndShareTopic.addCommand(cmdBack);
+		cgNonSharedGroup = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
+		ArrayList groups;
+		if((groups=user.GetGroups())!= null)
+		{
+			frmCreateAndShareTopic.addCheckBox(cgNonSharedGroup);
+			for(int i=0; i<groups.size(); ++i)
+			{
+				Group g = (Group)groups.get(i);
+				//#style checkBoxItem
+				cgNonSharedGroup.append(new UserItem(" " + g.groupName, List.MULTIPLE, g));
+			}
+			strNonSharedGroupsCount.setText(groups.size() + " nhóm để bạn chia sẻ bài viết");
+		}
+		frmCreateAndShareTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmCreateAndShareTopic);
+	}
+	
 	private void openTopicDetailForm(GroupTopic t)
 	{
 		frmTopicDetail = new UserForm(t.topic.title,t);
@@ -735,10 +773,67 @@ implements ApplicationInitializer, CommandListener
 		frmNewTopic = new UserList("Bài viết mới");
 		//frmNewTopic.addCommand(cmdViewTopic);
 		frmNewTopic.addCommand(cmdRefresh);
+		frmNewTopic.addCommand(cmdViewSharedTopic);
+		frmNewTopic.addCommand(cmdViewNonSharedTopic);
 		frmNewTopic.addCommand(cmdBack);
 		refreshNewTopicListData();
 		frmNewTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmNewTopic);
+	}
+	
+	private void refreshSharedTopicListData()
+	{
+		ArrayList topics=user.GetSharedTopics();
+		if(topics!=null)
+		{
+			frmSharedTopic.deleteAll();
+			for(int i=0;i<topics.size();i++)
+			{
+				Topic t=(Topic)topics.get(i);
+				UserItem topic=new UserItem(t.title + "\n" + t.createDate,t);
+				frmSharedTopic.addEntry(topic,"topic");
+			}
+		}
+	}
+	
+	private void openSharedTopicList() {
+		// TODO Auto-generated method stub
+		frmSharedTopic = new UserList("Bài viết đã chia sẻ");
+		//frmNewTopic.addCommand(cmdViewTopic);
+		frmSharedTopic.addCommand(cmdRefresh);
+		frmSharedTopic.addCommand(cmdViewCreateTopic);
+		frmSharedTopic.addCommand(cmdBack);
+		refreshSharedTopicListData();
+		frmSharedTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmSharedTopic);
+	}
+	
+	private void refreshNonSharedTopicListData()
+	{
+		ArrayList topics=user.GetNonSharedTopics();
+		if(topics!=null)
+		{
+			frmNonSharedTopic.deleteAll();
+			for(int i=0;i<topics.size();i++)
+			{
+				Topic t=(Topic)topics.get(i);
+				UserItem topic=new UserItem(t.title + "\n" + t.createDate,t);
+				frmNonSharedTopic.addEntry(topic,"topic");
+			}
+		}
+	}
+	
+	private void openNonSharedTopicList() {
+		// TODO Auto-generated method stub
+		frmNonSharedTopic = new UserList("Bài viết mới");
+		//frmNewTopic.addCommand(cmdViewTopic);
+		frmNonSharedTopic.addCommand(cmdRefresh);
+		frmNonSharedTopic.addCommand(cmdViewCreateTopic);
+		frmNonSharedTopic.addCommand(cmdDeleteTopic);
+		frmNonSharedTopic.addCommand(cmdBack);
+		refreshNonSharedTopicListData();
+		frmNonSharedTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmNonSharedTopic);
 	}
 	/**
 	 * Creates a new controller.
@@ -846,7 +941,7 @@ implements ApplicationInitializer, CommandListener
 		MainMenuList list = new MainMenuList();
 		list.setCommandListener(this.commandListener);
 		list.addCommand(this.cmdExit);
-		list.addEntry("Tin mới");
+		list.addEntry("Bài viết");
 		list.addEntry("Nhóm");
 		list.addEntry("Yêu cầu");
 		list.addEntry("Tìm kiếm");
@@ -1201,10 +1296,21 @@ implements ApplicationInitializer, CommandListener
 		}
 		else if(cmd==cmdViewCreateTopic)
 		{
-			UserList ul = (UserList)this.screenHistory.getPrevious();
-			UserItem item=(UserItem)ul.getCurrentItem();
-			Group g=(Group)item.data;
-			openCreateTopicForm(g);
+			if(disp==frmSharedTopic)
+			{
+				openCreateAndShareTopicForm();
+			}
+			else if(disp==frmNonSharedTopic)
+			{
+				
+			}
+			else
+			{
+				UserList ul = (UserList)this.screenHistory.getPrevious();
+				UserItem item=(UserItem)ul.getCurrentItem();
+				Group g=(Group)item.data;
+				openCreateTopicForm(g);
+			}
 		}
 		else if(cmd==cmdDeleteComment)
 		{
@@ -1234,8 +1340,16 @@ implements ApplicationInitializer, CommandListener
 		}
 		else if(cmd==cmdViewGroupInfo)
 		{
-			UserList ul = (UserList)disp;
-			UserItem item=(UserItem)ul.getCurrentItem();
+			UserItem item;
+			if(disp == frmCreateAndShareTopic)
+			{
+				item = (UserItem)cgNonSharedGroup.getFocusedChild();
+			}
+			else
+			{
+				UserList ul = (UserList)disp;
+				item=(UserItem)ul.getCurrentItem();
+			}
 			Group g=(Group)item.data;
 			openGroupInfoForm(g);
 		}
@@ -1308,10 +1422,6 @@ implements ApplicationInitializer, CommandListener
 			else
 				MessageBox.Show("Đã từ chối yêu cầu tham gia nhóm!",  AlertType.INFO);
 		}
-		else if(cmd==cmdViewTopic)
-		{
-			commandAction(List.SELECT_COMMAND,disp);
-		}
 		else if(cmd==cmdViewCreateComment)
 		{
 			GroupTopic t = (GroupTopic)frmTopicDetail.data;
@@ -1322,6 +1432,14 @@ implements ApplicationInitializer, CommandListener
 			UserItem item = (UserItem)lstComment.getFocusedChild();
 			Comment c = (Comment)item.data;
 			openUpdateCommentForm(c);
+		}
+		else if(cmd==cmdViewSharedTopic)
+		{
+			openSharedTopicList();
+		}
+		else if(cmd==cmdViewNonSharedTopic)
+		{
+			openNonSharedTopicList();
 		}
 		else if(cmd==cmdRefresh)
 		{
