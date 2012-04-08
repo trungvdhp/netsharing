@@ -112,21 +112,28 @@
 }
 
 .checkBoxLabel{
-	padding: 4px;
+	padding-left: 4px;
 	font-color: #000;
 }
 
 .checkBox {
-	padding: 4px;
+	padding-left: 4px;
 	width: 98%;
 	label-style: checkBoxLabel;
+	layout: left | expand;
 }
 .checkBoxItem {
-	padding: 4px;
+	margin-left: 4px;
+	padding-left: 4px;
 	label-style: checkBoxLabel;
+	layout: left | expand;
+}
+.checkBoxItem:hover{
+	padding-left: 4px;
+	font-color:#0087fa;
 }
 .checkBox:hover {
-	padding: 4px;
+	padding-left: 4px;
 	font-color:#0087fa;
 }
 .alertBox {
@@ -213,6 +220,14 @@
 		color: #00c8fa;
 	}
 	font-color: focusedFontColor;
+}
+.comment{
+	padding-left: 4px;
+	label-style: checkBoxLabel;
+	layout: left | expand;
+}
+.comment:hover {
+	padding-left: 4px;
 }
 .commentItem{
 	icon-image: url(comment_icon.png);

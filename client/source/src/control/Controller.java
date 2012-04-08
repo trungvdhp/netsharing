@@ -84,8 +84,8 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtPhone = new TextField("Điện thoại: ","", 20,TextField.PHONENUMBER);
 	
 	private TextField txtSearch = new TextField("Từ khóa: ","", 50,TextField.ANY);
-	private TextField txtTopicTitle = new TextField("Tiêu đề: ","", 100,TextField.ANY);
-	private TextField txtTopicContent = new TextField("Nội dung: ","", 512,TextField.ANY);
+	private TextField txtTitle = new TextField("Tiêu đề: ","", 100,TextField.ANY);
+	private TextField txtContent = new TextField("Nội dung: ","", 512,TextField.ANY);
 	private TextField txtGroupName = new TextField("Tên nhóm: ","", 50,TextField.ANY);
 	private TextField txtDescription = new TextField("Mô tả: ","", 150,TextField.ANY);
 	private TextField txtGroupRule = new TextField("Quy tắc: ","", 300,TextField.ANY);
@@ -149,9 +149,12 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdDetail=new Command("Chi tiết",Command.SCREEN,1);
 	private Command cmdGroupDetail=new Command("Chi tiết nhóm",Command.SCREEN,1);
 	private Command cmdRefresh = new Command("Làm mới", Command.SCREEN, 1);
-	private Command cmdUpdateGroup =new Command("Cập nhật nhóm",Command.SCREEN,1);
+	//private Command cmdUpdateGroup =new Command("Cập nhật nhóm",Command.SCREEN,1);
 	private Command cmdSendRequest =new Command("Tham gia",Command.OK,1);
 	private Command cmdViewCreateComment=new Command("Bình luận",Command.SCREEN,1);
+	private Command cmdViewUpdateComment=new Command("Sửa bình luận",Command.SCREEN,1);
+	private Command cmdDeleteComment=new Command("Xóa bình luận",Command.SCREEN,1);
+	
 	
 	private User user;
 	
@@ -163,15 +166,19 @@ implements ApplicationInitializer, CommandListener
 	private UserForm frmUpdateProfile;
 	private UserForm frmMemberProfile;
 	private UserForm frmChangePassword;
-	private UserForm frmCreateGroup;
 	private UserForm frmGroupInfo;
-	private UserForm frmCreateTopic;
-	private UserForm frmTopicDetail;
+	private UserForm frmCreateGroup;
 	private UserForm frmUpdateGroup;
-	private UserForm frmSearch;
+	private UserForm frmTopicDetail;
+	private UserForm frmCreateTopic;
 	private UserForm frmUpdateTopic;
+	private UserForm frmCreateComment;
+	private UserForm frmUpdateComment;
+	private UserForm frmSearch;
 	//private UserForm frmJoinRequestDetail;
 	private Alert frmConfirmDelGroup;
+	private Alert frmConfirmDelComment;
+	private Alert frmConfirmDelTopic;
 	
 	private UserList frmGroup;
 	private UserList frmMyGroup;
@@ -300,7 +307,7 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.addTextField(txtPassword);
 		//#style checkBoxItem
 		cgRemember = new ChoiceGroup("",ChoiceGroup.EXCLUSIVE);
-		cgRemember.append("Ghi nhớ mật khẩu", null);
+		cgRemember.append(" Ghi nhớ mật khẩu", null);
 		frmLogin.addCheckBox(cgRemember);
 		frmLogin.addMenu(cmdLogin);
 		frmLogin.addMenu(cmdRegister);
@@ -355,7 +362,6 @@ implements ApplicationInitializer, CommandListener
 		else ShowError();
 	}
 
-	
 	private void openCreateGroupForm() {
 		// TODO Auto-generated method stub
 		frmCreateGroup = new UserForm("Tạo nhóm mới",null);
@@ -367,7 +373,6 @@ implements ApplicationInitializer, CommandListener
 		screenHistory.show(frmCreateGroup);
 	}
 
-	
 	private void openGroupInfoForm(Group g) {
 		// TODO Auto-generated method stub
 		if(g.GetInfo())
@@ -402,10 +407,10 @@ implements ApplicationInitializer, CommandListener
 			return;
 		}
 		frmUpdateTopic = new UserForm(t.title,t);
-		txtTopicContent.setString(t.content);
-		txtTopicTitle.setString(t.title);
-		frmUpdateTopic.addTextField(txtTopicTitle);
-		frmUpdateTopic.addTextBox(txtTopicContent);
+		txtContent.setString(t.content);
+		txtTitle.setString(t.title);
+		frmUpdateTopic.addTextField(txtTitle);
+		frmUpdateTopic.addTextBox(txtContent);
 		frmUpdateTopic.addCommand(cmdConfirm);
 		frmUpdateTopic.addCommand(cmdBack);
 		frmUpdateTopic.setCommandListener(this.commandListener);
@@ -428,8 +433,8 @@ implements ApplicationInitializer, CommandListener
 	private void openCreateTopicForm(Group g) {
 		// TODO Auto-generated method stub
 		frmCreateTopic=new UserForm("Viết bài mới",g);
-		frmCreateTopic.addTextField(txtTopicTitle);
-		frmCreateTopic.addTextBox(txtTopicContent);
+		frmCreateTopic.addTextField(txtTitle);
+		frmCreateTopic.addTextBox(txtContent);
 		frmCreateTopic.addCommand(cmdConfirm);
 		frmCreateTopic.addCommand(cmdBack);
 		frmCreateTopic.setCommandListener(this.commandListener);
@@ -450,26 +455,51 @@ implements ApplicationInitializer, CommandListener
 			for(int i=0; i<t.comments.size(); ++i)
 			{
 				Comment c = (Comment)t.comments.get(i);
-				lstComment.add(new UserItem(c.user.username + ": " + c.content + "\n" + c.createDate, c));
+				//#style commentItem
+				lstComment.append(new UserItem(c.user.username + ": " + c.content + "\n" + c.createDate, c));
 			}
 			frmTopicDetail.addListItem(lstComment);
+			strCommentsCount.setText(t.comments.size() + " bình luận");
 		}
 		strShareUser.setText("Chia sẻ bởi: " + t.shareUser.username);
 		strAuthor.setText("Đăng bởi: " + t.topic.author.username);
 		strShareDate.setText("Ngày chia sẻ: " + t.shareDate);
 		strTopicContent.setText(t.topic.content);
-		strCommentsCount.setText(t.commentsCount + " bình luận");
-		/*String body="";
-		body+="Chia sẻ bởi: "+t.shareUser.username+"\n"+
-				"Ngày chia sẻ: "+t.shareDate+"\n"+
-				t.topic.content+"\n"+
-				t.commentsCount+" bình luận\n";
-		frmTopicDetail.append(new StringItem("Đăng bởi: " + t.topic.author.username, body));*/
+		frmTopicDetail.addCommand(cmdViewCreateComment);
+		frmTopicDetail.addCommand(cmdViewUpdateComment);
+		frmTopicDetail.addCommand(cmdDeleteComment);
 		frmTopicDetail.addCommand(cmdBack);
 		frmTopicDetail.setCommandListener(this.commandListener);
 		screenHistory.show(frmTopicDetail);
 	}
 
+	private void openCreateCommentForm(GroupTopic t) {
+		// TODO Auto-generated method stub
+		frmCreateComment = new UserForm("Tạo bình luận",t);
+		txtContent.setString("");
+		frmCreateComment.addTextBox(txtContent);
+		frmCreateComment.addMenu(cmdConfirm);
+		frmCreateComment.addMenu(cmdBack);
+		frmCreateComment.setCommandListener(this.commandListener);
+		screenHistory.show(frmCreateComment);
+	}
+	
+	private void openUpdateCommentForm(Comment c) {
+		// TODO Auto-generated method stub
+		if(!user.userId.equals(c.user.userId))
+		{
+			MessageBox.Show("Không thể sửa bình luận không phải do bạn tạo!",  AlertType.ERROR);
+			return;
+		}
+		frmUpdateComment = new UserForm("Sửa bình luận",c);
+		txtContent.setString(c.content);
+		frmUpdateComment.addTextBox(txtContent);
+		frmUpdateComment.addMenu(cmdConfirm);
+		frmUpdateComment.addMenu(cmdBack);
+		frmUpdateComment.setCommandListener(this.commandListener);
+		screenHistory.show(frmUpdateComment);
+	}
+	
 	//private void openSettingForm() {
 		// TODO Auto-generated method stub
 		
@@ -624,7 +654,7 @@ implements ApplicationInitializer, CommandListener
 			for(int i=0;i<topics.size();i++)
 			{
 				GroupTopic t=(GroupTopic)topics.get(i);
-				UserItem topic=new UserItem(t.shareUser.username + ": " + t.topic.title + "\n" + t.shareDate,t);
+				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\n" + t.shareDate,t);
 				frmGroupTopic.addEntry(topic,"topic");
 			}
 		}
@@ -694,7 +724,7 @@ implements ApplicationInitializer, CommandListener
 			for(int i=0;i<topics.size();i++)
 			{
 				GroupTopic t=(GroupTopic)topics.get(i);
-				UserItem topic=new UserItem(t.shareUser.username + ": " + t.topic.title + "\n" + t.shareDate,t);
+				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\n" + t.shareDate,t);
 				frmNewTopic.addEntry(topic,"topic");
 			}
 		}
@@ -989,19 +1019,19 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmCreateTopic)
 			{
-				if(txtTopicTitle.getString()=="")
+				if(txtTitle.getString()=="")
 				{
 					MessageBox.Show("Tiêu đề bài viết không được bỏ trống!",  AlertType.INFO);
 					return;
 				}
 				
-				if(txtTopicContent.getString()=="")
+				if(txtContent.getString()=="")
 				{
 					MessageBox.Show("Nội dung bài viết không được bỏ trống!",  AlertType.INFO);
 					return;
 				}
 
-				if(user.CreateTopic(txtTopicTitle.getString(), txtTopicContent.getString(), (Group)frmCreateTopic.data) != null)
+				if(user.CreateTopic(txtTitle.getString(), txtContent.getString(), (Group)frmCreateTopic.data) != null)
 				{
 					MessageBox.Show("Tạo bài viết mới thành công!",  AlertType.INFO);
 				}
@@ -1012,18 +1042,18 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmUpdateTopic)
 			{
-				if(txtTopicTitle.getString()=="")
+				if(txtTitle.getString()=="")
 				{
 					MessageBox.Show("Tiêu đề bài viết không được bỏ trống!",  AlertType.INFO);
 					return;
 				}
-				if(txtTopicContent.getString()=="")
+				if(txtContent.getString()=="")
 				{
 					MessageBox.Show("Nội dung bài viết không được bỏ trống!",  AlertType.INFO);
 					return;
 				}
 				Topic t = (Topic)frmUpdateTopic.data;
-				if(user.UpdateTopic(t.topicId, txtTopicTitle.getString(), txtTopicContent.getString()))
+				if(user.UpdateTopic(t.topicId, txtTitle.getString(), txtContent.getString()))
 				{
 					MessageBox.Show("Bạn đã cập nhật thông tin bài viết thành công!",  AlertType.INFO );
 				}
@@ -1040,7 +1070,6 @@ implements ApplicationInitializer, CommandListener
 					return;
 				}
 				Group g=user.CreateGroup(txtGroupName.getString());
-				
 				if(!g.groupId.equals(""))
 				{
 					//txtGroupName.setString("");
@@ -1051,18 +1080,17 @@ implements ApplicationInitializer, CommandListener
 					MessageBox.Show("Không thể tạo nhóm mới!",  AlertType.ERROR);
 				}
 			}
-			else if(disp==frmConfirmDelGroup)
+			else if(disp==frmConfirmDelComment)
 			{
-				UserList ul = (UserList)this.screenHistory.getPrevious();
-				UserItem item=(UserItem)ul.getCurrentItem();
-				Group g=(Group)item.data;
-				if(user.DeleteGroup(g))
+				UserItem item = (UserItem)lstComment.getFocusedChild();
+				Comment c = (Comment)item.data;
+				if(user.DeleteComment(c))
 				{
-					MessageBox.Show("Nhóm đã được xóa!",  AlertType.INFO);
+					MessageBox.Show("Đã xóa bình luận!",  AlertType.INFO);
 				}
 				else
 				{
-					MessageBox.Show("Không thể xóa nhóm!",  AlertType.ERROR);	
+					MessageBox.Show("Không thể xóa bình luận!",  AlertType.ERROR);	
 				}
 			}
 			else if(disp==frmUpdateGroup)
@@ -1080,6 +1108,40 @@ implements ApplicationInitializer, CommandListener
 				else
 				{
 					MessageBox.Show("Cập nhật thông tin nhóm thất bại!",  AlertType.ERROR);
+				}
+			}
+			else if(disp==frmCreateComment)
+			{
+				if(txtContent.getString() == "")
+				{
+					MessageBox.Show("Nội dung bình luận không được bỏ trống!",  AlertType.INFO);
+					return;
+				}
+				GroupTopic t =(GroupTopic)frmCreateComment.data;
+				if(user.CreateComment(t, txtContent.getString()) != null)
+				{
+					MessageBox.Show("Bạn đã đăng bình luận bài viết thành công!",  AlertType.INFO );
+				}
+				else
+				{
+					MessageBox.Show("Đăng bình luận bài viết thất bại!",  AlertType.ERROR);
+				}
+			}
+			else if(disp==frmUpdateComment)
+			{
+				if(txtContent.getString() == "")
+				{
+					MessageBox.Show("Nội dung bình luận không được bỏ trống!",  AlertType.INFO);
+					return;
+				}
+				Comment c =(Comment)frmUpdateComment.data;
+				if(user.UpdateComment(c, txtContent.getString()))
+				{
+					MessageBox.Show("Bạn đã sửa bình luận bài viết thành công!",  AlertType.INFO );
+				}
+				else
+				{
+					MessageBox.Show("Sửa bình luận bài viết thất bại!",  AlertType.ERROR);
 				}
 			}
 			else if(disp==frmSearch)
@@ -1144,20 +1206,19 @@ implements ApplicationInitializer, CommandListener
 			Group g=(Group)item.data;
 			openCreateTopicForm(g);
 		}
-		else if(cmd==cmdDeleteGroup)
+		else if(cmd==cmdDeleteComment)
 		{
-			UserList ul = (UserList)disp;
-			UserItem item=(UserItem)ul.getCurrentItem();
-			Group g=(Group)item.data;
-			if(!g.leader.userId.equals(user.userId))
+			UserItem item = (UserItem)lstComment.getFocusedChild();
+			Comment c = (Comment)item.data;
+			if(!c.user.userId.equals(user.userId))
 			{
-				MessageBox.Show("Không thể xóa nhóm không phải do bạn tạo!",  AlertType.ERROR);
+				MessageBox.Show("Không thể xóa bình luận không phải do bạn đăng!",  AlertType.ERROR);
 				return;
 			}
-			frmConfirmDelGroup=MessageBox.Show("Bạn có chắc chắn muốn xóa nhóm "+g.groupName+" không?",AlertType.CONFIRMATION);
-			frmConfirmDelGroup.addCommand(cmdConfirm);
-			frmConfirmDelGroup.addCommand(cmdBack);
-			frmConfirmDelGroup.setCommandListener(this.commandListener);
+			frmConfirmDelComment=MessageBox.Show("Bạn có chắc chắn bạn muốn xóa bình luận này không?",AlertType.CONFIRMATION);
+			frmConfirmDelComment.addCommand(cmdConfirm);
+			frmConfirmDelComment.addCommand(cmdBack);
+			frmConfirmDelComment.setCommandListener(this.commandListener);
 			//screenHistory.show(frmConfirmDelGroup);
 		}
 		else if(cmd==cmdDetail)
@@ -1250,6 +1311,17 @@ implements ApplicationInitializer, CommandListener
 		else if(cmd==cmdViewTopic)
 		{
 			commandAction(List.SELECT_COMMAND,disp);
+		}
+		else if(cmd==cmdViewCreateComment)
+		{
+			GroupTopic t = (GroupTopic)frmTopicDetail.data;
+			openCreateCommentForm(t);
+		}
+		else if(cmd==cmdViewUpdateComment)
+		{
+			UserItem item = (UserItem)lstComment.getFocusedChild();
+			Comment c = (Comment)item.data;
+			openUpdateCommentForm(c);
 		}
 		else if(cmd==cmdRefresh)
 		{

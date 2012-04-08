@@ -69,7 +69,7 @@ public class UserForm extends Form
 	
 	public void addListItem(ListItem list)
 	{
-		//#style commentItem
+		//#style comment
 		append(list);
 	}
 }
