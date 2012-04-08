@@ -461,6 +461,8 @@ implements ApplicationInitializer, CommandListener
 		txtTitle.setString("");
 		txtContent.setString("");
 		frmCreateAndShareTopic.addCommand(cmdConfirm);
+		frmCreateAndShareTopic.addCommand(cmdViewGroupInfo);
+		frmCreateAndShareTopic.addCommand(cmdViewGroupMember);
 		frmCreateAndShareTopic.addCommand(cmdBack);
 		cgNonSharedGroup = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 		ArrayList groups;
@@ -773,6 +775,7 @@ implements ApplicationInitializer, CommandListener
 		frmNewTopic = new UserList("Bài viết mới");
 		//frmNewTopic.addCommand(cmdViewTopic);
 		frmNewTopic.addCommand(cmdRefresh);
+		frmNewTopic.addCommand(cmdViewCreateTopic);
 		frmNewTopic.addCommand(cmdViewSharedTopic);
 		frmNewTopic.addCommand(cmdViewNonSharedTopic);
 		frmNewTopic.addCommand(cmdBack);
@@ -1239,6 +1242,39 @@ implements ApplicationInitializer, CommandListener
 					MessageBox.Show("Sửa bình luận bài viết thất bại!",  AlertType.ERROR);
 				}
 			}
+			else if(disp==frmCreateAndShareTopic)
+			{
+				if(txtTitle.getString()=="")
+				{
+					MessageBox.Show("Tiêu đề bài viết không được bỏ trống!",  AlertType.INFO);
+					return;
+				}
+				
+				if(txtContent.getString()=="")
+				{
+					MessageBox.Show("Nội dung bài viết không được bỏ trống!",  AlertType.INFO);
+					return;
+				}
+				String groupIds="";
+				for(int i=0; i<cgNonSharedGroup.size(); ++i)
+				{
+					if(cgNonSharedGroup.isSelected(i))
+					{
+						UserItem item = (UserItem)cgNonSharedGroup.getItem(i);
+						Group group = (Group)item.data;
+						groupIds += "|" + group.groupId;
+					}
+				}
+				groupIds = groupIds.substring(1);
+				if(user.CreateTopic(txtTitle.getString(), txtContent.getString(), groupIds)!=null)
+				{
+					MessageBox.Show("Tạo bài viết mới thành công!\n" + groupIds,  AlertType.INFO);
+				}
+				else
+				{
+					MessageBox.Show("Không thể tạo bài viết mới!",  AlertType.ERROR);
+				}
+			}
 			else if(disp==frmSearch)
 			{
 				openSearchGroupList();
@@ -1296,13 +1332,9 @@ implements ApplicationInitializer, CommandListener
 		}
 		else if(cmd==cmdViewCreateTopic)
 		{
-			if(disp==frmSharedTopic)
+			if(disp==frmNewTopic || disp==frmSharedTopic || disp==frmNonSharedTopic)
 			{
 				openCreateAndShareTopicForm();
-			}
-			else if(disp==frmNonSharedTopic)
-			{
-				
 			}
 			else
 			{
@@ -1355,8 +1387,16 @@ implements ApplicationInitializer, CommandListener
 		}
 		else if(cmd==cmdViewGroupMember)
 		{
-			UserList ul = (UserList)disp;
-			UserItem item=(UserItem)ul.getCurrentItem();
+			UserItem item;
+			if(disp == frmCreateAndShareTopic)
+			{
+				item = (UserItem)cgNonSharedGroup.getFocusedChild();
+			}
+			else
+			{
+				UserList ul = (UserList)disp;
+				item=(UserItem)ul.getCurrentItem();
+			}
 			Group g=(Group)item.data;
 			openGroupMemberList(g);
 		}
