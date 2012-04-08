@@ -186,8 +186,8 @@ public class User {
 			return topics;
 		}
 	}
-	//Lấy danh sách các bài viết của bạn
-	public ArrayList GetMyTopics()
+	//Lấy danh sách các bài viết đã chia sẻ của bạn
+	public ArrayList GetSharedTopics()
 	{
 		ArrayList data = new ArrayList();	
 		topics = new ArrayList();
@@ -195,7 +195,7 @@ public class User {
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"BaiVietCuaToi", userId}
+					new String[] {"BaiVietDaChiaSe", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -204,12 +204,40 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				/*TopicGroup t = new TopicGroup(data.get(i).toString(),data.get(i+1).toString(),
-						data.get(i+2).toString(),data.get(i+3).toString(),
-						data.get(i+4).toString(),data.get(i+5).toString(), 
-						data.get(i+6).toString(),data.get(i+7).toString(),data.get(i+8).toString());
-				topics.add(t);*/
-				i += 9;
+				Topic t = new Topic(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString());
+				topics.add(t);
+				i += 4;
+			}
+			return topics;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các bài viết chưa chia sẻ của bạn
+	public ArrayList GetNonSharedTopics()
+	{
+		ArrayList data = new ArrayList();	
+		topics = new ArrayList();
+		try
+		{
+			String s = Html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"BaiVietChuaChiaSe", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Topic t = new Topic(data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString());
+				topics.add(t);
+				i += 4;
 			}
 			return topics;
 		}
@@ -236,11 +264,11 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Group t=new Group(data.get(i).toString(),
+				Group g=new Group(data.get(i).toString(),
 						data.get(i+1).toString(),
 						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
 						);
-				groups.add(t);
+				groups.add(g);
 				i += 4;
 			}
 			return groups;
@@ -268,11 +296,11 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Group t=new Group(data.get(i).toString(),
+				Group g=new Group(data.get(i).toString(),
 						data.get(i+1).toString(),
 						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
 						);
-				groups.add(t);
+				groups.add(g);
 				i += 4;
 			}
 			return groups;
@@ -308,11 +336,11 @@ public class User {
 			
 			while(i<len)
 			{
-				Group t=new Group(data.get(i).toString(),
+				Group g=new Group(data.get(i).toString(),
 						data.get(i+1).toString(),
 						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
 						);
-				groups.add(t);
+				groups.add(g);
 				i += 4;
 			}
 			return groups;
@@ -341,12 +369,12 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Request t = new Request(data.get(i).toString(),
+				Request r = new Request(data.get(i).toString(),
 						 new Group(data.get(i+3).toString(),data.get(i+4).toString(),"",""),
 						 new User(data.get(i+1).toString(),data.get(i+2).toString(),"",""),
 						 data.get(i+5).toString()
 						);
-				requests.add(t);
+				requests.add(r);
 				i += 6;
 			}
 			return requests;
@@ -374,10 +402,10 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Request t =null;/* new Request(data.get(i).toString(),data.get(i+1).toString(),
+				Request r=null;/* new Request(data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString(),
 						data.get(i+4).toString(),data.get(i+5).toString());*/
-				requests.add(t);
+				requests.add(r);
 				i += 6;
 			}
 			return requests;
@@ -454,10 +482,20 @@ public class User {
 	{
 		return Group.Delete(g);
 	}
-	//Tạo bài viết
+	//Tạo bài viết và chia sẻ cho một nhóm đã chọn
 	public Topic CreateTopic(String title, String content,Group g)
 	{
-		return Topic.Create(this, title, content,g);
+		return Topic.Create(this, title, content, g);
+	}
+	//Tạo bài viết và chia sẻ cho các nhóm đã chọn
+	public Topic CreateTopic(String title, String content,String groupIds)
+	{
+		return Topic.Create(this, title, content, groupIds);
+	}
+	//Chia sẻ bài viết
+	public boolean ShareTopic(Topic topic, String groupIds)
+	{
+		return topic.Share(this, groupIds);
 	}
 	//Sửa bài viết
 	public boolean UpdateTopic(String topicId, String topicTitle, String topicContent)

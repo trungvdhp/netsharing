@@ -107,13 +107,14 @@ public class Topic {
 		}
 	}
 	
-	public static Topic Create(User u,String title,String content,Group g)
+	//Tạo bài viết và chia sẻ cho một nhóm đã chọn
+	public static Topic Create(User u,String title,String content,Group group)
 	{
 		try
 		{
 			String buf=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMaNhom", "xTieuDe","xNoiDung"},
-					new String[] {"TaoBaiVietNhom",u.userId,g.groupId,title,content}
+					new String[] {"TaoBaiVietNhom",u.userId,group.groupId,title,content}
 					);
 			if(buf.indexOf("false")>=0) return null;
 			ArrayList data=UtilString.Split(buf, Constants.KyTuChiaTruongDL);
@@ -124,6 +125,44 @@ public class Topic {
 		catch(Exception ex)
 		{
 			return null;
+		}
+	}
+	//Tạo bài viết và chia sẻ cho các nhóm đã chọn
+	public static Topic Create(User u,String title,String content,String groupIds)
+	{
+		try
+		{
+			String buf=Html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan","xMaNhom", "xTieuDe","xNoiDung"},
+					new String[] {"TaoBaiVietCacNhom",u.userId, groupIds,title,content}
+					);
+			if(buf.indexOf("false")>=0) return null;
+			ArrayList data=UtilString.Split(buf, Constants.KyTuChiaTruongDL);
+			String id=data.get(0).toString();
+			String createDate = UtilString.GetTimeString();
+			return new Topic(u, id, title, content, createDate);
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	
+	//Chia sẻ cho các nhóm đã chọn
+	public boolean Share(User u, String groupIds)
+	{
+		try
+		{
+			String buf=Html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan","xMaBaiViet", "xMaNhom"},
+					new String[] {"ChiaSeBaiViet",u.userId, this.topicId, groupIds}
+					);
+			if(buf.indexOf("false")>=0) return false;
+			return true;
+		}
+		catch(Exception ex)
+		{
+			return false;
 		}
 	}
 	
