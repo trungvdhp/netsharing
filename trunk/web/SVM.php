@@ -133,6 +133,28 @@ switch ($Case){
             echo $false;
         break;
 	}
+	case "SuaBinhLuan": {
+		$MaBinhLuan = $_REQUEST["xMaBinhLuan"];
+		$NoiDung = $_REQUEST["xNoiDung"];
+		if($MaBinhLuan != "" && $NoiDung != "") {
+			$NoiDung =  addslashes(str_replace("$", "\n", str_replace("|", " ", $NoiDung)));
+			$sql = "UPDATE binhluanbaiviet SET NoiDung = '".$NoiDung."' WHERE MaBinhLuan = '".$MaBinhLuan."'";
+			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+			echo ($result != null) ? $true : $false;
+        } else
+            echo $false;
+        break;
+	}
+	case "XoaBinhLuan": {
+		$MaBinhLuan = $_REQUEST["xMaBinhLuan"];
+		if($MaBinhLuan != "") {
+			$sql = "DELETE FROM binhluanbaiviet WHERE MaBinhLuan = '".$MaBinhLuan."'";
+			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+			echo ($result != null) ? $true : $false;
+        } else
+            echo $false;
+        break;
+	}
 	case "TaoAnh": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TenFile = $_REQUEST["xTenFile"];
@@ -398,6 +420,7 @@ switch ($Case){
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
 		$NoiDung = $_REQUEST["xNoiDung"];
 		if ($MaBaiViet_Nhom != "" && $NoiDung != "") {
+			$NoiDung =  addslashes(str_replace("$", "\n", str_replace("|", " ", $NoiDung)));
 			$sql = "INSERT INTO binhluanbaiviet(MaTaiKhoan, NoiDung, MaBaiViet_Nhom) VALUES('".$MaTaiKhoan."', '".$NoiDung."', '".$MaBaiViet_Nhom."')";
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			if ($result != null)
@@ -412,13 +435,9 @@ switch ($Case){
 		$MaBaiViet_Nhom = $_REQUEST["xMaBaiViet_Nhom"];
 		if ($MaBaiViet_Nhom != null) {
 			$sql = "SELECT MaBinhLuan, NoiDung, tk.MaTaiKhoan, tk.TaiKhoan, blbv.NgayTao 
-					FROM binhluanbaiviet blbv INNER JOIN taikhoan tk ON blbv.MaTaiKhoan = tk.MaTaiKhoan 
-					WHERE MaBaiViet_Nhom = '".$MaBaiViet_Nhom."' ORDER BY MaBinhLuan DESC";
+					FROM binhluanbaiviet blbv INNER JOIN taikhoan tk ON blbv.MaTaiKhoan = tk.MaTaiKhoan WHERE MaBaiViet_Nhom = '".$MaBaiViet_Nhom."' ORDER BY MaBinhLuan DESC";
 			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
 			while ($row = mysql_fetch_array($result)) {
-				//$image = new SimpleImage();
-            	//$AnhDaiDien = $image->checkImage($AvatarMobile, $row["AnhDaiDien"]);
-            	
 				echo $row["MaBinhLuan"] . $KyTuChiaTruongDL
 					. $row["NoiDung"] . $KyTuChiaTruongDL
 					. $row["MaTaiKhoan"] . $KyTuChiaTruongDL
@@ -956,27 +975,15 @@ switch ($Case){
 	case "DanhSachBaiVietTheoNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
 		if ($MaNhom != "") {
-			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
-							FROM baiviet_nhom bvn 
-								INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet
-								INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan  
-							WHERE bvn.MaNhom = '".$MaNhom."' AND bvn.TrangThai = 1 
-							ORDER BY MaBaiViet_Nhom DESC";
+			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan WHERE bvn.MaNhom = '".$MaNhom."' AND bvn.TrangThai = 1 ORDER BY MaBaiViet_Nhom DESC";
 			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
-			// MỘT TÀI KHOẢN CÓ THỂ THAM GIA NHIỀU NHÓM
-			// Nếu có quyền trưởng nhóm thì không có bản ghi dữ liệu trong bảng: TaiKhoan_Nhom
 			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
 				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
 					$sqlBinhLuanBaiViet = "SELECT MaBinhLuan FROM binhluanbaiviet WHERE MaBaiViet_Nhom = '".$rowBaiViet_Nhom["MaBaiViet_Nhom"]."'";
 					$countBinhLuanBaiViet = mysql_num_rows(mysql_query($sqlBinhLuanBaiViet));
-					
-    				$image = new SimpleImage();
-            		$AnhDaiDien = $image->checkImage($AvatarMobile, $rowBaiViet_Nhom["AnhDaiDien"]);
 					$TaiKhoanChiaSe = get_user_info($rowBaiViet_Nhom["MaTaiKhoanChiaSe"]);
-                    //8 truong
+                    //11 truong
 					echo $rowBaiViet_Nhom["MaBaiViet_Nhom"] . $KyTuChiaTruongDL
-						//. SimpleImage::MySubString($rowBaiViet_Nhom["TieuDe"], 20) . $KyTuChiaTruongDL
-						//. SimpleImage::MySubString($rowBaiViet_Nhom["NoiDung"], 50) . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["MaBaiViet"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NoiDung"] . $KyTuChiaTruongDL
@@ -984,9 +991,6 @@ switch ($Case){
 						. $rowBaiViet_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["MaTaiKhoanChiaSe"] . $KyTuChiaTruongDL
-						//. $rowBaiViet_Nhom["HoDem"] . $KyTuChiaTruongDL
-						//. $rowBaiViet_Nhom["Ten"] . $KyTuChiaTruongDL
-                        //. $AnhDaiDien . $KyTuChiaTruongDL
 						. $countBinhLuanBaiViet . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom['TaiKhoan'] . $KyTuChiaTruongDL
 						. $TaiKhoanChiaSe['TaiKhoan'] . $KyTuChiaTruongDL
