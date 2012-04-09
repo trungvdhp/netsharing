@@ -161,6 +161,9 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdViewUpdateComment=new Command("Sửa bình luận",Command.SCREEN,1);
 	private Command cmdDeleteComment=new Command("Xóa bình luận",Command.SCREEN,1);
 	
+	private Command cmdMyTopic=new Command("Bạn đăng",Command.SCREEN,1);
+	private Command cmdOthersTopic=new Command("Người khác đăng",Command.SCREEN,1);
+	
 	
 	private User user;
 	
@@ -178,7 +181,9 @@ implements ApplicationInitializer, CommandListener
 	private UserForm frmTopicDetail;
 	private UserForm frmCreateTopic;
 	private UserForm frmCreateAndShareTopic;
-	private UserForm frmUpdateTopic;
+	private UserForm frmUpdateGroupTopic;
+	private UserForm frmUpdateSharedMyTopic;
+	private UserForm frmUpdateSharedOthersTopic;
 	private UserForm frmCreateComment;
 	private UserForm frmUpdateComment;
 	private UserForm frmSearch;
@@ -195,7 +200,8 @@ implements ApplicationInitializer, CommandListener
 	private UserList frmGroupMember;
 	private UserList frmGroupTopic;
 	private UserList frmNewTopic;
-	private UserList frmSharedTopic;
+	private UserList frmSharedMyTopic;
+	private UserList frmSharedOthersTopic;
 	private UserList frmNonSharedTopic;
 	private UserList frmMemberRequest;
 	
@@ -408,24 +414,111 @@ implements ApplicationInitializer, CommandListener
 		else ShowError();
 	}
 	
-	private void openUpdateTopicForm(Topic t) {
+	private void openUpdateGroupTopicForm(Topic t) {
 		// TODO Auto-generated method stub
 		if(!t.author.userId.equals(user.userId))
 		{
 			MessageBox.Show("Không thể sửa nội dung bài viết không phải do bạn tạo!",  AlertType.ERROR);
 			return;
 		}
-		frmUpdateTopic = new UserForm(t.title,t);
+		frmUpdateGroupTopic = new UserForm(t.title,t);
 		txtContent.setString(t.content);
 		txtTitle.setString(t.title);
-		frmUpdateTopic.addTextField(txtTitle);
-		frmUpdateTopic.addTextBox(txtContent);
-		frmUpdateTopic.addCommand(cmdConfirm);
-		frmUpdateTopic.addCommand(cmdBack);
-		frmUpdateTopic.setCommandListener(this.commandListener);
-		screenHistory.show(frmUpdateTopic);
+		frmUpdateGroupTopic.addTextField(txtTitle);
+		frmUpdateGroupTopic.addTextBox(txtContent);
+		frmUpdateGroupTopic.addCommand(cmdConfirm);
+		frmUpdateGroupTopic.addCommand(cmdBack);
+		frmUpdateGroupTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmUpdateGroupTopic);
 	}
 	
+	private void openUpdateSharedMyTopicForm(Topic t) {
+		// TODO Auto-generated method stub
+		frmUpdateSharedMyTopic = new UserForm("Sửa: " + t.title,t);
+		txtContent.setString(t.content);
+		txtTitle.setString(t.title);
+		frmUpdateSharedMyTopic.addTextField(txtTitle);
+		frmUpdateSharedMyTopic.addTextBox(txtContent);
+		lstSharedGroup = new ListItem("");
+		ArrayList groups;
+		if((groups=user.GetSharedGroups(t))!= null)
+		{
+			for(int i=0; i<groups.size(); ++i)
+			{
+				Group g = (Group)groups.get(i);
+				//#style commentItem
+				lstSharedGroup.append(new UserItem(g.groupName,g));
+			}
+			frmUpdateSharedMyTopic.addListItem(lstSharedGroup);
+			frmUpdateSharedMyTopic.addStringItemField(strSharedGroupsCount);
+			strSharedGroupsCount.setText(groups.size() + " nhóm bạn đã chia sẻ");
+		}
+		cgNonSharedGroup = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
+		ArrayList groups1;
+		if((groups1=user.GetNonSharedGroups(t))!= null)
+		{
+			frmUpdateSharedMyTopic.addCheckBox(cgNonSharedGroup);
+			for(int i=0; i<groups1.size(); ++i)
+			{
+				Group g1 = (Group)groups1.get(i);
+				//#style checkBoxItem
+				cgNonSharedGroup.append(new UserItem(" " + g1.groupName, List.MULTIPLE, g1));
+			}
+			frmUpdateSharedMyTopic.addStringItemField(strNonSharedGroupsCount);
+			strNonSharedGroupsCount.setText(groups1.size() + " nhóm để bạn chia sẻ bài viết");
+		}
+		frmUpdateSharedMyTopic.addCommand(cmdConfirm);
+		frmUpdateSharedMyTopic.addCommand(cmdViewGroupInfo);
+		frmUpdateSharedMyTopic.addCommand(cmdViewGroupMember);
+		frmUpdateSharedMyTopic.addCommand(cmdBack);
+		frmUpdateSharedMyTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmUpdateSharedMyTopic);
+	}
+	
+	private void openUpdateSharedOthersTopicForm(Topic t) {
+		// TODO Auto-generated method stub
+		frmUpdateSharedOthersTopic = new UserForm("Chia sẻ: " + t.title,t);
+		frmUpdateSharedOthersTopic.addStringItemField(strAuthor);
+		frmUpdateSharedOthersTopic.addStringItemField(strShareDate);
+		frmUpdateSharedOthersTopic.addStringItemBox(strTopicContent);
+		strAuthor.setText("Đăng bởi: " + t.author.username);
+		strTopicContent.setText("Ngày tạo: " + t.createDate);
+		strTopicContent.setText(t.content);
+		lstSharedGroup = new ListItem("");
+		ArrayList groups;
+		if((groups=user.GetSharedGroups(t))!= null)
+		{
+			for(int i=0; i<groups.size(); ++i)
+			{
+				Group g = (Group)groups.get(i);
+				//#style commentItem
+				lstSharedGroup.append(new UserItem(g.groupName,g));
+			}
+			frmUpdateSharedOthersTopic.addListItem(lstSharedGroup);
+			frmUpdateSharedOthersTopic.addStringItemField(strSharedGroupsCount);
+			strSharedGroupsCount.setText(groups.size() + " nhóm bạn đã chia sẻ");
+		}
+		cgNonSharedGroup = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
+		ArrayList groups1;
+		if((groups1=user.GetNonSharedGroups(t))!= null)
+		{
+			frmUpdateSharedOthersTopic.addCheckBox(cgNonSharedGroup);
+			for(int i=0; i<groups1.size(); ++i)
+			{
+				Group g1 = (Group)groups1.get(i);
+				//#style checkBoxItem
+				cgNonSharedGroup.append(new UserItem(" " + g1.groupName, List.MULTIPLE, g1));
+			}
+			frmUpdateSharedOthersTopic.addStringItemField(strNonSharedGroupsCount);
+			strNonSharedGroupsCount.setText(groups1.size() + " nhóm để bạn chia sẻ bài viết");
+		}
+		frmUpdateSharedOthersTopic.addCommand(cmdConfirm);
+		frmUpdateSharedOthersTopic.addCommand(cmdViewGroupInfo);
+		frmUpdateSharedOthersTopic.addCommand(cmdViewGroupMember);
+		frmUpdateSharedOthersTopic.addCommand(cmdBack);
+		frmUpdateSharedOthersTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmUpdateSharedOthersTopic);
+	}
 	/*private void openJoinRequestDetailForm(Request request) {
 		// TODO Auto-generated method stub
 		frmJoinRequestDetail = new UserForm("Yêu cầu " + request.requestId + " của " + request.user.username,request);
@@ -777,6 +870,8 @@ implements ApplicationInitializer, CommandListener
 		frmNewTopic.addCommand(cmdRefresh);
 		frmNewTopic.addCommand(cmdViewCreateTopic);
 		frmNewTopic.addCommand(cmdViewSharedTopic);
+		UiAccess.addSubCommand(cmdMyTopic, cmdViewSharedTopic,frmNewTopic);
+		UiAccess.addSubCommand(cmdOthersTopic, cmdViewSharedTopic,frmNewTopic);
 		frmNewTopic.addCommand(cmdViewNonSharedTopic);
 		frmNewTopic.addCommand(cmdBack);
 		refreshNewTopicListData();
@@ -784,31 +879,60 @@ implements ApplicationInitializer, CommandListener
 		screenHistory.show(frmNewTopic);
 	}
 	
-	private void refreshSharedTopicListData()
+	private void refreshSharedMyTopicListData()
 	{
-		ArrayList topics=user.GetSharedTopics();
+		ArrayList topics=user.GetSharedMyTopics();
 		if(topics!=null)
 		{
-			frmSharedTopic.deleteAll();
+			frmSharedMyTopic.deleteAll();
 			for(int i=0;i<topics.size();i++)
 			{
 				Topic t=(Topic)topics.get(i);
 				UserItem topic=new UserItem(t.title + "\n" + t.createDate,t);
-				frmSharedTopic.addEntry(topic,"topic");
+				frmSharedMyTopic.addEntry(topic,"topic");
 			}
 		}
 	}
 	
-	private void openSharedTopicList() {
+	private void openSharedMyTopicList() {
 		// TODO Auto-generated method stub
-		frmSharedTopic = new UserList("Bài viết đã chia sẻ");
+		frmSharedMyTopic = new UserList("Bài viết bạn đăng và chia sẻ");
 		//frmNewTopic.addCommand(cmdViewTopic);
-		frmSharedTopic.addCommand(cmdRefresh);
-		frmSharedTopic.addCommand(cmdViewCreateTopic);
-		frmSharedTopic.addCommand(cmdBack);
-		refreshSharedTopicListData();
-		frmSharedTopic.setCommandListener(this.commandListener);
-		screenHistory.show(frmSharedTopic);
+		frmSharedMyTopic.addCommand(cmdRefresh);
+		frmSharedMyTopic.addCommand(cmdViewCreateTopic);
+		frmSharedMyTopic.addCommand(cmdViewUpdateTopic);
+		frmSharedMyTopic.addCommand(cmdBack);
+		refreshSharedMyTopicListData();
+		frmSharedMyTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmSharedMyTopic);
+	}
+	
+	private void refreshSharedOthersTopicListData()
+	{
+		ArrayList topics=user.GetSharedOthersTopics();
+		if(topics!=null)
+		{
+			frmSharedOthersTopic.deleteAll();
+			for(int i=0;i<topics.size();i++)
+			{
+				Topic t=(Topic)topics.get(i);
+				UserItem topic=new UserItem(t.title + "\n" + t.createDate,t);
+				frmSharedOthersTopic.addEntry(topic,"topic");
+			}
+		}
+	}
+	
+	private void openSharedOthersTopicList() {
+		// TODO Auto-generated method stub
+		frmSharedOthersTopic = new UserList("Bài viết người khác đăng");
+		//frmNewTopic.addCommand(cmdViewTopic);
+		frmSharedOthersTopic.addCommand(cmdRefresh);
+		frmSharedOthersTopic.addCommand(cmdViewCreateTopic);
+		frmSharedOthersTopic.addCommand(cmdViewUpdateTopic);
+		frmSharedOthersTopic.addCommand(cmdBack);
+		refreshSharedOthersTopicListData();
+		frmSharedOthersTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmSharedOthersTopic);
 	}
 	
 	private void refreshNonSharedTopicListData()
@@ -828,10 +952,11 @@ implements ApplicationInitializer, CommandListener
 	
 	private void openNonSharedTopicList() {
 		// TODO Auto-generated method stub
-		frmNonSharedTopic = new UserList("Bài viết mới");
+		frmNonSharedTopic = new UserList("Bài viết chưa chia sẻ");
 		//frmNewTopic.addCommand(cmdViewTopic);
 		frmNonSharedTopic.addCommand(cmdRefresh);
 		frmNonSharedTopic.addCommand(cmdViewCreateTopic);
+		frmNonSharedTopic.addCommand(cmdViewUpdateTopic);
 		frmNonSharedTopic.addCommand(cmdDeleteTopic);
 		frmNonSharedTopic.addCommand(cmdBack);
 		refreshNonSharedTopicListData();
@@ -1138,7 +1263,7 @@ implements ApplicationInitializer, CommandListener
 					MessageBox.Show("Không thể tạo bài viết mới!",  AlertType.ERROR);
 				}
 			}
-			else if(disp==frmUpdateTopic)
+			else if(disp==frmUpdateGroupTopic)
 			{
 				if(txtTitle.getString()=="")
 				{
@@ -1150,7 +1275,7 @@ implements ApplicationInitializer, CommandListener
 					MessageBox.Show("Nội dung bài viết không được bỏ trống!",  AlertType.INFO);
 					return;
 				}
-				Topic t = (Topic)frmUpdateTopic.data;
+				Topic t = (Topic)frmUpdateGroupTopic.data;
 				if(user.UpdateTopic(t.topicId, txtTitle.getString(), txtContent.getString()))
 				{
 					MessageBox.Show("Bạn đã cập nhật thông tin bài viết thành công!",  AlertType.INFO );
@@ -1176,6 +1301,19 @@ implements ApplicationInitializer, CommandListener
 				else
 				{
 					MessageBox.Show("Không thể tạo nhóm mới!",  AlertType.ERROR);
+				}
+			}
+			else if(disp==frmConfirmDelTopic)
+			{
+				UserItem item = (UserItem)frmNonSharedTopic.getCurrentItem();
+				Topic t = (Topic)item.data;
+				if(user.DeleteTopic(t))
+				{
+					MessageBox.Show("Đã xóa bài viết!",  AlertType.INFO);
+				}
+				else
+				{
+					MessageBox.Show("Không thể xóa bài viết!",  AlertType.ERROR);	
 				}
 			}
 			else if(disp==frmConfirmDelComment)
@@ -1303,6 +1441,18 @@ implements ApplicationInitializer, CommandListener
 				openTopicDetailForm(t);
 				user.ViewedNewTopic(t);
 			}
+			else if(disp==frmSharedMyTopic || disp==frmNonSharedTopic)
+			{
+				UserList ul = (UserList)disp;
+				UserItem item = (UserItem)ul.getCurrentItem();
+				openUpdateSharedMyTopicForm((Topic)item.data);
+			}
+			else if(disp==frmSharedOthersTopic)
+			{
+				UserList ul = (UserList)disp;
+				UserItem item = (UserItem)ul.getCurrentItem();
+				openUpdateSharedOthersTopicForm((Topic)item.data);
+			}
 			else if(disp==frmMemberRequest)
 			{
 				UserItem t=(UserItem)frmMemberRequest.getCurrentItem();
@@ -1332,7 +1482,7 @@ implements ApplicationInitializer, CommandListener
 		}
 		else if(cmd==cmdViewCreateTopic)
 		{
-			if(disp==frmNewTopic || disp==frmSharedTopic || disp==frmNonSharedTopic)
+			if(disp==frmNewTopic || disp==frmSharedMyTopic || disp==frmNonSharedTopic)
 			{
 				openCreateAndShareTopicForm();
 			}
@@ -1343,6 +1493,16 @@ implements ApplicationInitializer, CommandListener
 				Group g=(Group)item.data;
 				openCreateTopicForm(g);
 			}
+		}
+		else if(cmd==cmdDeleteTopic)
+		{
+			UserList ul = (UserList)disp;
+			UserItem item=(UserItem)ul.getCurrentItem();
+			Topic t = (Topic)item.data;
+			frmConfirmDelTopic=MessageBox.Show("Bạn có chắc chắn bạn muốn xóa bài viết này không?",AlertType.CONFIRMATION);
+			frmConfirmDelTopic.addCommand(cmdConfirm);
+			frmConfirmDelTopic.addCommand(cmdBack);
+			frmConfirmDelTopic.setCommandListener(this.commandListener);
 		}
 		else if(cmd==cmdDeleteComment)
 		{
@@ -1425,9 +1585,15 @@ implements ApplicationInitializer, CommandListener
 			UserList ul = (UserList)disp;
 			UserItem item = (UserItem)ul.getCurrentItem();
 			if(disp==frmGroupTopic)
-				openUpdateTopicForm(((GroupTopic)item.data).topic);
-			else
-				openUpdateTopicForm((Topic)item.data);
+				openUpdateGroupTopicForm(((GroupTopic)item.data).topic);
+			else if(disp==frmSharedMyTopic || disp==frmNonSharedTopic)
+			{
+				openUpdateSharedMyTopicForm((Topic)item.data);
+			}
+			else if(disp==frmSharedOthersTopic)
+			{
+				openUpdateSharedOthersTopicForm((Topic)item.data);
+			}
 		}
 		else if(cmd==cmdUpdate)
 		{
@@ -1473,9 +1639,13 @@ implements ApplicationInitializer, CommandListener
 			Comment c = (Comment)item.data;
 			openUpdateCommentForm(c);
 		}
-		else if(cmd==cmdViewSharedTopic)
+		else if(cmd==cmdMyTopic)
 		{
-			openSharedTopicList();
+			openSharedMyTopicList();
+		}
+		else if(cmd==cmdOthersTopic)
+		{
+			openSharedOthersTopicList();
 		}
 		else if(cmd==cmdViewNonSharedTopic)
 		{
