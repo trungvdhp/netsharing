@@ -26,7 +26,7 @@ public class Comment {
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan", "xMaBaiViet_Nhom", "xNoiDung"},
-					new String[] {"TaoBinhLuan",u.userId,t.topicGroupId,content}
+					new String[] {"TaoBinhLuan",u.userId,t.groupTopicId,content}
 					);
 			if(id.indexOf("false")>=0) return null;
 			

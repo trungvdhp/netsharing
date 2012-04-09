@@ -186,8 +186,8 @@ public class User {
 			return topics;
 		}
 	}
-	//Lấy danh sách các bài viết đã chia sẻ của bạn
-	public ArrayList GetSharedTopics()
+	//Lấy danh sách các bài viết đã chia sẻ do bạn tạo
+	public ArrayList GetSharedMyTopics()
 	{
 		ArrayList data = new ArrayList();	
 		topics = new ArrayList();
@@ -195,7 +195,7 @@ public class User {
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"BaiVietDaChiaSe", userId}
+					new String[] {"BaiVietDaChiaSeBanTao", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -204,10 +204,42 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Topic t = new Topic(data.get(i).toString(),data.get(i+1).toString(),
+				Topic t = new Topic(new User(data.get(i+4).toString(), data.get(i+5).toString(),""),
+						data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString());
 				topics.add(t);
-				i += 4;
+				i += 6;
+			}
+			return topics;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các bài viết đã chia sẻ không phải do bạn tạo
+	public ArrayList GetSharedOthersTopics()
+	{
+		ArrayList data = new ArrayList();	
+		topics = new ArrayList();
+		try
+		{
+			String s = Html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan"},
+					new String[] {"BaiVietDaChiaSeNguoiKhacTao", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Topic t = new Topic(new User(data.get(i+4).toString(), data.get(i+5).toString(),""),
+						data.get(i).toString(),data.get(i+1).toString(),
+						data.get(i+2).toString(),data.get(i+3).toString());
+				topics.add(t);
+				i += 6;
 			}
 			return topics;
 		}
@@ -234,10 +266,11 @@ public class User {
 			int i=0;
 			while(i<len)
 			{
-				Topic t = new Topic(data.get(i).toString(),data.get(i+1).toString(),
+				Topic t = new Topic(new User(data.get(i+4).toString(), data.get(i+5).toString(),""),
+						data.get(i).toString(),data.get(i+1).toString(),
 						data.get(i+2).toString(),data.get(i+3).toString());
 				topics.add(t);
-				i += 4;
+				i += 6;
 			}
 			return topics;
 		}
@@ -288,6 +321,70 @@ public class User {
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
 					new String[] {"NhomBanThamGia", userId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Group g=new Group(data.get(i).toString(),
+						data.get(i+1).toString(),
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
+						);
+				groups.add(g);
+				i += 4;
+			}
+			return groups;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các nhóm bạn đã chia sẻ bài viết
+	public ArrayList GetSharedGroups(Topic t)
+	{
+		ArrayList data = new ArrayList();
+		groups=new ArrayList();
+		try
+		{
+			String s = Html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan","xMaBaiViet"},
+					new String[] {"NhomDaChiaSe", userId, t.topicId}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				Group g=new Group(data.get(i).toString(),
+						data.get(i+1).toString(),
+						new User(data.get(i+2).toString(),data.get(i+3).toString(),"","")
+						);
+				groups.add(g);
+				i += 4;
+			}
+			return groups;
+		}
+		catch(Exception ex)
+		{
+			return null;
+		}
+	}
+	//Lấy danh sách các nhóm bạn chưa chia sẻ bài viết
+	public ArrayList GetNonSharedGroups(Topic t)
+	{
+		ArrayList data = new ArrayList();
+		groups=new ArrayList();
+		try
+		{
+			String s = Html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan","xMaBaiViet"},
+					new String[] {"NhomChuaChiaSe", userId, t.topicId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -590,8 +687,8 @@ public class User {
 		try
 		{
 			String s=Html.SendRequest("", 
-					new String[]{"CVM","xMaTaiKhoan"},
-					new String[]{"XemBaiVietMoi",this.userId}
+					new String[]{"CVM","xMaTaiKhoan","xMaBaiViet_Nhom"},
+					new String[]{"XemBaiVietMoi",this.userId, t.groupTopicId}
 			);
 			if(s.indexOf("true")>=0)return true;
 			return false;

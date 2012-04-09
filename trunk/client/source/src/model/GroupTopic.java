@@ -4,7 +4,7 @@ import base.Constants;
 import de.enough.polish.util.ArrayList;
 
 public class GroupTopic {
-	public String topicGroupId;
+	public String groupTopicId;
 	public Topic topic;
 	public User shareUser;
 	public String shareDate;
@@ -13,12 +13,12 @@ public class GroupTopic {
 	
 	public GroupTopic(String topicGroupId)
 	{
-		this.topicGroupId = topicGroupId;
+		this.groupTopicId = topicGroupId;
 	}
 	public GroupTopic(String topicGroupId, Topic topic, User shareUser, 
 			String shareDate, String commentsCount)
 	{
-		this.topicGroupId = topicGroupId;
+		this.groupTopicId = topicGroupId;
 		this.topic = topic;
 		this.shareUser = shareUser;
 		this.shareDate = shareDate;
@@ -33,7 +33,7 @@ public class GroupTopic {
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaBaiViet_Nhom"},
-					new String[] {"DanhSachBinhLuanBaiViet", topicGroupId}
+					new String[] {"DanhSachBinhLuanBaiViet", groupTopicId}
 					);
 			if(s.indexOf("false")>=0)
 				return false;
@@ -61,7 +61,7 @@ public class GroupTopic {
 		{
 			String id=Html.SendRequest("",
 					new String[] {"CVM", "xMaBaiVietNhom"},
-					new String[] {"XoaChiaSeBaiViet",t.topicGroupId}
+					new String[] {"XoaChiaSeBaiViet",t.groupTopicId}
 					);
 			if(id.indexOf("false")>=0) return false;
 			return true;
