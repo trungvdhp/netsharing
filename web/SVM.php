@@ -130,9 +130,13 @@ switch ($Case){
 				$row = mysql_fetch_array($resultSelect);
 				if ($row != null){
 					echo $row["MaBaiViet"].$KyTuChiaTruongDL;
-					$_REQUEST['xMaBaiViet']=$row["MaBaiViet"];
-					$Case="ChiaSeBaiVietCacNhom";
-					$re=true;
+					if($MaNhom != "null"){
+						$_REQUEST['xMaBaiViet']=$row["MaBaiViet"];
+						$Case="ChiaSeBaiVietCacNhom";
+						$re=true;
+					}
+					else
+						echo $true;
 				}
 				else 
 					echo $false;
