@@ -682,6 +682,21 @@ switch ($Case){
 			echo $false;
     	break;
     }
+	case "XoaBaiViet": {
+		$MaBaiViet = $_REQUEST["xMaBaiViet"];
+		if ($MaBaiViet != "") {
+			$sqlBaiViet_Nhom ="SELECT MaNhom FROM baiviet_nhom WHERE MaBaiViet = '".$MaBaiViet."' ORDER BY MaBaiViet DESC LIMIT 0,1";
+			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
+			if (mysql_num_rows($resultBaiViet_Nhom) == 0) {
+				$sql = "DELETE FROM baiviet WHERE MaBaiViet='$MaBaiViet'";
+				$result = mysql_query($sql) or die ("Lệnh truy vấn không chính xác!");
+				echo ($result != null) ? $true : $false;
+			}
+			else echo $false;
+		}else
+			echo $false;
+    	break;
+    }
     case "ChiTietNhomTimKiem": {
     	$MaNhom = $_REQUEST["xMaNhom"];
     	if ($MaNhom != "") {
@@ -1043,10 +1058,10 @@ switch ($Case){
 			echo $false;
 		break;
 	}
-	case "BaiVietDaChiaSe": {
+	case "BaiVietDaChiaSeBanTao": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
-			$sqlBaiViet_Nhom = "SELECT DISTINCT bv.MaBaiViet, TieuDe, NoiDung, NgayTao FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bv.MaBaiViet = bvn.MaBaiViet WHERE bvn.MaTaiKhoan='$MaTaiKhoan' ORDER BY bv.MaBaiViet DESC";
+			$sqlBaiViet_Nhom = "SELECT DISTINCT bv.MaBaiViet, TieuDe, NoiDung, bv.NgayTao, bv.MaTaiKhoan, tk.TaiKhoan FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bv.MaBaiViet = bvn.MaBaiViet INNER JOIN taikhoan tk ON tk.MaTaiKhoan=bv.MaTaiKhoan WHERE bvn.MaTaiKhoan='$MaTaiKhoan' AND bv.MaTaiKhoan='$MaTaiKhoan' ORDER BY bv.MaBaiViet DESC";
 			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
 			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
 				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
@@ -1058,6 +1073,33 @@ switch ($Case){
 						. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NoiDung"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NgayTao"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
+						;
+				}
+			} else 
+				echo $null;
+		}else 
+			echo $false;
+		break;
+	}
+	case "BaiVietDaChiaSeNguoiKhacTao": {
+		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+		if ($MaTaiKhoan != "") {
+			$sqlBaiViet_Nhom = "SELECT DISTINCT bv.MaBaiViet, TieuDe, NoiDung, bv.NgayTao, bv.MaTaiKhoan, tk.TaiKhoan FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bv.MaBaiViet = bvn.MaBaiViet INNER JOIN taikhoan tk ON tk.MaTaiKhoan=bv.MaTaiKhoan WHERE bvn.MaTaiKhoan='$MaTaiKhoan' AND bv.MaTaiKhoan <> '$MaTaiKhoan' ORDER BY bv.MaBaiViet DESC";
+			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
+			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
+				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
+					$sqlBinhLuanBaiViet = "SELECT MaBinhLuan FROM binhluanbaiviet WHERE MaBaiViet_Nhom = '".$rowBaiViet_Nhom["MaBaiViet_Nhom"]."'";
+					$countBinhLuanBaiViet = mysql_num_rows(mysql_query($sqlBinhLuanBaiViet));
+					$TaiKhoanChiaSe = get_user_info($rowBaiViet_Nhom["MaTaiKhoanChiaSe"]);
+                    //11 truong
+					echo $rowBaiViet_Nhom["MaBaiViet"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["NoiDung"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["NgayTao"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
 						;
 				}
 			} else 
@@ -1069,7 +1111,7 @@ switch ($Case){
 	case "BaiVietChuaChiaSe": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
-			$sqlBaiViet_Nhom = "SELECT MaBaiViet, TieuDe, NoiDung, NgayTao FROM baiviet WHERE MaTaiKhoan='$MaTaiKhoan' AND MaBaiViet NOT IN (SELECT DISTINCT MaBaiViet FROM baiviet_nhom WHERE MaTaiKhoan='$MaTaiKhoan') ORDER BY MaBaiViet DESC";
+			$sqlBaiViet_Nhom = "SELECT MaBaiViet, TieuDe, NoiDung, bv.NgayTao, bv.MaTaiKhoan, tk.TaiKhoan FROM baiviet bv INNER JOIN taikhoan tk ON tk.MaTaiKhoan=bv.MaTaiKhoan WHERE bv.MaTaiKhoan='$MaTaiKhoan' AND MaBaiViet NOT IN (SELECT DISTINCT MaBaiViet FROM baiviet_nhom WHERE MaTaiKhoan='$MaTaiKhoan') ORDER BY MaBaiViet DESC";
 			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
 			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
 				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
@@ -1081,6 +1123,8 @@ switch ($Case){
 						. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NoiDung"] . $KyTuChiaTruongDL
 						. $rowBaiViet_Nhom["NgayTao"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["MaTaiKhoan"] . $KyTuChiaTruongDL
+						. $rowBaiViet_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
 						;
 				}
 			} else 
