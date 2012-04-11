@@ -56,8 +56,8 @@ public class Configuration implements Externalizable {
 	/**
 	 * Just an example for a field.
 	 */
-	private String keys[] = {"username","password","remember"};
-	private String values[] = {"","",""};
+	private String keys[] = {"username","password","remember","pageSize"};
+	private String values[] = {"","","","10"};
 	
 	/**
 	 * Creates a new standard configuration.

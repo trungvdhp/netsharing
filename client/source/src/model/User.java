@@ -457,7 +457,7 @@ public class User {
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"DSYeuCauThamGiaNhomCuaBan", userId}
+					new String[] {"DanhSachYeuCauThamGiaNhomCuaBan", userId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
