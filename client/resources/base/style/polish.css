@@ -240,6 +240,7 @@
 	}
 	font-color: focusedFontColor;
 }
+
 /**********************************************************************/
 
 label {
@@ -448,7 +449,6 @@ rightcommand extends leftcommand
 	text-wrap: true;
 	margin-left: 4px;
 	padding: 4px;
-	include-label: false;
 	choicetextfield-choicestyle: .addressChoice;
 	choicetextfield-containerstyle: .addressChoicesContainer;
 	layout: left | expand;
