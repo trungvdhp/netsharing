@@ -14,12 +14,14 @@ import de.enough.polish.util.ArrayList;
 
 public class UserList extends List{
 	private ArrayList items;
+	public int pageId;
 	public UserList(String title) {
 		
 		//#style userList
 		super(title,List.IMPLICIT);
 		// TODO Auto-generated constructor stub
 		items=new ArrayList();
+		pageId = 0;
 	}
 	public void addEntry(String item)
 	{

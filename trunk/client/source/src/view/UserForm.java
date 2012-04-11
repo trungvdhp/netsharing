@@ -13,7 +13,7 @@ import de.enough.polish.ui.Command;
 public class UserForm extends Form
 {
 	public Object data;
-	
+	public int[] pageId;	
 	public UserForm(String title,Object data) {
 		//#style userForm
 		super(title);

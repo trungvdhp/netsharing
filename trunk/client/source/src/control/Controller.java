@@ -321,7 +321,7 @@ implements ApplicationInitializer, CommandListener
 		frmLogin.addTextField(txtUsername);
 		frmLogin.addTextField(txtPassword);
 		//#style checkBoxItem
-		cgRemember = new ChoiceGroup("",ChoiceGroup.EXCLUSIVE);
+		cgRemember = new ChoiceGroup("",ChoiceGroup.MULTIPLE);
 		cgRemember.append(" Ghi nhớ mật khẩu", null);
 		frmLogin.addCheckBox(cgRemember);
 		frmLogin.addMenu(cmdLogin);
@@ -669,7 +669,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList groups = user.GetGroups();
 		if(groups != null && groups.size()>0)
 		{
-			frmGroup.deleteAll();
+			frmGroup.removeAllEntry();
 			for(int i=0;i<groups.size();i++)
 			{
 				Group group=(Group)groups.get(i);
@@ -704,7 +704,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList groups = user.GetMyGroups();
 		if(groups!=null && groups.size()>0)
 		{
-			frmMyGroup.deleteAll();
+			frmMyGroup.removeAllEntry();
 			for(int i=0;i<groups.size();i++)
 			{
 				Group group=(Group)groups.get(i);
@@ -737,7 +737,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList groups = user.GetJoinGroups();
 		if(groups!=null && groups.size()>0)
 		{
-			frmJoinGroup.deleteAll();
+			frmJoinGroup.removeAllEntry();
 			for(int i=0;i<groups.size();i++)
 			{
 				Group group=(Group)groups.get(i);
@@ -840,7 +840,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList requests=user.GetMemberRequests();
 		if(requests!=null && requests.size()>0)
 		{
-			frmMemberRequest.deleteAll();
+			frmMemberRequest.removeAllEntry();
 			for(int i=0;i<requests.size();i++)
 			{
 				Request r = (Request)requests.get(i);
@@ -869,7 +869,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList topics=user.GetNewTopics();
 		if(topics!=null && topics.size()>0)
 		{
-			frmNewTopic.deleteAll();
+			frmNewTopic.removeAllEntry();
 			for(int i=0;i<topics.size();i++)
 			{
 				GroupTopic t=(GroupTopic)topics.get(i);
@@ -900,7 +900,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList topics=user.GetSharedMyTopics();
 		if(topics!=null && topics.size()>0)
 		{
-			frmSharedMyTopic.deleteAll();
+			frmSharedMyTopic.removeAllEntry();
 			for(int i=0;i<topics.size();i++)
 			{
 				Topic t=(Topic)topics.get(i);
@@ -928,7 +928,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList topics=user.GetSharedOthersTopics();
 		if(topics!=null && topics.size()>0)
 		{
-			frmSharedOthersTopic.deleteAll();
+			frmSharedOthersTopic.removeAllEntry();
 			for(int i=0;i<topics.size();i++)
 			{
 				Topic t=(Topic)topics.get(i);
@@ -956,7 +956,7 @@ implements ApplicationInitializer, CommandListener
 		ArrayList topics=user.GetNonSharedTopics();
 		if(topics!=null && topics.size()>0)
 		{
-			frmNonSharedTopic.deleteAll();
+			frmNonSharedTopic.removeAllEntry();
 			for(int i=0;i<topics.size();i++)
 			{
 				Topic t=(Topic)topics.get(i);
@@ -1154,7 +1154,7 @@ implements ApplicationInitializer, CommandListener
 			{
 				//boolean[] gets=new boolean[1];
 				//cgRemember.getSelectedFlags(gets);
-				if(cgRemember.isSelected(0)){
+				if(cgRemember.isSelected(0)==true){
 					configuration.set("remember", "true");
 					configuration.set("username", txtUsername.getString());
 					configuration.set("password", txtPassword.getString());
