@@ -1,6 +1,6 @@
 package model;
 
-//import control.MessageBox;
+import control.Controller;
 //import control.UserItem;
 import util.UtilString;
 //import de.enough.polish.ui.Display;
@@ -85,15 +85,15 @@ public class Group {
 		}
 	}
 	
-	public ArrayList GetMembers()
+	public ArrayList GetMembers(int pageId)
 	{
 		ArrayList data = new ArrayList();
 		members = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaNhom"},
-					new String[] {"DanhSachThanhVienNhom", groupId}
+					new String[] {Constants.Case,"xMaNhom","xPageSize","xPageId"},
+					new String[] {"DanhSachThanhVienNhom", groupId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -146,49 +146,7 @@ public class Group {
 			return requests;
 		}
 	}
-	public ArrayList GetTopics()
-	{
-		return GetTopics(true);
-	}
-	public ArrayList GetTopics(boolean refresh)
-	{
-		if(topics!=null&&!refresh) return topics;
-		topics=new ArrayList();
-		ArrayList data = new ArrayList();		
-		try
-		{
-			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaNhom"},
-					new String[] {"DanhSachBaiVietTheoNhom", groupId}
-					);
-			if(s.indexOf("false")>=0)
-				return null;
-			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
-			int len = data.size();
-			int i=0;
-			
-			while(i<len)
-			{
-				GroupTopic t=new GroupTopic(
-						data.get(i).toString(),
-						new Topic(new User(data.get(i+5).toString(),data.get(i+9).toString(),"",""),
-								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
-						new User(data.get(i+7).toString(), data.get(i+10).toString(),"",""),
-						data.get(i+6).toString(),
-						data.get(i+8).toString()
-						);
-				topics.add(t);
-				i += 11;
-			}
-			
-			return topics;
-		}
-		catch(Exception ex)
-		{
-			return topics;
-		}
-	}
-	public ArrayList GetTopic(int pageId)
+	public ArrayList GetTopics(int pageId)
 	{
 		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
@@ -196,7 +154,7 @@ public class Group {
 		{
 			String s = Html.SendRequest("",
 					new String[] {Constants.Case,"xMaNhom","xPageSize","xPageId"},
-					new String[] {"DanhSachBaiVietTheoNhomP", groupId}
+					new String[] {"DanhSachBaiVietTheoNhom", groupId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;

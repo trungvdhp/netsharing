@@ -70,7 +70,7 @@ implements ApplicationInitializer, CommandListener
 
 	private final App midlet;
 	private Display display;
-	private Configuration configuration;
+	public static  Configuration configuration;
 	private RmsStorage storage;
 	
 	private TextField txtUsername = new TextField("Tên đăng nhập: ","", 50,TextField.ANY);
@@ -82,6 +82,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtLastName = new TextField("Tên: ","", 32,TextField.ANY);
 	private TextField txtAddress = new TextField("Địa chỉ: ","", 150,TextField.ANY);
 	private TextField txtPhone = new TextField("Điện thoại: ","", 20,TextField.PHONENUMBER);
+	private TextField txtPageSize = new TextField("Số bản ghi / 1 trang: ","", 2,TextField.PHONENUMBER);
 	
 	private TextField txtSearch = new TextField("Từ khóa: ","", 50,TextField.ANY);
 	private TextField txtTitle = new TextField("Tiêu đề: ","", 100,TextField.ANY);
@@ -165,6 +166,9 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdMyTopic=new Command("Bạn đăng",Command.SCREEN,1);
 	private Command cmdOthersTopic=new Command("Người khác đăng",Command.SCREEN,1);
 	
+	private Command cmdNext=new Command("Trang tiếp",Command.SCREEN,1);
+	private Command cmdPrev=new Command("Trang trước",Command.SCREEN,1);
+	
 	private User user;
 	
 	private MainMenuList screenMainMenu;
@@ -187,6 +191,7 @@ implements ApplicationInitializer, CommandListener
 	private UserForm frmCreateComment;
 	private UserForm frmUpdateComment;
 	private UserForm frmSearch;
+	private UserForm frmSetting;
 	//private UserForm frmJoinRequestDetail;
 	//private Alert frmConfirmDelGroup;
 	private Alert frmConfirmDelComment;
@@ -205,11 +210,20 @@ implements ApplicationInitializer, CommandListener
 	private UserList frmNonSharedTopic;
 	private UserList frmMemberRequest;
 	
+	private void openSettingForm()
+	{
+		frmSetting = new UserForm("Cài đặt",null);
+		frmSetting.addTextField(txtPageSize);
+		txtPageSize.setString(configuration.get("pageSize"));
+		frmSetting.addCommand(cmdBack);
+		frmSetting.setCommandListener(this.commandListener);
+		screenHistory.show(frmSetting);
+	}
 	private void openUpdateProfileForm() {
 		// TODO Auto-generated method stub
 		if(user.GetInfo())
 		{
-			frmUpdateProfile=new UserForm("Tài khoản",null);
+			frmUpdateProfile=new UserForm("Tài khoản: " + user.username,null);
 			
 			frmUpdateProfile.addTextField(txtFirstName);
 			frmUpdateProfile.addTextField(txtLastName);
@@ -531,18 +545,6 @@ implements ApplicationInitializer, CommandListener
 		frmUpdateSharedOthersTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmUpdateSharedOthersTopic);
 	}
-	/*private void openJoinRequestDetailForm(Request request) {
-		// TODO Auto-generated method stub
-		frmJoinRequestDetail = new UserForm("Yêu cầu " + request.requestId + " của " + request.user.username,request);
-		if(request.user.GetInfo())
-		{
-			
-		}
-		frmJoinRequestDetail.addMenu(cmdConfirm);
-		frmJoinRequestDetail.addMenu(cmdReject);
-		frmJoinRequestDetail.setCommandListener(this.commandListener);
-		screenHistory.show(frmJoinRequestDetail);
-	}*/
 
 	private void openCreateTopicForm(Group g) {
 		// TODO Auto-generated method stub
@@ -571,7 +573,7 @@ implements ApplicationInitializer, CommandListener
 		frmCreateAndShareTopic.addCommand(cmdBack);
 		cgNonSharedGroup = new ChoiceGroup("", ChoiceGroup.MULTIPLE);
 		ArrayList groups;
-		if((groups=user.GetGroups())!= null)
+		if((groups=user.GetGroups(0))!= null)
 		{
 			if(groups.size()>0)
 			{
@@ -656,7 +658,6 @@ implements ApplicationInitializer, CommandListener
 	private void openSearchForm() {
 		// TODO Auto-generated method stub
 		frmSearch=new UserForm("Tìm kiếm",null);
-		
 		frmSearch.addTextField(txtSearch);
 		frmSearch.addMenu(cmdConfirm);
 		frmSearch.addMenu(cmdBack);
@@ -664,9 +665,9 @@ implements ApplicationInitializer, CommandListener
 		frmSearch.setCommandListener(this.commandListener);
 	}
 	
-	private void refreshGroupListData()
+	private void nextGroupListPage()
 	{
-		ArrayList groups = user.GetGroups();
+		ArrayList groups = user.GetGroups(frmGroup.pageId);
 		if(groups != null && groups.size()>0)
 		{
 			frmGroup.removeAllEntry();
@@ -675,13 +676,31 @@ implements ApplicationInitializer, CommandListener
 				Group group=(Group)groups.get(i);
 				frmGroup.addEntry(new UserItem(group.groupName,group),"group");
 			}
+			if(configuration.get("pageSize").equals("" + groups.size()))
+				frmGroup.addCommand(cmdNext);
+			else
+				frmGroup.removeCommand(cmdNext);
+			if(frmGroup.pageId==1)
+				frmGroup.addCommand(cmdPrev);
+			if(frmGroup.pageId==0)
+				frmGroup.removeCommand(cmdPrev);
+			frmGroup.pageId++;
+		}
+		else
+		{
+			frmGroup.removeCommand(cmdNext);
 		}
 	}
 	
+	private void prevGroupListPage()
+	{
+		frmGroup.pageId -= 2;
+		nextGroupListPage();
+	}
 	private void openGroupList()
 	{
 		frmGroup=new UserList("Nhóm bạn là thành viên");
-		frmGroup.addCommand(cmdRefresh);
+		//frmGroup.addCommand(cmdRefresh);
 		frmGroup.addCommand(cmdGroupDetail);
 		UiAccess.addSubCommand(cmdViewGroupInfo, cmdGroupDetail,frmGroup);
 		UiAccess.addSubCommand(cmdViewGroupMember, cmdGroupDetail,frmGroup);
@@ -694,14 +713,14 @@ implements ApplicationInitializer, CommandListener
 		frmGroup.addCommand(cmdViewMyGroup);
 		frmGroup.addCommand(cmdViewJoinGroup);
 		frmGroup.addCommand(cmdBack);
-		refreshGroupListData();
+		nextGroupListPage();
 		frmGroup.setCommandListener(this.commandListener);
 		screenHistory.show(frmGroup);
 	}
 	
-	private void refreshMyGroupListData()
+	private void nextMyGroupListPage()
 	{
-		ArrayList groups = user.GetMyGroups();
+		ArrayList groups = user.GetMyGroups(frmMyGroup.pageId);
 		if(groups!=null && groups.size()>0)
 		{
 			frmMyGroup.removeAllEntry();
@@ -710,13 +729,30 @@ implements ApplicationInitializer, CommandListener
 				Group group=(Group)groups.get(i);
 				frmMyGroup.addEntry(new UserItem(group.groupName,group),"group");
 			}
+			if(configuration.get("pageSize").equals("" + groups.size()))
+				frmMyGroup.addCommand(cmdNext);
+			else
+				frmMyGroup.removeCommand(cmdNext);
+			if(frmMyGroup.pageId==1)
+				frmMyGroup.addCommand(cmdPrev);
+			if(frmMyGroup.pageId==0)
+				frmMyGroup.removeCommand(cmdPrev);
+			frmMyGroup.pageId++;
+		}
+		else
+		{
+			frmMyGroup.removeCommand(cmdNext);
 		}
 	}
-	
+	private void prevMyGroupListPage()
+	{
+		frmMyGroup.pageId -= 2;
+		nextMyGroupListPage();
+	}
 	private void openMyGroupList()
 	{
 		frmMyGroup=new UserList("Nhóm bạn tạo");
-		frmMyGroup.addCommand(cmdRefresh);
+		//frmMyGroup.addCommand(cmdRefresh);
 		frmMyGroup.addCommand(cmdGroupDetail);
 		UiAccess.addSubCommand(cmdViewGroupInfo, cmdGroupDetail,frmMyGroup);
 		UiAccess.addSubCommand(cmdViewGroupMember, cmdGroupDetail,frmMyGroup);
@@ -727,7 +763,7 @@ implements ApplicationInitializer, CommandListener
 		//UiAccess.addSubCommand(cmdViewUpdateGroup, cmdUpdateGroup,frmMyGroup);
 		//UiAccess.addSubCommand(cmdDeleteGroup, cmdUpdateGroup,frmMyGroup);
 		frmMyGroup.addCommand(cmdBack);
-		refreshMyGroupListData();
+		nextMyGroupListPage();
 		frmMyGroup.setCommandListener(this.commandListener);
 		screenHistory.show(frmMyGroup);
 	}
@@ -757,61 +793,129 @@ implements ApplicationInitializer, CommandListener
 		frmJoinGroup.setCommandListener(this.commandListener);
 		screenHistory.show(frmJoinGroup);
 	}
-	
-	private void openSearchGroupList()
+	private void nextSearchGroupListPage()
 	{
-		ArrayList groups = user.SearchGroup(txtSearch.getString());
-		frmSearchGroup=new UserList("Nhóm bạn chưa tham gia");
-		frmSearchGroup.addCommand(cmdSendRequest);
-		frmSearchGroup.addCommand(cmdBack);
+		ArrayList groups = user.SearchGroup(txtSearch.getString(), frmSearchGroup.pageId);
 		if(groups!=null && groups.size()>0)
 		{
+			frmSearchGroup.removeAllEntry();
 			for(int i=0;i<groups.size();i++)
 			{
 				Group group=(Group)groups.get(i);
 				frmSearchGroup.addEntry(new UserItem(group.groupName,group),"group");
 			}
+			if(configuration.get("pageSize").equals("" + groups.size()))
+				frmSearchGroup.addCommand(cmdNext);
+			else
+				frmSearchGroup.removeCommand(cmdNext);
+			if(frmSearchGroup.pageId==1)
+				frmSearchGroup.addCommand(cmdPrev);
+			if(frmSearchGroup.pageId==0)
+				frmSearchGroup.removeCommand(cmdPrev);
+			frmSearchGroup.pageId++;
 		}
+		else
+		{
+			frmSearchGroup.removeCommand(cmdNext);
+		}
+	}
+	private void prevSearchGroupListPage()
+	{
+		frmSearchGroup.pageId -= 2;
+		nextSearchGroupListPage();
+	}
+	private void openSearchGroupList()
+	{
+		frmSearchGroup=new UserList("Nhóm bạn chưa tham gia");
+		frmSearchGroup.addCommand(cmdSendRequest);
+		frmSearchGroup.addCommand(cmdBack);
+		nextSearchGroupListPage();
 		frmSearchGroup.setCommandListener(this.commandListener);
 		screenHistory.show(frmSearchGroup);
 	}
-	
-	private void openGroupMemberList(Group group)
+	private void nextGroupMemberListPage(Group group)
 	{
-		ArrayList members = group.GetMembers();
-		frmGroupMember=new UserList("" + members.size() + " thành viên nhóm: " + group.groupName);
-		frmGroupMember.addCommand(cmdBack);
+		ArrayList members = group.GetMembers(frmGroupMember.pageId);
 		User u=(User)members.get(0);
+		if(members.size() > 1)
+			frmGroupMember.removeAllEntry();
+		else
+		{
+			frmGroupMember.removeCommand(cmdNext);
+			return;
+		}
 		frmGroupMember.addEntry(new UserItem(u.username + " - Trưởng nhóm",u),"leader");
 		for(int i=1;i<members.size();i++)
 		{
 			u=(User)members.get(i);
 			frmGroupMember.addEntry(new UserItem(u.username,u),"user");
 		}
-		
+		if(configuration.get("pageSize").equals("" + (members.size() - 1)))
+			frmGroupMember.addCommand(cmdNext);
+		else
+			frmGroupMember.removeCommand(cmdNext);
+		if(frmGroupMember.pageId==1)
+			frmGroupMember.addCommand(cmdPrev);
+		if(frmGroupMember.pageId==0)
+			frmGroupMember.removeCommand(cmdPrev);
+		frmGroupMember.pageId++;
+	}
+	private void prevGroupMemberListPage(Group group)
+	{
+		frmGroupMember.pageId -= 2;
+		nextGroupMemberListPage(group);
+	}
+	private void openGroupMemberList(Group group)
+	{
+		frmGroupMember=new UserList("Thành viên nhóm: " + group.groupName);
+		frmGroupMember.addCommand(cmdBack);
+		nextGroupMemberListPage(group);
 		frmGroupMember.setCommandListener(this.commandListener);
 		screenHistory.show(frmGroupMember);
 	}
 	
-	private void openGroupTopicList(Group group)
+	private void nextGroupTopicListPage(Group group)
 	{
-		frmGroupTopic = new UserList(group.groupName);
-		ArrayList topics=group.GetTopics();
+		ArrayList topics=group.GetTopics(frmGroupTopic.pageId);
 		if(topics!=null && topics.size()>0)
 		{
+			frmGroupTopic.removeAllEntry();
 			for(int i=0;i<topics.size();i++)
 			{
 				GroupTopic t=(GroupTopic)topics.get(i);
 				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\n" + t.shareDate,t);
 				frmGroupTopic.addEntry(topic,"topic");
 			}
+			if(configuration.get("pageSize").equals("" + topics.size()))
+				frmGroupTopic.addCommand(cmdNext);
+			else
+				frmGroupTopic.removeCommand(cmdNext);
+			if(frmGroupTopic.pageId==1)
+				frmGroupTopic.addCommand(cmdPrev);
+			if(frmGroupTopic.pageId==0)
+				frmGroupTopic.removeCommand(cmdPrev);
+			frmGroupTopic.pageId++;
 		}
-		//frmGroupTopic.addCommand(cmdViewTopic);
+		else
+		{
+			frmGroupTopic.removeCommand(cmdNext);
+		}
+	}
+	private void prevGroupTopicListPage(Group group)
+	{
+		frmGroupTopic.pageId -= 2;
+		nextGroupTopicListPage(group);
+	}
+	private void openGroupTopicList(Group group)
+	{
+		frmGroupTopic = new UserList(group.groupName);
 		frmGroupTopic.addCommand(cmdViewCreateTopic);
 		frmGroupTopic.addCommand(cmdViewUpdateTopic);
 		frmGroupTopic.addCommand(cmdViewShareTopic);
-		//frmGroupTopic.addCommand(cmdDeleteTopic);
 		frmGroupTopic.addCommand(cmdBack);
+		nextGroupTopicListPage(group);
+		//frmGroupTopic.addCommand(cmdViewTopic);
+		//frmGroupTopic.addCommand(cmdDeleteTopic);
 		frmGroupTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmGroupTopic);
 	}
@@ -835,9 +939,9 @@ implements ApplicationInitializer, CommandListener
 		screenHistory.show(frmGroupRequest);
 	}
 	
-	private void refreshMemberRequestListData()
+	private void nextMemberRequestListPage()
 	{
-		ArrayList requests=user.GetMemberRequests();
+		ArrayList requests=user.GetMemberRequests(frmMemberRequest.pageId);
 		if(requests!=null && requests.size()>0)
 		{
 			frmMemberRequest.removeAllEntry();
@@ -847,7 +951,25 @@ implements ApplicationInitializer, CommandListener
 				frmMemberRequest.addEntry(new UserItem(r.user.username + " - Nhóm: " 
 				+r.group.groupName + "\n" + r.requestDate,r),"request");
 			}
+			if(configuration.get("pageSize").equals("" + requests.size()))
+				frmMemberRequest.addCommand(cmdNext);
+			else
+				frmMemberRequest.removeCommand(cmdNext);
+			if(frmMemberRequest.pageId==1)
+				frmMemberRequest.addCommand(cmdPrev);
+			if(frmMemberRequest.pageId==0)
+				frmMemberRequest.removeCommand(cmdPrev);
+			frmMemberRequest.pageId++;
 		}
+		else
+		{
+			frmMemberRequest.removeCommand(cmdNext);
+		}
+	}
+	private void prevMemberRequestListPage()
+	{
+		frmMemberRequest.pageId -= 2;
+		nextMemberRequestListPage();
 	}
 	
 	private void openMemberRequestList() {
@@ -859,14 +981,14 @@ implements ApplicationInitializer, CommandListener
 		//frmMemberRequest.addCommand(cmdConfirmAll);
 		//frmMemberRequest.addCommand(cmdRejectAll);
 		frmMemberRequest.addCommand(cmdBack);
-		refreshMemberRequestListData();
+		nextMemberRequestListPage();
 		frmMemberRequest.setCommandListener(this.commandListener);
 		screenHistory.show(frmMemberRequest);
 	}
 
-	private void refreshNewTopicListData()
+	private void nextNewTopicListPage()
 	{
-		ArrayList topics=user.GetNewTopics();
+		ArrayList topics=user.GetNewTopics(frmNewTopic.pageId);
 		if(topics!=null && topics.size()>0)
 		{
 			frmNewTopic.removeAllEntry();
@@ -876,21 +998,39 @@ implements ApplicationInitializer, CommandListener
 				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\n" + t.shareDate,t);
 				frmNewTopic.addEntry(topic,"topic");
 			}
+			if(configuration.get("pageSize").equals("" + topics.size()))
+				frmNewTopic.addCommand(cmdNext);
+			else
+				frmNewTopic.removeCommand(cmdNext);
+			if(frmNewTopic.pageId==1)
+				frmNewTopic.addCommand(cmdPrev);
+			if(frmNewTopic.pageId==0)
+				frmNewTopic.removeCommand(cmdPrev);
+			frmNewTopic.pageId++;
+		}
+		else 
+		{
+			frmNewTopic.removeCommand(cmdNext);
 		}
 	}
 	
+	private void prevNewTopicListPage()
+	{
+		frmNewTopic.pageId -= 2;
+		nextNewTopicListPage();
+	}
 	private void openNewTopicList() {
 		// TODO Auto-generated method stub
 		frmNewTopic = new UserList("Bài viết mới");
 		//frmNewTopic.addCommand(cmdViewTopic);
-		frmNewTopic.addCommand(cmdRefresh);
+		//frmNewTopic.addCommand(cmdRefresh);
 		frmNewTopic.addCommand(cmdViewCreateTopic);
 		frmNewTopic.addCommand(cmdViewSharedTopic);
 		UiAccess.addSubCommand(cmdMyTopic, cmdViewSharedTopic,frmNewTopic);
 		UiAccess.addSubCommand(cmdOthersTopic, cmdViewSharedTopic,frmNewTopic);
 		frmNewTopic.addCommand(cmdViewNonSharedTopic);
 		frmNewTopic.addCommand(cmdBack);
-		refreshNewTopicListData();
+		nextNewTopicListPage();
 		frmNewTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmNewTopic);
 	}
@@ -1043,8 +1183,8 @@ implements ApplicationInitializer, CommandListener
 			openUpdateProfileForm();
 			break;
 		case 6:
-			MessageBox.Show("Chức năng đang xây dựng", AlertType.INFO);
-			//openSettingForm();
+			//MessageBox.Show("Chức năng đang xây dựng", AlertType.INFO);
+			openSettingForm();
 		}
 		return false;
 	}
@@ -1068,8 +1208,7 @@ implements ApplicationInitializer, CommandListener
 	public void initApp() {
 		long initStartTime = System.currentTimeMillis();
 		this.storage = new RmsStorage();
-		this.configuration = configurationLoad();
-		
+		configuration = configurationLoad();
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - initStartTime < 1000) { // show the splash at least for 1000 ms / 1 seconds:
 			try {
@@ -1116,7 +1255,7 @@ implements ApplicationInitializer, CommandListener
 	 */
 	private boolean configurationSave() {
 		try {
-			this.storage.save(this.configuration, Configuration.KEY);
+			this.storage.save(configuration, Configuration.KEY);
 			return true;
 		} catch (IOException e) {
 			//#debug error
@@ -1132,7 +1271,7 @@ implements ApplicationInitializer, CommandListener
 	public void commandAction(Command cmd, Displayable disp) 
 	{
 		if (cmd == this.cmdExit) {
-			if (this.configuration.isDirty()) {
+			if (configuration.isDirty()) {
 			configurationSave();
 			}
 			this.midlet.exit();
@@ -1141,6 +1280,13 @@ implements ApplicationInitializer, CommandListener
 				return;
 			}
 		} else if (cmd == this.cmdBack) {
+			if(disp == frmSetting)
+			{
+				if(txtPageSize.getString()=="" || txtPageSize.getString() == "0")
+					MessageBox.Show("Vui lòng nhập số bản ghi trên một trang > 0");
+				else 
+					configuration.set("pageSize", txtPageSize.getString());
+			}
 			if (this.screenHistory.hasPrevious()) {
 				this.screenHistory.showPrevious();
 			} else {
@@ -1708,7 +1854,7 @@ implements ApplicationInitializer, CommandListener
 		{
 			openNonSharedTopicList();
 		}
-		else if(cmd==cmdRefresh)
+		/*else if(cmd==cmdRefresh)
 		{
 			if(disp==frmGroup)
 				refreshGroupListData();
@@ -1732,7 +1878,80 @@ implements ApplicationInitializer, CommandListener
 			{
 				refreshNonSharedTopicListData();
 			}
-			
+		}*/
+		else if(cmd == cmdNext)
+		{
+			if(disp == frmGroupTopic)
+			{
+				UserList ul = (UserList)this.screenHistory.getPrevious();
+				UserItem item=(UserItem)ul.getCurrentItem();
+				Group g = (Group)item.data;
+				nextGroupTopicListPage(g);
+			}
+			else if(disp == frmGroupMember)
+			{
+				UserList ul = (UserList)this.screenHistory.getPrevious();
+				UserItem item=(UserItem)ul.getCurrentItem();
+				Group g = (Group)item.data;
+				nextGroupMemberListPage(g);
+			}
+			else if(disp == frmSearchGroup)
+			{
+				nextSearchGroupListPage();
+			}
+			else if(disp == frmNewTopic)
+			{
+				nextNewTopicListPage();
+			}
+			else if(disp == frmMemberRequest)
+			{
+				nextMemberRequestListPage();
+			}
+			else if(disp == frmMyGroup)
+			{
+				nextMyGroupListPage();
+			}
+			else if(disp == frmGroup)
+			{
+				nextGroupListPage();
+			}
+		}
+		else if(cmd == cmdPrev)
+		{
+			if(disp == frmGroupTopic)
+			{
+				UserList ul = (UserList)this.screenHistory.getPrevious();
+				UserItem item=(UserItem)ul.getCurrentItem();
+				Group g = (Group)item.data;
+				prevGroupTopicListPage(g);
+			}
+			else if(disp == frmGroupMember)
+			{
+				UserList ul = (UserList)this.screenHistory.getPrevious();
+				UserItem item=(UserItem)ul.getCurrentItem();
+				Group g = (Group)item.data;
+				prevGroupMemberListPage(g);
+			}
+			else if(disp == frmSearchGroup)
+			{
+				prevSearchGroupListPage();
+			}
+			else if(disp == frmNewTopic)
+			{
+				prevNewTopicListPage();
+			}
+			else if(disp == frmMemberRequest)
+			{
+				prevMemberRequestListPage();
+			}
+			else if(disp == frmMyGroup)
+			{
+				prevMyGroupListPage();
+			}
+			else if(disp == frmGroup)
+			{
+				prevGroupListPage();
+			}
 		}
 	}
 }
