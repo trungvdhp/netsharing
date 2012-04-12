@@ -4,6 +4,7 @@ package model;
 //import de.enough.polish.ui.Display;
 //import de.enough.polish.ui.Displayable;
 //import de.enough.polish.ui.AlertType;
+import control.Controller;
 import de.enough.polish.util.ArrayList;
 
 import util.UtilString;
@@ -148,15 +149,15 @@ public class User {
 		}
 	}
 	//Danh sách các bài viết mới
-	public ArrayList GetNewTopics()
+	public ArrayList GetNewTopics(int pageId)
 	{
 		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"DanhSachBaiVietMoi", this.userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId"},
+					new String[] {"DanhSachBaiVietMoi", this.userId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -280,15 +281,15 @@ public class User {
 		}
 	}
 	//Lấy danh sách các nhóm mà bạn là nhóm trưởng
-	public ArrayList GetMyGroups()
+	public ArrayList GetMyGroups(int pageId)
 	{
 		ArrayList data = new ArrayList();
 		groups=new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"NhomBanTao", userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId"},
+					new String[] {"NhomBanTao", userId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -408,21 +409,16 @@ public class User {
 		}
 	}
 	//Lấy danh sách tất cả các nhóm có bạn la thanh vien
-	public ArrayList GetGroups()
+	public ArrayList GetGroups(int pageId)
 	{
-		return this.GetGroups(true);
-	}
-	public ArrayList GetGroups(boolean refresh)
-	{
-		if(groups!=null&&!refresh) return groups;
 		groups=new ArrayList();
 		ArrayList data = new ArrayList();	
 		try
 		{
 			
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"NhomBanLaThanhVien", userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId"},
+					new String[] {"NhomBanLaThanhVien", userId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -449,15 +445,15 @@ public class User {
 		}
 	}
 	//Lấy danh sách các yêu cầu tham gia
-	public ArrayList GetMemberRequests()
+	public ArrayList GetMemberRequests(int pageId)
 	{
 		requests=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"DanhSachYeuCauThamGiaNhomCuaBan", userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId"},
+					new String[] {"DanhSachYeuCauThamGiaNhomCuaBan", userId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -649,14 +645,14 @@ public class User {
 	{
 		return Comment.Delete(c);
 	}
-	public ArrayList SearchGroup(String keyword)
+	public ArrayList SearchGroup(String keyword, int pageId)
 	{
 		ArrayList groups=new ArrayList();
 		try
 		{
 			String s=Html.SendRequest("", 
-					new String[]{"CVM","xTuKhoa","xMaTaiKhoan"},
-					new String[]{"TimKiemNhom",keyword,this.userId}
+					new String[]{"CVM","xTuKhoa","xMaTaiKhoan","xPageSize","xPageId"},
+					new String[]{"TimKiemNhom",keyword,this.userId, Controller.configuration.get("pageSize"), "" + pageId}
 			);
 			if(s.indexOf("false")>=0)
 				return groups;
