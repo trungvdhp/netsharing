@@ -243,12 +243,15 @@ switch ($Case){
     }
 	case "DanhSachYeuCauThamGiaNhom": {
     	$MaNhom = $_REQUEST["xMaNhom"];
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
     	if ($MaNhom != "") {
 			$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.TaiKhoan, tk.MaTaiKhoan, n.MaNhom, n.TenNhom, tkn.NgayVaoNhom 
 						FROM taikhoan_nhom tkn 
 							INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan 
 							INNER JOIN nhom n ON tkn.MaNhom = n.MaNhom 
-						WHERE tkn.TrangThai = 0 AND tkn.MaNhom = '".$MaNhom."'";
+						WHERE tkn.TrangThai = 0 AND tkn.MaNhom = '".$MaNhom."' LIMIT $Id, $PageSize";
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			if (mysql_num_rows($resultTaiKhoan_Nhom) > 0) {
 				while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
@@ -267,13 +270,16 @@ switch ($Case){
     case "DanhSachYeuCauThamGiaNhomCuaBan": {
     	$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
     	$CountTaiKhoan_Nhom = 0;
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
     	if ($MaTaiKhoan != "") {
     		$sqlNhom = "SELECT MaNhom FROM nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."'";
     		$resultNhom = mysql_query($sqlNhom) or die("Lệnh truy vấn không chính xác!");
     		if (mysql_num_rows($resultNhom) > 0) {
     			while ($rowNhom = mysql_fetch_array($resultNhom)) {
     				$MaNhom = $rowNhom["MaNhom"];
-    				$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.TaiKhoan, tk.MaTaiKhoan, n.MaNhom, n.TenNhom, tkn.NgayVaoNhom FROM taikhoan_nhom tkn INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan INNER JOIN nhom n ON tkn.MaNhom = n.MaNhom WHERE tkn.TrangThai = 0 AND tkn.MaNhom = '".$MaNhom."' AND tkn.MaTaiKhoan <>'".$MaTaiKhoan."'";
+    				$sqlTaiKhoan_Nhom = "SELECT tkn.MaTaiKhoan_Nhom, tk.TaiKhoan, tk.MaTaiKhoan, n.MaNhom, n.TenNhom, tkn.NgayVaoNhom FROM taikhoan_nhom tkn INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan INNER JOIN nhom n ON tkn.MaNhom = n.MaNhom WHERE tkn.TrangThai = 0 AND tkn.MaNhom = '".$MaNhom."' AND tkn.MaTaiKhoan <>'".$MaTaiKhoan."' LIMIT $Id, $PageSize";
     				$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
     				if (mysql_num_rows($resultTaiKhoan_Nhom) > 0) {
 	    				$CountTaiKhoan_Nhom += mysql_num_rows($resultTaiKhoan_Nhom);
@@ -317,6 +323,9 @@ switch ($Case){
     }
 	case "DanhSachThanhVienNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
 		if ($MaNhom != "") {
 			$sqlTruongNhom = "SELECT tk.TaiKhoan, tk.MaTaiKhoan, n.NgayTao
 					FROM nhom n INNER JOIN taikhoan tk ON n.MaTaiKhoan = tk.MaTaiKhoan  
@@ -332,7 +341,7 @@ switch ($Case){
 			}
 			$sqlThanhVien = "SELECT tk.MaTaiKhoan, tk.TaiKhoan, tkn.NgayVaoNhom
 					FROM taikhoan_nhom tkn INNER JOIN taikhoan tk ON tkn.MaTaiKhoan = tk.MaTaiKhoan 
-					WHERE tkn.MaNhom = '".$MaNhom."' AND tkn.TrangThai = 1 AND tkn.MaTaiKhoan != '".$MaTruongNhom."'";
+					WHERE tkn.MaNhom = '".$MaNhom."' AND tkn.TrangThai = 1 AND tkn.MaTaiKhoan != '".$MaTruongNhom."' LIMIT $Id, $PageSize";
 			$resultThanhVien = mysql_query($sqlThanhVien) or die("Lệnh truy vấn không chính xác! 21");
 			if (mysql_num_rows($resultThanhVien) > 0) {
 				while ($rowThanhVien = mysql_fetch_array($resultThanhVien)) {
@@ -349,8 +358,11 @@ switch ($Case){
 	case "TimKiemNhom": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		$TuKhoa = $_REQUEST['xTuKhoa'];
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
 		if ($MaTaiKhoan != "") {
-			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, tk.TaiKhoan,n.NgayTao  FROM nhom n INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan WHERE TenNhom LIKE '%".$TuKhoa."%' AND MaNhom NOT IN (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."')";
+			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, tk.TaiKhoan,n.NgayTao  FROM nhom n INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan WHERE TenNhom LIKE '%".$TuKhoa."%' AND MaNhom NOT IN (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."') LIMIT $Id, $PageSize";
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
 				echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
@@ -366,8 +378,11 @@ switch ($Case){
     }
 	case "NhomBanLaThanhVien": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
 		if ($MaTaiKhoan != "") {
-			$sqlTaiKhoan_Nhom = "SELECT tkn.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' and TrangThai = 1) tkn INNER JOIN nhom n ON n.MaNhom = tkn.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan";
+			$sqlTaiKhoan_Nhom = "SELECT tkn.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' and TrangThai = 1) tkn INNER JOIN nhom n ON n.MaNhom = tkn.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan LIMIT $Id, $PageSize";
 ;
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
@@ -383,9 +398,11 @@ switch ($Case){
 	}
 	case "NhomBanTao": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
 		if ($MaTaiKhoan != "") {
-			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM nhom n INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."'";
-;
+			$sqlTaiKhoan_Nhom = "SELECT n.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM nhom n INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan WHERE tk.MaTaiKhoan = '".$MaTaiKhoan."' LIMIT $Id, $PageSize";
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
 				echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
@@ -402,7 +419,6 @@ switch ($Case){
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 		if ($MaTaiKhoan != "") {
 			$sqlTaiKhoan_Nhom = "SELECT tkn.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' and TrangThai = 1 and MaNhom NOT IN(SELECT MaNhom FROM nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."'))tkn INNER JOIN nhom n ON n.MaNhom = tkn.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan";
-;
 			$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 			while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
 				echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
@@ -451,8 +467,11 @@ switch ($Case){
     }
 	case "DanhSachBaiVietTheoNhom": {
 		$MaNhom = $_REQUEST["xMaNhom"];
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
 		if ($MaNhom != "") {
-			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan WHERE bvn.MaNhom = '".$MaNhom."' AND bvn.TrangThai = 1 ORDER BY MaBaiViet_Nhom DESC";
+			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan WHERE bvn.MaNhom = '".$MaNhom."' AND bvn.TrangThai = 1 ORDER BY MaBaiViet_Nhom DESC LIMIT $Id, $PageSize";
 			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
 			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
 				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
@@ -638,6 +657,9 @@ switch ($Case){
     }
 	case "DanhSachBaiVietMoi": {
 		$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
+		$PageSize = $_REQUEST["xPageSize"];
+		$PageId = $_REQUEST["xPageId"];
+		$Id = $PageId * $PageSize;
 		if ($MaTaiKhoan != "") {
 			$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe
 							FROM baiviet_nhom bvn 
@@ -645,7 +667,7 @@ switch ($Case){
 								INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan  
 								INNER JOIN baivietmoi bvm ON bvm.MaBaiViet_Nhom=bvn.MaBaiViet_Nhom
 							WHERE bvm.MaTaiKhoan='$MaTaiKhoan' AND bvn.TrangThai = 1 
-							ORDER BY MaBaiVietMoi DESC";
+							ORDER BY MaBaiVietMoi DESC LIMIT $Id, $PageSize";
 			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
 			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
 				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
