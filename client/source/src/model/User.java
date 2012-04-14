@@ -149,15 +149,16 @@ public class User {
 		}
 	}
 	//Danh sách các bài viết mới
-	public ArrayList GetNewTopics(int pageId)
+	public ArrayList GetNewTopics(int pageId, Topic topic)
 	{
 		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId"},
-					new String[] {"DanhSachBaiVietMoi", this.userId, Controller.configuration.get("pageSize"), "" + pageId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTieuDe","xNoiDung","xTaiKhoan"},
+					new String[] {"DanhSachBaiVietMoi", this.userId, Controller.configuration.get("pageSize"), "" + pageId,
+					topic.title, topic.content, topic.author.username}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -188,15 +189,16 @@ public class User {
 		}
 	}
 	//Lấy danh sách các bài viết đã chia sẻ do bạn tạo
-	public ArrayList GetSharedMyTopics()
+	public ArrayList GetSharedMyTopics(int pageId, Topic topic)
 	{
 		ArrayList data = new ArrayList();	
 		topics = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"BaiVietDaChiaSeBanTao", userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTieuDe","xNoiDung"},
+					new String[] {"BaiVietBanTaoVaChiaSe", userId, Controller.configuration.get("pageSize"), "" + pageId,
+					topic.title, topic.content}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -219,15 +221,16 @@ public class User {
 		}
 	}
 	//Lấy danh sách các bài viết đã chia sẻ không phải do bạn tạo
-	public ArrayList GetSharedOthersTopics()
+	public ArrayList GetSharedOthersTopics(int pageId, Topic topic)
 	{
 		ArrayList data = new ArrayList();	
 		topics = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"BaiVietDaChiaSeNguoiKhacTao", userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTieuDe","xNoiDung","xTaiKhoan"},
+					new String[] {"BaiVietNguoiKhacChiaSe", userId, Controller.configuration.get("pageSize"), "" + pageId,
+					topic.title, topic.content, topic.author.username}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -250,15 +253,16 @@ public class User {
 		}
 	}
 	//Lấy danh sách các bài viết chưa chia sẻ của bạn
-	public ArrayList GetNonSharedTopics()
+	public ArrayList GetNonSharedTopics(int pageId, Topic topic)
 	{
 		ArrayList data = new ArrayList();	
 		topics = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"BaiVietChuaChiaSe", userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTieuDe","xNoiDung"},
+					new String[] {"BaiVietBanChuaChiaSe", userId, Controller.configuration.get("pageSize"), "" + pageId,
+					topic.title, topic.content}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -281,15 +285,15 @@ public class User {
 		}
 	}
 	//Lấy danh sách các nhóm mà bạn là nhóm trưởng
-	public ArrayList GetMyGroups(int pageId)
+	public ArrayList GetMyGroups(int pageId, Group group)
 	{
 		ArrayList data = new ArrayList();
 		groups=new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId"},
-					new String[] {"NhomBanTao", userId, Controller.configuration.get("pageSize"), "" + pageId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId", "xTenNhom"},
+					new String[] {"NhomBanTao", userId, Controller.configuration.get("pageSize"), "" + pageId, group.groupName}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -313,15 +317,16 @@ public class User {
 		}
 	}
 	//Lấy danh sách các nhóm có bạn tham gia
-	public ArrayList GetJoinGroups()
+	public ArrayList GetJoinGroups(int pageId, Group group)
 	{
 		ArrayList data = new ArrayList();
 		groups=new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan"},
-					new String[] {"NhomBanThamGia", userId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTenNhom","xTaiKhoan"},
+					new String[] {"NhomBanThamGia", userId, Controller.configuration.get("pageSize"), "" + pageId,
+					group.groupName, group.leader.username}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -345,15 +350,15 @@ public class User {
 		}
 	}
 	//Lấy danh sách các nhóm bạn đã chia sẻ bài viết
-	public ArrayList GetSharedGroups(Topic t)
+	public ArrayList GetSharedGroups(Topic t, int pageId)
 	{
 		ArrayList data = new ArrayList();
 		groups=new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan","xMaBaiViet"},
-					new String[] {"NhomDaChiaSe", userId, t.topicId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xMaBaiViet","xPageSize","xPageId"},
+					new String[] {"NhomDaChiaSe", userId, t.topicId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -377,15 +382,15 @@ public class User {
 		}
 	}
 	//Lấy danh sách các nhóm bạn chưa chia sẻ bài viết
-	public ArrayList GetNonSharedGroups(Topic t)
+	public ArrayList GetNonSharedGroups(Topic t, int pageId)
 	{
 		ArrayList data = new ArrayList();
 		groups=new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan","xMaBaiViet"},
-					new String[] {"NhomChuaChiaSe", userId, t.topicId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xMaBaiViet","xPageSize","xPageId"},
+					new String[] {"NhomChuaChiaSe", userId, t.topicId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -409,7 +414,7 @@ public class User {
 		}
 	}
 	//Lấy danh sách tất cả các nhóm có bạn la thanh vien
-	public ArrayList GetGroups(int pageId)
+	public ArrayList GetGroups(int pageId, Group group)
 	{
 		groups=new ArrayList();
 		ArrayList data = new ArrayList();	
@@ -417,8 +422,9 @@ public class User {
 		{
 			
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId"},
-					new String[] {"NhomBanLaThanhVien", userId, Controller.configuration.get("pageSize"), "" + pageId}
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTenNhom","xTaiKhoan"},
+					new String[] {"NhomBanLaThanhVien", userId, Controller.configuration.get("pageSize"), "" + pageId,
+					group.groupName, group.leader.username}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
@@ -550,6 +556,22 @@ public class User {
 			String data=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMatKhau"},
 					new String[] {"DoiMatKhau",userId,password}
+					);
+			if(data.indexOf("false") >= 0)
+				return false;
+			return true;
+		}
+		catch(Exception ex)		{
+			return false;
+		}
+	}
+	public boolean DeleteMember(Group g)
+	{
+		try
+		{
+			String data=Html.SendRequest("",
+					new String[] {"CVM","xMaTaiKhoan","xMaNhom"},
+					new String[] {"HuyTuCach",userId,g.groupId}
 					);
 			if(data.indexOf("false") >= 0)
 				return false;

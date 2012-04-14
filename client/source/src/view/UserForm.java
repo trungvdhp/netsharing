@@ -13,11 +13,28 @@ import de.enough.polish.ui.Command;
 public class UserForm extends Form
 {
 	public Object data;
-	public int[] pageId;	
+	public int[] pageId;
+	public int id;
+	public UserForm(String title) {
+		//#style userForm
+		super(title);
+		pageId = new int[]{0, 0};
+		id=0;
+	}
 	public UserForm(String title,Object data) {
 		//#style userForm
 		super(title);
 		this.data=data;
+		pageId = new int[]{0, 0};
+		id=0;
+		// TODO Auto-generated constructor stub
+	}
+	public UserForm(String title,Object data, int id) {
+		//#style userForm
+		super(title);
+		this.data=data;
+		pageId = new int[]{0, 0};
+		this.id=id;
 		// TODO Auto-generated constructor stub
 	}
 	public void addTextField(TextField text)

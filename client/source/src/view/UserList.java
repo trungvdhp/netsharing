@@ -8,6 +8,7 @@ import model.GroupTopic;
 import control.UserItem;
 //import de.enough.polish.ui.Display;
 //import de.enough.polish.ui.Displayable;
+import de.enough.polish.ui.Command;
 import de.enough.polish.ui.Item;
 import de.enough.polish.ui.List;
 import de.enough.polish.util.ArrayList;
@@ -15,13 +16,45 @@ import de.enough.polish.util.ArrayList;
 public class UserList extends List{
 	private ArrayList items;
 	public int pageId;
-	public UserList(String title) {
-		
+	public int id;
+	public Object data;
+	public UserList(String title) 
+	{
 		//#style userList
 		super(title,List.IMPLICIT);
 		// TODO Auto-generated constructor stub
 		items=new ArrayList();
 		pageId = 0;
+		id = 0;
+	}
+	public UserList(String title, Object data) 
+	{
+		//#style userList
+		super(title,List.IMPLICIT);
+		// TODO Auto-generated constructor stub
+		items=new ArrayList();
+		pageId = 0;
+		id = 0;
+		this.data = data;
+	}
+	public UserList(String title, int id) 
+	{
+		//#style userList
+		super(title,List.IMPLICIT);
+		// TODO Auto-generated constructor stub
+		items=new ArrayList();
+		pageId = 0;
+		this.id = id;
+	}
+	public UserList(String title, Object data, int id) 
+	{
+		//#style userList
+		super(title,List.IMPLICIT);
+		// TODO Auto-generated constructor stub
+		items=new ArrayList();
+		pageId = 0;
+		this.id = id;
+		this.data = data;
 	}
 	public void addEntry(String item)
 	{
@@ -29,9 +62,14 @@ public class UserList extends List{
 		this.append(item, null);
 		
 	}
+	public void addMenu(Command cmd)
+	{
+		addCommand(cmd);
+	}
 	public void removeAllEntry()
 	{
 		this.deleteAll();
+		items.clear();
 	}
 	public void addEntry(UserItem item,String type)
 	{

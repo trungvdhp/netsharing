@@ -146,15 +146,16 @@ public class Group {
 			return requests;
 		}
 	}
-	public ArrayList GetTopics(int pageId)
+	public ArrayList GetTopics(int pageId, Topic topic)
 	{
 		topics=new ArrayList();
 		ArrayList data = new ArrayList();		
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaNhom","xPageSize","xPageId"},
-					new String[] {"DanhSachBaiVietTheoNhom", groupId, Controller.configuration.get("pageSize"), "" + pageId}
+					new String[] {Constants.Case,"xMaNhom","xPageSize","xPageId","xTieuDe","xNoiDung","xTaiKhoan"},
+					new String[] {"DanhSachBaiVietTheoNhom", groupId, Controller.configuration.get("pageSize"), "" + pageId,
+					topic.title, topic.content, topic.author.username}
 					);
 			if(s.indexOf("false")>=0)
 				return null;

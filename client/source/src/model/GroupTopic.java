@@ -1,4 +1,5 @@
 package model;
+import control.Controller;
 import util.UtilString;
 import base.Constants;
 import de.enough.polish.util.ArrayList;
@@ -24,16 +25,21 @@ public class GroupTopic {
 		this.shareDate = shareDate;
 		this.commentsCount = commentsCount;
 	}
-	
-	public boolean GetDetails()
+	public GroupTopic(String title, String content, String createUsername, String shareUsername)
+	{
+		this.topic = new Topic(title,content);
+		this.topic.author.username = createUsername;
+		this.shareUser.username = shareUsername;
+	}
+	public boolean GetDetails(int pageId)
 	{
 		ArrayList data = new ArrayList();
 		comments = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaBaiViet_Nhom"},
-					new String[] {"DanhSachBinhLuanBaiViet", groupTopicId}
+					new String[] {Constants.Case,"xMaBaiViet_Nhom","xPageSize","xPageId"},
+					new String[] {"DanhSachBinhLuanBaiViet", groupTopicId, Controller.configuration.get("pageSize"), "" + pageId}
 					);
 			if(s.indexOf("false")>=0)
 				return false;

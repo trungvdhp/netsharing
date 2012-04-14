@@ -13,7 +13,12 @@ public class Topic {
 	{
 		this.topicId=topicId;
 	}
-	
+	public Topic(String title, String content, User author)
+	{
+		this.title = title;
+		this.content = content;
+		this.author = author;
+	}
 	public Topic(String title, String content)
 	{
 		this.title = title;
@@ -155,7 +160,7 @@ public class Topic {
 		{
 			String buf=Html.SendRequest("",
 					new String[] {"CVM","xMaTaiKhoan","xMaBaiViet", "xMaNhom"},
-					new String[] {"ChiaSeBaiViet",u.userId, this.topicId, groupIds}
+					new String[] {"ChiaSeBaiVietCacNhom",u.userId, this.topicId, groupIds}
 					);
 			if(buf.indexOf("false")>=0) return false;
 			return true;
