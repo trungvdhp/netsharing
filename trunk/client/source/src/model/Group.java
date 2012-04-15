@@ -85,15 +85,15 @@ public class Group {
 		}
 	}
 	
-	public ArrayList GetMembers(int pageId)
+	public ArrayList GetMembers(int pageId, String tuKhoa)
 	{
 		ArrayList data = new ArrayList();
 		members = new ArrayList();
 		try
 		{
 			String s = Html.SendRequest("",
-					new String[] {Constants.Case,"xMaNhom","xPageSize","xPageId"},
-					new String[] {"DanhSachThanhVienNhom", groupId, Controller.configuration.get("pageSize"), "" + pageId}
+					new String[] {Constants.Case,"xMaNhom","xPageSize","xPageId","xTuKhoa"},
+					new String[] {"DanhSachThanhVienNhom", groupId, Controller.configuration.get("pageSize"), "" + pageId, tuKhoa}
 					);
 			if(s.indexOf("false")>=0)
 				return null;
