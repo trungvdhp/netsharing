@@ -700,7 +700,35 @@ public class User {
 		}
 		return groups;
 	}
-
+	
+	public ArrayList SearchMembers(int pageId, String tuKhoa)
+	{
+		ArrayList data = new ArrayList();
+		ArrayList members = new ArrayList();
+		try
+		{
+			String s = Html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTuKhoa"},
+					new String[] {"TimKiemThanhVien", userId, Controller.configuration.get("pageSize"), "" + pageId, tuKhoa}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			while(i<len)
+			{
+				User t = new User(data.get(i).toString(),data.get(i+1).toString(),"");
+				members.add(t);
+				i += 2;
+			}
+			return members;
+		}
+		catch(Exception ex)
+		{
+			return members;
+		}
+	}
 	public boolean ViewedNewTopic(GroupTopic t) {
 		try
 		{

@@ -86,7 +86,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtCreateUsername = new TextField("Người tạo: ","", 50,TextField.ANY);
 	private TextField txtShareUsername = new TextField("Người chia sẻ: ","", 50,TextField.ANY);
 	
-	private TextField txtSearch = new TextField("Từ khóa: ","", 50,TextField.ANY);
+	private TextField txtKeyword = new TextField("Từ khóa: ","", 50,TextField.ANY);
 	private TextField txtTitle = new TextField("Tiêu đề: ","", 100,TextField.ANY);
 	private TextField txtContent = new TextField("Nội dung: ","", 512,TextField.ANY);
 	private TextField txtGroupName = new TextField("Tên nhóm: ","", 50,TextField.ANY);
@@ -182,10 +182,8 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdDeleteMember = new Command("Hủy tư cách", Command.SCREEN,1);
 	
 	private User user;
-	private GroupTopic grouptopic;
 	private Group group;
 	private Topic topic;
-	private User member;
 	private MainMenuList screenMainMenu;
 	private SimpleScreenHistory screenHistory;
 	
@@ -207,6 +205,7 @@ implements ApplicationInitializer, CommandListener
 	private UserForm frmSearch;
 	private UserForm frmSearchGroup;
 	private UserForm frmSearchTopic;
+	private UserForm frmSearchMember;
 	private UserForm frmSetting;
 	//private UserForm frmJoinRequestDetail;
 	//private Alert frmConfirmDelGroup;
@@ -215,29 +214,41 @@ implements ApplicationInitializer, CommandListener
 	private Alert frmConfirmDelMember;
 	
 	private UserList frmGroup;
-	private UserList frmMyGroup;
-	private UserList frmJoinGroup;
 	private UserList frmSearchGroupResult;
 	private UserList frmGroupRequest;
 	private UserList frmGroupMember;
+	private UserList frmSearchMemberResult;
 	private UserList frmTopic;
 	private UserList frmNonSharedTopic;
 	private UserList frmMemberRequest;
 
+	//Mở form tìm kiếm chung
 	private void openSearchForm() {
 		// TODO Auto-generated method stub
 		frmSearch=new UserForm("Tìm kiếm",null);
-		frmSearch.addTextField(txtSearch);
 		//#style checkBoxItem
 		cgSearchType = new ChoiceGroup("Chọn loại tìm kiếm: ", ChoiceGroup.EXCLUSIVE);
-		cgSearchType.append(" Nhóm chưa tham gia", null);
-		cgSearchType.append(" Bài viết",null);
+		cgSearchType.append(" Nhóm bạn chưa tham gia", null);
+		cgSearchType.append(" Bài viết nhóm",null);
 		cgSearchType.append(" Thành viên",null);
 		frmSearch.addCheckBox(cgSearchType);
+		cgSearchType.setSelectedIndex(0, true);
+		frmSearch.addTextField(txtKeyword);
+		txtKeyword.setString("");
 		frmSearch.addMenu(cmdConfirm);
 		frmSearch.addMenu(cmdBack);
 		screenHistory.show(frmSearch);
 		frmSearch.setCommandListener(this.commandListener);
+	}
+	//Mở form tìm kiếm thành viên
+	private void openSearchMemberForm() {
+		// TODO Auto-generated method stub
+		frmSearchMember=new UserForm("Tìm kiếm thành viên",null);
+		frmSearchMember.addTextField(txtKeyword);
+		frmSearchMember.addMenu(cmdConfirm);
+		frmSearchMember.addMenu(cmdBack);
+		screenHistory.show(frmSearchMember);
+		frmSearchMember.setCommandListener(this.commandListener);
 	}
 	//Mở form tìm kiếm nhóm
 	private void openSearchGroupFrom()
@@ -576,6 +587,7 @@ implements ApplicationInitializer, CommandListener
 		frmShareTopic.addMenu(cmdViewGroupInfo);
 		frmShareTopic.addMenu(cmdViewGroupMember);
 		frmShareTopic.addMenu(cmdBack);
+		group = new Group("","",new User("",""));
 		nextNonSharedGroupPageForShare(t);
 		frmShareTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmShareTopic);
@@ -675,6 +687,7 @@ implements ApplicationInitializer, CommandListener
 		frmCreateAndShareTopic.addMenu(cmdViewGroupInfo);
 		frmCreateAndShareTopic.addMenu(cmdViewGroupMember);
 		frmCreateAndShareTopic.addMenu(cmdBack);
+		group = new Group("","",new User("",""));
 		nextNonSharedGroupPageForCreate();
 		frmCreateAndShareTopic.setCommandListener(this.commandListener);
 		screenHistory.show(frmCreateAndShareTopic);
@@ -874,10 +887,10 @@ implements ApplicationInitializer, CommandListener
 		frmGroup.pageId = 0;
 		nextJoinGroupListPage();
 	}
-	
+	//Hiển thị trang các nhóm bạn chưa tham gia tiếp theo
 	private void nextSearchGroupListPage()
 	{
-		ArrayList groups = user.SearchGroup(txtSearch.getString(), frmSearchGroupResult.pageId);
+		ArrayList groups = user.SearchGroup(txtKeyword.getString(), frmSearchGroupResult.pageId);
 		if(groups!=null && groups.size()>0)
 		{
 			frmSearchGroupResult.removeAllEntry();
@@ -901,6 +914,7 @@ implements ApplicationInitializer, CommandListener
 			frmSearchGroupResult.removeCommand(cmdNext);
 		}
 	}
+	//Hiển thị trang các nhóm bạn chưa tham gia trước đó
 	private void prevSearchGroupListPage()
 	{
 		frmSearchGroupResult.pageId -= 2;
@@ -915,14 +929,56 @@ implements ApplicationInitializer, CommandListener
 		frmSearchGroupResult.setCommandListener(this.commandListener);
 		screenHistory.show(frmSearchGroupResult);
 	}
-	//Hiển thị trang danh sách thành viên tiếp theo
+	//Hiển thị trang các thành viên tìm được tiếp theo
+	private void nextSearchMemberListPage()
+	{
+		ArrayList members = user.SearchMembers(frmSearchMemberResult.pageId, txtKeyword.getString());
+		if(members!=null && members.size()>0)
+		{
+			for(int i=0;i<members.size();i++)
+			{
+				User u=(User)members.get(i);
+				frmSearchMemberResult.addEntry(new UserItem(u.username,u),"user");
+			}
+			if(configuration.get("pageSize").equals("" + (members.size() - 1)))
+				frmSearchMemberResult.addMenu(cmdNext);
+			else
+				frmSearchMemberResult.removeCommand(cmdNext);
+			if(frmSearchMemberResult.pageId==1)
+				frmSearchMemberResult.addMenu(cmdPrev);
+			if(frmSearchMemberResult.pageId==0)
+				frmSearchMemberResult.removeCommand(cmdPrev);
+			frmSearchMemberResult.pageId++;
+		}
+		else
+		{
+			frmSearchMemberResult.removeCommand(cmdNext);
+		}
+	}
+	//Hiển thị trang các thành viên tìm được trước đó
+	private void prevSearchMemberListPage()
+	{
+		frmSearchMemberResult.pageId -= 2;
+		nextSearchMemberListPage();
+	}
+	//Mở form danh sách thành viên tìm kiếm được
+	private void openSearchMemberList()
+	{
+		frmSearchMemberResult=new UserList("Kết quả tìm kiếm thành viên");
+		frmSearchMemberResult.addMenu(cmdBack);
+		nextSearchMemberListPage();
+		frmSearchMemberResult.setCommandListener(this.commandListener);
+		screenHistory.show(frmSearchMemberResult);
+	}
+	//Hiển thị trang danh sách thành viên nhóm tiếp theo
 	private void nextGroupMemberListPage(Group group)
 	{
-		ArrayList members = group.GetMembers(frmGroupMember.pageId);
+		ArrayList members = group.GetMembers(frmGroupMember.pageId, txtKeyword.getString());
 		User u=(User)members.get(0);
 		if(members.size() > 1)
 			frmGroupMember.removeAllEntry();
-		frmGroupMember.addEntry(new UserItem(u.username + " - Trưởng nhóm",u),"leader");
+		if(frmGroupMember.size() == 0) 
+			frmGroupMember.addEntry(new UserItem(u.username + " - Trưởng nhóm",u),"leader");
 		if(members.size()==1)
 		{
 			frmGroupMember.removeCommand(cmdNext);
@@ -943,21 +999,30 @@ implements ApplicationInitializer, CommandListener
 			frmGroupMember.removeCommand(cmdPrev);
 		frmGroupMember.pageId++;
 	}
-	//Hiển thị trang danh sách thành viên trước đó
+	//Hiển thị trang danh sách thành viên nhóm trước đó
 	private void prevGroupMemberListPage(Group group)
 	{
 		frmGroupMember.pageId -= 2;
 		nextGroupMemberListPage(group);
 	}
-	//Mở form danh sách thành viên nhóm
-	private void openGroupMemberList(Group group)
+	//Khởi tạo form danh sách thành viên nhóm
+	private void initGroupMemberList(Group group)
 	{
 		frmGroupMember=new UserList("Thành viên nhóm: " + group.groupName, group);
+		frmGroupMember.addMenu(cmdViewSearch);
 		frmGroupMember.addMenu(cmdDeleteMember);
 		frmGroupMember.addMenu(cmdBack);
+		txtKeyword.setString("");
 		nextGroupMemberListPage(group);
 		frmGroupMember.setCommandListener(this.commandListener);
 		screenHistory.show(frmGroupMember);
+	}
+	//Mở form danh sách thành viên nhóm
+	private void openGroupMemberList(Group group)
+	{
+		frmGroupMember.pageId = 0;
+		frmGroupMember.removeAllEntry();
+		nextGroupMemberListPage(group);
 	}
 	//Hiển thị danh sách bài viết nhóm
 	private void addGroupTopicList(ArrayList topics)
@@ -1398,32 +1463,6 @@ implements ApplicationInitializer, CommandListener
 	 */
 	public void commandAction(Command cmd, Displayable disp) 
 	{
-		if(disp == frmSearch)
-		{
-			int id = cgSearchType.focusedIndex;
-			for(int j=1; j<frmSearch.size(); j++)
-			{
-				frmSearch.delete(j);
-			}
-			if(id==0)
-			{
-				frmSearch.addTextField(txtTitle);
-				txtTitle.setString("");
-				frmSearch.addTextBox(txtContent);
-				txtContent.setString("");
-				frmSearch.addTextField(txtCreateUsername);
-				txtCreateUsername.setString("");
-				frmSearch.addTextField(txtShareUsername);
-				txtShareUsername.setString("");
-			}
-			else if(id==1)
-			{
-				frmSearch.addTextField(txtGroupName);
-				txtGroupName.setString("");
-				frmSearch.addTextBox(txtDescription);
-				txtDescription.setString("");
-			}
-		}
 		if (cmd == this.cmdExit) {
 			if (configuration.isDirty()) {
 			configurationSave();
@@ -1788,7 +1827,17 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmSearch)
 			{
-				openSearchGroupList();
+				int i = cgSearchType.getSelectedIndex();
+				if(i==0)
+					openSearchGroupList();
+				else if(i==1)
+				{
+					MessageBox.Show("1");
+				}
+				else if(i==2)
+				{
+					openSearchMemberList();
+				}
 			}
 			else if(disp==frmSearchTopic)
 			{
@@ -1820,6 +1869,11 @@ implements ApplicationInitializer, CommandListener
 				else if(id==2)
 					openMyGroupList();
 				screenHistory.show(frmGroup);
+			}
+			else if(disp==frmSearchMember)
+			{
+				openGroupMemberList((Group)frmGroupMember.data);
+				screenHistory.show(frmGroupMember);
 			}
 		}
 		else if(cmd==List.SELECT_COMMAND)
@@ -1864,6 +1918,12 @@ implements ApplicationInitializer, CommandListener
 				UserItem item=(UserItem)frmSearchGroupResult.getCurrentItem();
 				Group g=(Group)item.data;
 				openGroupInfoForm(g);
+			}
+			else if(disp==frmSearchMemberResult)
+			{
+				UserItem item=(UserItem)frmSearchMemberResult.getCurrentItem();
+				User u=(User)item.data;
+				openMemberProfileForm(u);
 			}
 			else if(disp==frmGroupMember)
 			{
@@ -1969,7 +2029,7 @@ implements ApplicationInitializer, CommandListener
 				item=(UserItem)ul.getCurrentItem();
 			}
 			Group g=(Group)item.data;
-			openGroupMemberList(g);
+			initGroupMemberList(g);
 		}
 		else if(cmd==cmdViewGroupRequest)
 		{
@@ -2085,6 +2145,10 @@ implements ApplicationInitializer, CommandListener
 			{
 				nextSearchGroupListPage();
 			}
+			else if(disp == frmSearchMemberResult)
+			{
+				nextSearchMemberListPage();
+			}
 			else if(disp == frmTopic)
 			{
 				int id = frmTopic.id;
@@ -2146,6 +2210,10 @@ implements ApplicationInitializer, CommandListener
 			else if(disp == frmSearchGroupResult)
 			{
 				prevSearchGroupListPage();
+			}
+			else if(disp == frmSearchMemberResult)
+			{
+				prevSearchMemberListPage();
 			}
 			else if(disp == frmTopic)
 			{
@@ -2222,6 +2290,8 @@ implements ApplicationInitializer, CommandListener
 				openSearchTopicForm();
 			else if(disp==frmGroup)
 				openSearchGroupFrom();
+			else if(disp==frmGroupMember)
+				openSearchMemberForm();
 		}
 	}
 }
