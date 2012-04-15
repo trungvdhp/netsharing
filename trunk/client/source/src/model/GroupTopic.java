@@ -7,6 +7,7 @@ import de.enough.polish.util.ArrayList;
 public class GroupTopic {
 	public String groupTopicId;
 	public Topic topic;
+	public Group group;
 	public User shareUser;
 	public String shareDate;
 	public String commentsCount;
@@ -15,6 +16,16 @@ public class GroupTopic {
 	public GroupTopic(String topicGroupId)
 	{
 		this.groupTopicId = topicGroupId;
+	}
+	public GroupTopic(String topicGroupId, Topic topic, User shareUser, 
+			String shareDate, String commentsCount, Group group)
+	{
+		this.groupTopicId = topicGroupId;
+		this.topic = topic;
+		this.shareUser = shareUser;
+		this.shareDate = shareDate;
+		this.commentsCount = commentsCount;
+		this.group = group;
 	}
 	public GroupTopic(String topicGroupId, Topic topic, User shareUser, 
 			String shareDate, String commentsCount)
