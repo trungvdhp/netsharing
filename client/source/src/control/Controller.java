@@ -161,7 +161,7 @@ implements ApplicationInitializer, CommandListener
 	private Command cmdUpdate=new Command("Cập nhật",Command.SCREEN,1);
 	private Command cmdDetail=new Command("Chi tiết",Command.SCREEN,1);
 	private Command cmdGroupDetail=new Command("Chi tiết nhóm",Command.SCREEN,1);
-	private Command cmdRefresh = new Command("Làm mới", Command.SCREEN, 1);
+	//private Command cmdRefresh = new Command("Làm mới", Command.SCREEN, 1);
 	//private Command cmdUpdateGroup =new Command("Cập nhật nhóm",Command.SCREEN,1);
 	private Command cmdSendRequest =new Command("Tham gia",Command.OK,1);
 	private Command cmdViewCreateComment=new Command("Bình luận",Command.SCREEN,1);
@@ -1214,7 +1214,7 @@ implements ApplicationInitializer, CommandListener
 		frmMemberRequest=new UserList("Danh sách yêu cầu");
 		frmMemberRequest.addMenu(cmdConfirm);
 		frmMemberRequest.addMenu(cmdReject);
-		frmMemberRequest.addMenu(cmdRefresh);
+		//frmMemberRequest.addMenu(cmdRefresh);
 		//frmMemberRequest.addMenu(cmdConfirmAll);
 		//frmMemberRequest.addMenu(cmdRejectAll);
 		frmMemberRequest.addMenu(cmdBack);
