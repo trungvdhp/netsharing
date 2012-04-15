@@ -26,6 +26,11 @@ public class Group {
 	{
 		this.groupId = groupId;
 	}
+	public Group(String groupId, String groupName)
+	{
+		this.groupId = groupId;
+		this.groupName = groupName;
+	}
 	//for update action
     public Group(String groupId, String groupName, String description, String rule)
     {

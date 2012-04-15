@@ -353,7 +353,7 @@ implements ApplicationInitializer, CommandListener
 			frmMemberProfile.addStringItemField(strLastName);
 			//frmProfile.addDateField(dateBirthday);
 			frmMemberProfile.addStringItemBox(strEmail);
-			String gender = u.gender.equals("0")?"Nữ":"Nam";
+			String gender = u.gender.equals("0")?"Nam":"Nữ";
 			frmMemberProfile.addStringItemField(strGender);
 			frmMemberProfile.addStringItemField(strPhone);
 			frmMemberProfile.addStringItemBox(strAddress);
@@ -1051,6 +1051,51 @@ implements ApplicationInitializer, CommandListener
 		{
 			frmTopic.removeCommand(cmdNext);
 		}
+	}
+	//Hiển thị trang danh sách bài viết nhóm tìm kiếm đượctiếp theo
+	private void nextSearchGroupTopicListPage()
+	{
+		ArrayList topics=user.SearchGroupTopics(frmTopic.pageId, txtKeyword.getString());
+		if(topics!=null && topics.size()>0)
+		{
+			frmTopic.removeAllEntry();
+			for(int i=0;i<topics.size();i++)
+			{
+				GroupTopic t=(GroupTopic)topics.get(i);
+				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\nNhóm: " + 
+				t.group.groupName + "\n" + t.shareDate + ", " + t.commentsCount + " bình luận",t);
+				frmTopic.addEntry(topic,"topic");
+			}
+			if(configuration.get("pageSize").equals("" + topics.size()))
+				frmTopic.addMenu(cmdNext);
+			else
+				frmTopic.removeCommand(cmdNext);
+			if(frmTopic.pageId==1)
+				frmTopic.addMenu(cmdPrev);
+			if(frmTopic.pageId==0)
+				frmTopic.removeCommand(cmdPrev);
+			frmTopic.pageId++;
+		}
+		else
+		{
+			frmTopic.removeCommand(cmdNext);
+		}
+	}
+	//Hiển thị trang danh sách bài viết nhóm tìm kiếm được trước đó
+	private void prevSearchGroupTopicListPage()
+	{
+		frmTopic.pageId -= 2;
+		nextSearchGroupTopicListPage();
+	}
+	//Mở form danh sách bài viết nhóm tìm kiếm được
+	private void openSearchGroupTopicList()
+	{
+		frmTopic = new UserList("Kết quả tìm kiếm bài viết nhóm",5);
+		frmTopic.addMenu(cmdViewShareTopic);
+		frmTopic.addMenu(cmdBack);
+		nextSearchGroupTopicListPage();
+		frmTopic.setCommandListener(this.commandListener);
+		screenHistory.show(frmTopic);
 	}
 	//Hiển thị trang danh sách bài viết nhóm tiếp theo
 	private void nextGroupTopicListPage(Group group)
@@ -1829,10 +1874,12 @@ implements ApplicationInitializer, CommandListener
 			{
 				int i = cgSearchType.getSelectedIndex();
 				if(i==0)
+				{
 					openSearchGroupList();
+				}
 				else if(i==1)
 				{
-					MessageBox.Show("1");
+					openSearchGroupTopicList();
 				}
 				else if(i==2)
 				{
@@ -1890,7 +1937,7 @@ implements ApplicationInitializer, CommandListener
 			{
 				UserItem item=(UserItem)frmTopic.getCurrentItem();
 				int id = frmTopic.id;
-				if(id<2)
+				if(id<2 || id==5)
 				{
 					GroupTopic t=(GroupTopic)item.data;
 					openTopicDetailForm(t);
@@ -2113,7 +2160,7 @@ implements ApplicationInitializer, CommandListener
 			UserList ul = (UserList)disp;
 			UserItem item = (UserItem)ul.getCurrentItem();
 			int id = frmTopic.id;
-			if(id<2)
+			if(id<2 || id==5)
 				openTopicShareForm(((GroupTopic)item.data).topic);
 			else
 				openTopicShareForm((Topic)item.data);
@@ -2165,6 +2212,8 @@ implements ApplicationInitializer, CommandListener
 					nextNonSharedTopicListPage();
 				else if(id==4)
 					nextSharedOthersTopicListPage();
+				else if(id==5)
+					nextSearchGroupTopicListPage();
 			}
 			else if(disp == frmGroupRequest)
 			{
@@ -2231,6 +2280,8 @@ implements ApplicationInitializer, CommandListener
 					prevNonSharedTopicListPage();
 				else if(id==4)
 					prevSharedOthersTopicListPage();
+				else if(id==5)
+					prevSearchGroupTopicListPage();
 			}
 			else if(disp == frmGroupRequest)
 			{

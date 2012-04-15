@@ -729,6 +729,47 @@ public class User {
 			return members;
 		}
 	}
+	
+	//Danh sách các bài viết mới
+	public ArrayList SearchGroupTopics(int pageId, String tuKhoa)
+	{
+		topics=new ArrayList();
+		ArrayList data = new ArrayList();		
+		try
+		{
+			String s = Html.SendRequest("",
+					new String[] {Constants.Case,"xMaTaiKhoan","xPageSize","xPageId","xTuKhoa"},
+					new String[] {"TimKiemBaiVietNhom", this.userId, Controller.configuration.get("pageSize"), "" + pageId,
+					tuKhoa}
+					);
+			if(s.indexOf("false")>=0)
+				return null;
+			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
+			int len = data.size();
+			int i=0;
+			
+			while(i<len)
+			{
+				GroupTopic t=new GroupTopic(
+						data.get(i).toString(), 
+						new Topic(new User(data.get(i+5).toString(),data.get(i+9).toString(),"",""),
+								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
+						new User(data.get(i+7).toString(), data.get(i+10).toString(),"",""),
+						data.get(i+6).toString(),
+						data.get(i+8).toString(), new Group("",data.get(i+11).toString()));
+				
+				topics.add(t);
+				i += 12;
+			}
+			
+			return topics;
+		}
+		catch(Exception ex)
+		{
+			//MessageBox.Show(ex.toString(), display, disp);
+			return topics;
+		}
+	}
 	public boolean ViewedNewTopic(GroupTopic t) {
 		try
 		{
