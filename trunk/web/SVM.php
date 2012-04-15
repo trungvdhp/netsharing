@@ -839,7 +839,7 @@ switch ($Case){
         $TieuDe = $_REQUEST["xTieuDe"];
         $NoiDung = $_REQUEST["xNoiDung"];
 		if ($MaTaiKhoan != "") {
-			$sqlBaiViet_Nhom = "SELECT MaBaiViet, TieuDe, NoiDung, bv.NgayTao, bv.MaTaiKhoan, tk.TaiKhoan FROM baiviet bv INNER JOIN taikhoan tk ON tk.MaTaiKhoan=bv.MaTaiKhoan WHERE bv.MaTaiKhoan = '$MaTaiKhoan' AND bv.TieuDe LIKE '%$TieuDe%' AND bv.NoiDung LIKE '%$NoiDung%' MaBaiViet NOT IN (SELECT DISTINCT MaBaiViet FROM baiviet_nhom WHERE MaTaiKhoan = '$MaTaiKhoan') ORDER BY MaBaiViet DESC LIMIT $Id, $PageSize";
+			$sqlBaiViet_Nhom = "SELECT MaBaiViet, TieuDe, NoiDung, bv.NgayTao, bv.MaTaiKhoan, tk.TaiKhoan FROM baiviet bv INNER JOIN taikhoan tk ON tk.MaTaiKhoan=bv.MaTaiKhoan WHERE bv.MaTaiKhoan = '$MaTaiKhoan' AND bv.TieuDe LIKE '%$TieuDe%' AND bv.NoiDung LIKE '%$NoiDung%' AND MaBaiViet NOT IN (SELECT DISTINCT MaBaiViet FROM baiviet_nhom WHERE MaTaiKhoan = '$MaTaiKhoan') ORDER BY MaBaiViet DESC LIMIT $Id, $PageSize";
 			$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
 			if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
 				while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
