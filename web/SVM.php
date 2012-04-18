@@ -382,7 +382,7 @@ else if(isset($_SESSION['MaTaiKhoan']))
 						$sqlBinhLuanBaiViet = "SELECT MaBinhLuan FROM binhluanbaiviet WHERE MaBaiViet_Nhom = '".$rowBaiViet_Nhom["MaBaiViet_Nhom"]."'";
 						$countBinhLuanBaiViet = mysql_num_rows(mysql_query($sqlBinhLuanBaiViet));
 						$TaiKhoanChiaSe = get_user_info($rowBaiViet_Nhom["MaTaiKhoanChiaSe"]);
-						//11 truong
+						//12 truong
 						echo $rowBaiViet_Nhom["MaBaiViet_Nhom"] . $KyTuChiaTruongDL
 							. $rowBaiViet_Nhom["MaBaiViet"] . $KyTuChiaTruongDL
 							. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
@@ -512,7 +512,7 @@ else if(isset($_SESSION['MaTaiKhoan']))
 			$PageId = $_REQUEST["xPageId"];
 			$Id = $PageId * $PageSize;
 			if ($MaTaiKhoan != "" && $MaBaiViet != "") {
-				$sqlTaiKhoan_Nhom = "SELECT tkn.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' and TrangThai = 1) tkn INNER JOIN nhom n ON n.MaNhom = tkn.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan AND n.MaNhom NOT IN (SELECT MaNhom FROM baiviet_nhom WHERE MaBaiViet = '".$MaBaiViet."' AND MaTaiKhoan ='".$MaTaiKhoan."') LIMIT $Id, $PageSize";
+				$sqlTaiKhoan_Nhom = "SELECT tkn.MaNhom, n.TenNhom, n.MaTaiKhoan, tk.TaiKhoan FROM (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' and TrangThai = 1) tkn INNER JOIN nhom n ON n.MaNhom = tkn.MaNhom INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan AND n.MaNhom NOT IN (SELECT MaNhom FROM baiviet_nhom WHERE MaBaiViet = '".$MaBaiViet."') LIMIT $Id, $PageSize";
 				$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
 				while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
 					echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
@@ -651,7 +651,7 @@ else if(isset($_SESSION['MaTaiKhoan']))
 			$result = mysql_query($sql);
 			$row=mysql_fetch_array($result);
 			$MaBaiViet_Nhom=$row['MaBaiViet_Nhom'];
-			$sql="SELECT MaTaiKhoan FROM taikhoan_nhom WHERE MaNhom = '".$MaNhom."'";
+			$sql="SELECT MaTaiKhoan FROM taikhoan_nhom WHERE MaNhom = '".$MaNhom."' AND TrangThai=1";
 			$result=mysql_query($sql);
 			while($row=mysql_fetch_array($result))
 			{
@@ -678,7 +678,7 @@ else if(isset($_SESSION['MaTaiKhoan']))
 				$result = mysql_query($sql);
 				$row=mysql_fetch_array($result);
 				$MaBaiViet_Nhom=$row['MaBaiViet_Nhom'];
-				$sql="SELECT MaTaiKhoan FROM taikhoan_nhom WHERE MaNhom='$MaNhom'";
+				$sql="SELECT MaTaiKhoan FROM taikhoan_nhom WHERE MaNhom='$MaNhom' AND TrangThai=1";
 				$result=mysql_query($sql);
 				while($row=mysql_fetch_array($result))
 				{
@@ -747,14 +747,14 @@ else if(isset($_SESSION['MaTaiKhoan']))
 			$NoiDung = $_REQUEST["xNoiDung"];
 			$TaiKhoan = $_REQUEST["xTaiKhoan"];
 			if ($MaTaiKhoan != "") {
-				$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan INNER JOIN baivietmoi bvm ON bvm.MaBaiViet_Nhom=bvn.MaBaiViet_Nhom WHERE bvm.MaTaiKhoan='$MaTaiKhoan' AND bvn.TrangThai = 1 AND bv.TieuDe LIKE '%$TieuDe%' AND bv.NoiDung LIKE '%$NoiDung%' AND tk.TaiKhoan LIKE '%$TaiKhoan%' ORDER BY MaBaiVietMoi DESC LIMIT $Id, $PageSize";
+				$sqlBaiViet_Nhom = "SELECT bvn.MaBaiViet_Nhom,bvn.MaBaiViet, bv.TieuDe, bv.NoiDung, bv.NgayTao, bvn.NgayChiaSe, tk.MaTaiKhoan, tk.TaiKhoan,bvn.MaTaiKhoan AS MaTaiKhoanChiaSe, n.TenNhom FROM baiviet_nhom bvn INNER JOIN baiviet bv ON bvn.MaBaiViet = bv.MaBaiViet INNER JOIN taikhoan tk ON bv.MaTaiKhoan = tk.MaTaiKhoan INNER JOIN nhom n ON n.MaNhom = bvn.MaNhom INNER JOIN baivietmoi bvm ON bvm.MaBaiViet_Nhom=bvn.MaBaiViet_Nhom WHERE bvm.MaTaiKhoan='$MaTaiKhoan' AND bv.TieuDe LIKE '%$TieuDe%' AND bv.NoiDung LIKE '%$NoiDung%' AND tk.TaiKhoan LIKE '%$TaiKhoan%' ORDER BY MaBaiVietMoi DESC LIMIT $Id, $PageSize";
 				$resultBaiViet_Nhom = mysql_query($sqlBaiViet_Nhom) or die("Lệnh truy vấn không chính xác!");
 				if (mysql_num_rows($resultBaiViet_Nhom) > 0) {
 					while ($rowBaiViet_Nhom = mysql_fetch_array($resultBaiViet_Nhom)) {
 						$sqlBinhLuanBaiViet = "SELECT MaBinhLuan FROM binhluanbaiviet WHERE MaBaiViet_Nhom = '".$rowBaiViet_Nhom["MaBaiViet_Nhom"]."'";
 						$countBinhLuanBaiViet = mysql_num_rows(mysql_query($sqlBinhLuanBaiViet));
 						$TaiKhoanChiaSe = get_user_info($rowBaiViet_Nhom["MaTaiKhoanChiaSe"]);
-						//11 truong
+						//12 truong
 						echo $rowBaiViet_Nhom["MaBaiViet_Nhom"] . $KyTuChiaTruongDL
 							. $rowBaiViet_Nhom["MaBaiViet"] . $KyTuChiaTruongDL
 							. $rowBaiViet_Nhom["TieuDe"] . $KyTuChiaTruongDL
@@ -764,8 +764,9 @@ else if(isset($_SESSION['MaTaiKhoan']))
 							. $rowBaiViet_Nhom["NgayChiaSe"] . $KyTuChiaTruongDL
 							. $rowBaiViet_Nhom["MaTaiKhoanChiaSe"] . $KyTuChiaTruongDL
 							. $countBinhLuanBaiViet . $KyTuChiaTruongDL
-							. $rowBaiViet_Nhom['TaiKhoan'] . $KyTuChiaTruongDL
-							. $TaiKhoanChiaSe['TaiKhoan'] . $KyTuChiaTruongDL
+							. $rowBaiViet_Nhom["TaiKhoan"] . $KyTuChiaTruongDL
+							. $TaiKhoanChiaSe["TaiKhoan"] . $KyTuChiaTruongDL
+							. $rowBaiViet_Nhom["TenNhom"] . $KyTuChiaTruongDL
 							;
 					}
 				} else 
