@@ -84,7 +84,7 @@ implements ApplicationInitializer, CommandListener
 	private TextField txtPhone = new TextField("Điện thoại: ","", 20,TextField.PHONENUMBER);
 	private TextField txtPageSize = new TextField("Số bản ghi / 1 trang: ","", 2,TextField.PHONENUMBER);
 	private TextField txtCreateUsername = new TextField("Người tạo: ","", 50,TextField.ANY);
-	private TextField txtShareUsername = new TextField("Người chia sẻ: ","", 50,TextField.ANY);
+	//private TextField txtShareUsername = new TextField("Người chia sẻ: ","", 50,TextField.ANY);
 	
 	private TextField txtKeyword = new TextField("Từ khóa: ","", 50,TextField.ANY);
 	private TextField txtTitle = new TextField("Tiêu đề: ","", 100,TextField.ANY);
@@ -115,7 +115,7 @@ implements ApplicationInitializer, CommandListener
 	private StringItem strAuthor = new StringItem("","");
 	private StringItem strShareDate = new StringItem("","");
 	private StringItem strTopicContent = new StringItem("Nội dung: ","");
-	private StringItem strCommentsCount = new StringItem("","");
+	//private StringItem strCommentsCount = new StringItem("","");
 	//private StringItem strSharedGroupsCount = new StringItem("","");
 	//private StringItem strNonSharedGroupsCount = new StringItem("","");
 	
@@ -1033,8 +1033,8 @@ implements ApplicationInitializer, CommandListener
 			for(int i=0;i<topics.size();i++)
 			{
 				GroupTopic t=(GroupTopic)topics.get(i);
-				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\n" + 
-				t.shareDate + ", " + t.commentsCount + " bình luận",t);
+				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\nNhóm: " + 
+				t.group.groupName + "\n" + t.shareDate + ", " + t.commentsCount + " bình luận",t);
 				frmTopic.addEntry(topic,"topic");
 			}
 			if(configuration.get("pageSize").equals("" + topics.size()))
@@ -1056,30 +1056,7 @@ implements ApplicationInitializer, CommandListener
 	private void nextSearchGroupTopicListPage()
 	{
 		ArrayList topics=user.SearchGroupTopics(frmTopic.pageId, txtKeyword.getString());
-		if(topics!=null && topics.size()>0)
-		{
-			frmTopic.removeAllEntry();
-			for(int i=0;i<topics.size();i++)
-			{
-				GroupTopic t=(GroupTopic)topics.get(i);
-				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\nNhóm: " + 
-				t.group.groupName + "\n" + t.shareDate + ", " + t.commentsCount + " bình luận",t);
-				frmTopic.addEntry(topic,"topic");
-			}
-			if(configuration.get("pageSize").equals("" + topics.size()))
-				frmTopic.addMenu(cmdNext);
-			else
-				frmTopic.removeCommand(cmdNext);
-			if(frmTopic.pageId==1)
-				frmTopic.addMenu(cmdPrev);
-			if(frmTopic.pageId==0)
-				frmTopic.removeCommand(cmdPrev);
-			frmTopic.pageId++;
-		}
-		else
-		{
-			frmTopic.removeCommand(cmdNext);
-		}
+		addGroupTopicList(topics);
 	}
 	//Hiển thị trang danh sách bài viết nhóm tìm kiếm được trước đó
 	private void prevSearchGroupTopicListPage()
@@ -1101,7 +1078,30 @@ implements ApplicationInitializer, CommandListener
 	private void nextGroupTopicListPage(Group group)
 	{
 		ArrayList topics=group.GetTopics(frmTopic.pageId, topic);
-		addGroupTopicList(topics);
+		if(topics!=null && topics.size()>0)
+		{
+			frmTopic.removeAllEntry();
+			for(int i=0;i<topics.size();i++)
+			{
+				GroupTopic t=(GroupTopic)topics.get(i);
+				UserItem topic=new UserItem(t.shareUser.username + " : " + t.topic.title + "\n" + 
+				t.shareDate + ", " + t.commentsCount + " bình luận",t);
+				frmTopic.addEntry(topic,"topic");
+			}
+			if(configuration.get("pageSize").equals("" + topics.size()))
+				frmTopic.addMenu(cmdNext);
+			else
+				frmTopic.removeCommand(cmdNext);
+			if(frmTopic.pageId==1)
+				frmTopic.addMenu(cmdPrev);
+			if(frmTopic.pageId==0)
+				frmTopic.removeCommand(cmdPrev);
+			frmTopic.pageId++;
+		}
+		else
+		{
+			frmTopic.removeCommand(cmdNext);
+		}
 	}
 	//Hiển thị trang danh sách bài viết nhóm trước đó
 	private void prevGroupTopicListPage(Group group)

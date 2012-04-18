@@ -5,7 +5,7 @@ package model;
 //import de.enough.polish.ui.Displayable;
 //import de.enough.polish.ui.AlertType;
 import control.Controller;
-import control.MessageBox;
+//import control.MessageBox;
 import de.enough.polish.util.ArrayList;
 
 import util.UtilString;
@@ -178,10 +178,10 @@ public class User {
 								data.get(i+1).toString(), data.get(i+2).toString(), data.get(i+3).toString(), data.get(i+4).toString()),
 						new User(data.get(i+7).toString(), data.get(i+10).toString(),"",""),
 						data.get(i+6).toString(),
-						data.get(i+8).toString() );
+						data.get(i+8).toString(), new Group("",data.get(i+11).toString()));
 				
 				topics.add(t);
-				i += 11;
+				i += 12;
 			}
 			
 			return topics;
