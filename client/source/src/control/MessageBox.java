@@ -20,6 +20,12 @@ public class MessageBox {
 		//#style alertBox
 		Alert alert=new Alert("",content,null,type);
 		_display.setCurrent(alert,_screenHistory.getCurrent());
+		/*try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		return alert;
 	}
 	public static Alert Show(String content)

@@ -35,10 +35,14 @@ public class Html {
 		connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		connection.setRequestProperty("Accept", "text/txt" );
 		
-		String params="sid="+_sessionId;
+		String params="";
 		for(int i=0;i<args.length;i++)
-			params+="&"+args[i]+"="+values[i];
-		//MessageBox.Show(params,  AlertType.ERROR);
+			params+=args[i]+"="+values[i]+"&";
+		if(!_sessionId.equals("")){
+			params+="sid="+_sessionId;
+			//MessageBox.Show(_sessionId);
+		}
+		
 		if(args.length>0)
 		{
 			OutputStream os =  connection.openOutputStream();
