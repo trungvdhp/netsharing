@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
-import control.MessageBox;
-import de.enough.polish.ui.AlertType;
+//import control.MessageBox;
+//import de.enough.polish.ui.AlertType;
 
 //import de.enough.polish.io.PostRedirectHttpConnection;
 //import de.enough.polish.util.URL;
