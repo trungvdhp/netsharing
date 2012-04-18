@@ -5,6 +5,7 @@ package model;
 //import de.enough.polish.ui.Displayable;
 //import de.enough.polish.ui.AlertType;
 import control.Controller;
+import control.MessageBox;
 import de.enough.polish.util.ArrayList;
 
 import util.UtilString;
@@ -84,15 +85,18 @@ public class User {
 	{
 		try
 		{
-			String data=Html.SendRequest("",
+			String s=Html.SendRequest("",
 					new String[] {"CVM","xTaiKhoan","xMatKhau"},
 					new String[] {"DangNhap",username,password}
 					);
 			//String data=Html.SendRequest("");
-			userId=data;
-			if(data.indexOf("TKTD")<0)
+			
+			if(s.indexOf("TKTD")<0)
 				return false;
-
+			ArrayList data=UtilString.Split(s,Constants.KyTuChiaTruongDL);
+			userId=data.get(0).toString();
+			Html.setSessionId(data.get(1).toString());
+			//MessageBox.Show(data.get(1).toString());
 			return true;
 		}
 		catch(Exception ex)
@@ -428,7 +432,6 @@ public class User {
 					);
 			if(s.indexOf("false")>=0)
 				return null;
-			
 			data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			int len = data.size();
 			int i=0;
