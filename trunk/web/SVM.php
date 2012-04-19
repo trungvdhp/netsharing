@@ -22,53 +22,18 @@ if($Case == "DangKyTaiKhoan")
 		$sqlTaiKhoan = "SELECT MaTaiKhoan FROM taikhoan WHERE TaiKhoan = '".$TaiKhoan."'";
 		$resultTaiKhoan = mysql_query($sqlTaiKhoan);
 		if (mysql_num_rows($resultTaiKhoan) == 0) {
-			$sqlInsert = "";
-			$sqlMaTaiKhoan = "SELECT MaTaiKhoan FROM taikhoan WHERE MaTaiKhoan LIKE 'TKTD%' ORDER BY MaTaiKhoan DESC LIMIT 0,1";
-			$resultMaTaiKhoan = mysql_query($sqlMaTaiKhoan) or die("Lệnh truy vấn không chính xác!");
-			if (mysql_num_rows($resultMaTaiKhoan) == 1) {
-				$MaTaiKhoanMoi = 0;
-				$rowMaTaiKhoan = mysql_fetch_array($resultMaTaiKhoan);
-				$MaTaiKhoan = substr($rowMaTaiKhoan["MaTaiKhoan"], 4);
-				$MaTaiKhoan = $MaTaiKhoan + 1;
-				$MaTaiKhoan = "TKTD".$MaTaiKhoan;
-				$sqlInsert = "INSERT INTO taikhoan(MaTaiKhoan, TaiKhoan, MatKhau) VALUES ('".$MaTaiKhoan."', '".$TaiKhoan."', '".md5($MatKhau)."')";
-			} else {
-				$sqlInsert = "INSERT INTO taikhoan(MaTaiKhoan, TaiKhoan, MatKhau) VALUES ('TKTD0', '".$TaiKhoan."', '".md5($MatKhau)."')";
-			}
-			if ($sqlInsert != "") {
-				$resultInsert = mysql_query($sqlInsert) or die("Lệnh truy vấn không chính xác!");
+				$sqlInsert = "INSERT INTO taikhoan(TaiKhoan, MatKhau) VALUES ( '".$TaiKhoan."', '".md5($MatKhau)."')";
+				$resultInsert = mysql_query($sqlInsert) or die($sqlInsert);//"Lệnh truy vấn không chính xác 2!");
 				if ($resultInsert != null) {
 					echo $true;
 				} else 
 					echo $false . "1";
-			} else 
-				echo $false ."2";
 		} else 
 			echo "TonTai";
 	} else 
 		echo $false."3";
 }
-else if($Case=='DangNhap')
-{
-	$TaiKhoan = $_REQUEST["xTaiKhoan"];
-	$MatKhau = $_REQUEST["xMatKhau"];
-	if($TaiKhoan != "" && $MatKhau != "") {
-		$sql = "SELECT MaTaiKhoan, TaiKhoan, MatKhau FROM taikhoan WHERE TaiKhoan='".$TaiKhoan."'";
-		$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
-		$row = mysql_fetch_array($result);
-		if($row != null) {
-			if (md5($MatKhau) == $row["MatKhau"]){
-				$_SESSION['MaTaiKhoan'] = $row['MaTaiKhoan'];
-				echo $row["MaTaiKhoan"] . $KyTuChiaTruongDL . session_id();
-			}
-			else 
-				echo $false;
-		}else 
-			echo $false;
-	}else
-		echo $false;
-}
-else if($Case == "ThongTinTaiKhoan")
+else if($Case=='ThongTinTaiKhoan')
 {
 	$TaiKhoan = $_REQUEST["xMaTaiKhoan"];
 	if($TaiKhoan != "" ) {
@@ -90,12 +55,33 @@ else if($Case == "ThongTinTaiKhoan")
 	}else
 		echo $false;
 }
+else if($Case=='DangNhap')
+{
+	$TaiKhoan = $_REQUEST["xTaiKhoan"];
+	$MatKhau = $_REQUEST["xMatKhau"];
+	if($TaiKhoan != "" && $MatKhau != "") {
+		$sql = "SELECT MaTaiKhoan, TaiKhoan, MatKhau FROM taikhoan WHERE TaiKhoan='".$TaiKhoan."'";
+		$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+		$row = mysql_fetch_array($result);
+		if($row != null) {
+			if (md5($MatKhau) == $row["MatKhau"]){
+				$_SESSION['MaTaiKhoan'] = $row['MaTaiKhoan'];
+				echo $row["MaTaiKhoan"] . $KyTuChiaTruongDL . session_id() . $KyTuChiaTruongDL . 'TKTD' ;
+			}
+			else 
+				echo $false;
+		}else 
+			echo $false;
+	}else
+		echo $false;
+}
 else if(isset($_SESSION['MaTaiKhoan']))
 {
 	$_REQUEST['xMaTaiKhoan']=$_SESSION['MaTaiKhoan'];
 	do{
 	$re = false;
 	switch ($Case){
+		
 		case "CapNhatTaiKhoan": {
 			$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 			$HoDem = $_REQUEST["xHoDem"];
