@@ -14,7 +14,41 @@ function get_user_info($user_id)
 	$row=mysql_fetch_array($result);
 	return $row;
 }
-if($Case=='DangNhap')
+if($Case == "DangKyTaiKhoan")
+{
+	$TaiKhoan = $_REQUEST["xTaiKhoan"];
+	$MatKhau = $_REQUEST["xMatKhau"];
+	if ($TaiKhoan != "" && $MatKhau != "") {
+		$sqlTaiKhoan = "SELECT MaTaiKhoan FROM taikhoan WHERE TaiKhoan = '".$TaiKhoan."'";
+		$resultTaiKhoan = mysql_query($sqlTaiKhoan);
+		if (mysql_num_rows($resultTaiKhoan) == 0) {
+			$sqlInsert = "";
+			$sqlMaTaiKhoan = "SELECT MaTaiKhoan FROM taikhoan WHERE MaTaiKhoan LIKE 'TKTD%' ORDER BY MaTaiKhoan DESC LIMIT 0,1";
+			$resultMaTaiKhoan = mysql_query($sqlMaTaiKhoan) or die("Lệnh truy vấn không chính xác!");
+			if (mysql_num_rows($resultMaTaiKhoan) == 1) {
+				$MaTaiKhoanMoi = 0;
+				$rowMaTaiKhoan = mysql_fetch_array($resultMaTaiKhoan);
+				$MaTaiKhoan = substr($rowMaTaiKhoan["MaTaiKhoan"], 4);
+				$MaTaiKhoan = $MaTaiKhoan + 1;
+				$MaTaiKhoan = "TKTD".$MaTaiKhoan;
+				$sqlInsert = "INSERT INTO taikhoan(MaTaiKhoan, TaiKhoan, MatKhau) VALUES ('".$MaTaiKhoan."', '".$TaiKhoan."', '".md5($MatKhau)."')";
+			} else {
+				$sqlInsert = "INSERT INTO taikhoan(MaTaiKhoan, TaiKhoan, MatKhau) VALUES ('TKTD0', '".$TaiKhoan."', '".md5($MatKhau)."')";
+			}
+			if ($sqlInsert != "") {
+				$resultInsert = mysql_query($sqlInsert) or die("Lệnh truy vấn không chính xác!");
+				if ($resultInsert != null) {
+					echo $true;
+				} else 
+					echo $false . "1";
+			} else 
+				echo $false ."2";
+		} else 
+			echo "TonTai";
+	} else 
+		echo $false."3";
+}
+else if($Case=='DangNhap')
 {
 	$TaiKhoan = $_REQUEST["xTaiKhoan"];
 	$MatKhau = $_REQUEST["xMatKhau"];
@@ -55,7 +89,6 @@ else if($Case == "ThongTinTaiKhoan")
 			echo $false;
 	}else
 		echo $false;
-	break;
 }
 else if(isset($_SESSION['MaTaiKhoan']))
 {
@@ -63,40 +96,6 @@ else if(isset($_SESSION['MaTaiKhoan']))
 	do{
 	$re = false;
 	switch ($Case){
-		case "DangKyTaiKhoan": {
-			$TaiKhoan = $_REQUEST["xTaiKhoan"];
-			$MatKhau = $_REQUEST["xMatKhau"];
-			if ($TaiKhoan != "" && $MatKhau != "") {
-				$sqlTaiKhoan = "SELECT MaTaiKhoan FROM taikhoan WHERE TaiKhoan = '".$TaiKhoan."'";
-				$resultTaiKhoan = mysql_query($sqlTaiKhoan);
-				if (mysql_num_rows($resultTaiKhoan) == 0) {
-					$sqlInsert = "";
-					$sqlMaTaiKhoan = "SELECT MaTaiKhoan FROM taikhoan WHERE MaTaiKhoan LIKE 'TKTD%' ORDER BY MaTaiKhoan DESC LIMIT 0,1";
-					$resultMaTaiKhoan = mysql_query($sqlMaTaiKhoan) or die("Lệnh truy vấn không chính xác!");
-					if (mysql_num_rows($resultMaTaiKhoan) == 1) {
-						$MaTaiKhoanMoi = 0;
-						$rowMaTaiKhoan = mysql_fetch_array($resultMaTaiKhoan);
-						$MaTaiKhoan = substr($rowMaTaiKhoan["MaTaiKhoan"], 4);
-						$MaTaiKhoan = $MaTaiKhoan + 1;
-						$MaTaiKhoan = "TKTD".$MaTaiKhoan;
-						$sqlInsert = "INSERT INTO taikhoan(MaTaiKhoan, TaiKhoan, MatKhau) VALUES ('".$MaTaiKhoan."', '".$TaiKhoan."', '".md5($MatKhau)."')";
-					} else {
-						$sqlInsert = "INSERT INTO taikhoan(MaTaiKhoan, TaiKhoan, MatKhau) VALUES ('TKTD0', '".$TaiKhoan."', '".md5($MatKhau)."')";
-					}
-					if ($sqlInsert != "") {
-						$resultInsert = mysql_query($sqlInsert) or die("Lệnh truy vấn không chính xác!");
-						if ($resultInsert != null) {
-							echo $true;
-						} else 
-							echo $false . "1";
-					} else 
-						echo $false ."2";
-				} else 
-					echo "TonTai";
-			} else 
-				echo $false."3";
-			break;
-		}
 		case "CapNhatTaiKhoan": {
 			$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 			$HoDem = $_REQUEST["xHoDem"];
