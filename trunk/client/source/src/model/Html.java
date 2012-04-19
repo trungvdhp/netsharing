@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
+import control.MessageBox;
+
 //import control.MessageBox;
 //import de.enough.polish.ui.AlertType;
 
@@ -25,6 +27,7 @@ public class Html {
 	{
 		try{
 		isBusy = true;
+		MessageBox.Show("Đang kết nối...");
 		url=path+url;
 		HttpConnection connection = (HttpConnection) Connector.open(url);
 		connection.setRequestMethod(HttpConnection.POST);
@@ -42,7 +45,7 @@ public class Html {
 			params+="sid="+_sessionId;
 			//MessageBox.Show(_sessionId);
 		}
-		
+		//MessageBox.Show(url+"?"+params);
 		if(args.length>0)
 		{
 			OutputStream os =  connection.openOutputStream();
@@ -52,6 +55,7 @@ public class Html {
 		byte[] data=new byte[is.available()];
 		is.read(data);
 		isBusy = false;
+		//MessageBox.Show(new String(data));
 		return new String(data);
 		}
 		catch(Exception ex)
