@@ -219,7 +219,6 @@ implements ApplicationInitializer, CommandListener
 	private UserList frmGroupMember;
 	private UserList frmSearchMemberResult;
 	private UserList frmTopic;
-	private UserList frmNonSharedTopic;
 	private UserList frmMemberRequest;
 
 	//Mở form tìm kiếm chung
@@ -1713,7 +1712,7 @@ implements ApplicationInitializer, CommandListener
 			{
 				UserItem item = (UserItem)frmGroupMember.getCurrentItem();
 				User u = (User)item.data;
-				if(u.DeleteMember((Group)frmGroupMember.data))
+				if(user.DeleteMember((Group)frmGroupMember.data, u))
 				{
 					MessageBox.Show("Đã hủy tư cách thành viên!",  AlertType.INFO);
 				}
@@ -1724,7 +1723,7 @@ implements ApplicationInitializer, CommandListener
 			}
 			else if(disp==frmConfirmDelTopic)
 			{
-				UserItem item = (UserItem)frmNonSharedTopic.getCurrentItem();
+				UserItem item = (UserItem)frmTopic.getCurrentItem();
 				Topic t = (Topic)item.data;
 				if(user.DeleteTopic(t))
 				{
@@ -2227,11 +2226,11 @@ implements ApplicationInitializer, CommandListener
 			{
 				int id = frmGroup.id;
 				if(id==0)
-					prevGroupListPage();
+					nextGroupListPage();
 				else if(id==1)
-					prevMyGroupListPage();
+					nextMyGroupListPage();
 				else
-					prevJoinGroupListPage();
+					nextJoinGroupListPage();
 			}
 			else if(disp == frmCreateAndShareTopic)
 			{

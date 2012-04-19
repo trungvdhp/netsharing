@@ -568,13 +568,13 @@ public class User {
 			return false;
 		}
 	}
-	public boolean DeleteMember(Group g)
+	public boolean DeleteMember(Group g, User u)
 	{
 		try
 		{
 			String data=Html.SendRequest("",
-					new String[] {"CVM","xMaTaiKhoan","xMaNhom"},
-					new String[] {"HuyTuCach",userId,g.groupId}
+					new String[] {"CVM","xMaTaiKhoan","xMaNhom","xMaTaiKhoanHuy"},
+					new String[] {"HuyTuCach",userId,g.groupId,u.userId}
 					);
 			if(data.indexOf("false") >= 0)
 				return false;
