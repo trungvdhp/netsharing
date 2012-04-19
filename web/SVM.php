@@ -16,23 +16,46 @@ function get_user_info($user_id)
 }
 if($Case=='DangNhap')
 {
-			$TaiKhoan = $_REQUEST["xTaiKhoan"];
-			$MatKhau = $_REQUEST["xMatKhau"];
-			if($TaiKhoan != "" && $MatKhau != "") {
-				$sql = "SELECT MaTaiKhoan, TaiKhoan, MatKhau FROM taikhoan WHERE TaiKhoan='".$TaiKhoan."'";
-				$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
-				$row = mysql_fetch_array($result);
-				if($row != null) {
-					if (md5($MatKhau) == $row["MatKhau"]){
-						$_SESSION['MaTaiKhoan'] = $row['MaTaiKhoan'];
-						echo $row["MaTaiKhoan"] . $KyTuChiaTruongDL . session_id();
-					}
-					else 
-						echo $false;
-				}else 
-					echo $false;
-			}else
+	$TaiKhoan = $_REQUEST["xTaiKhoan"];
+	$MatKhau = $_REQUEST["xMatKhau"];
+	if($TaiKhoan != "" && $MatKhau != "") {
+		$sql = "SELECT MaTaiKhoan, TaiKhoan, MatKhau FROM taikhoan WHERE TaiKhoan='".$TaiKhoan."'";
+		$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+		$row = mysql_fetch_array($result);
+		if($row != null) {
+			if (md5($MatKhau) == $row["MatKhau"]){
+				$_SESSION['MaTaiKhoan'] = $row['MaTaiKhoan'];
+				echo $row["MaTaiKhoan"] . $KyTuChiaTruongDL . session_id();
+			}
+			else 
 				echo $false;
+		}else 
+			echo $false;
+	}else
+		echo $false;
+}
+else if($Case == "ThongTinTaiKhoan")
+{
+	$TaiKhoan = $_REQUEST["xMaTaiKhoan"];
+	if($TaiKhoan != "" ) {
+		$sql = "SELECT * FROM taikhoan WHERE MaTaiKhoan='".$TaiKhoan."'";
+		$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+		$row = mysql_fetch_array($result);
+		if($row != null) {
+			echo $row["HoDem"] . $KyTuChiaTruongDL
+				. $row["Ten"] . $KyTuChiaTruongDL
+				. $row["NgaySinh"] . $KyTuChiaTruongDL
+				. $row["Email"] . $KyTuChiaTruongDL
+				. $row["GioiTinh"] . $KyTuChiaTruongDL
+				. $row["DienThoai"] . $KyTuChiaTruongDL
+				. $row["DiaChi"] . $KyTuChiaTruongDL
+				. $row["NgayTao"] . $KyTuChiaTruongDL
+				;
+		}else 
+			echo $false;
+	}else
+		echo $false;
+	break;
 }
 else if(isset($_SESSION['MaTaiKhoan']))
 {
@@ -98,28 +121,6 @@ else if(isset($_SESSION['MaTaiKhoan']))
 				else
 					echo $false;
 			} else
-				echo $false;
-			break;
-		}
-		case "ThongTinTaiKhoan": {
-			$TaiKhoan = $_REQUEST["xMaTaiKhoan"];
-			if($TaiKhoan != "" ) {
-				$sql = "SELECT * FROM taikhoan WHERE MaTaiKhoan='".$TaiKhoan."'";
-				$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
-				$row = mysql_fetch_array($result);
-				if($row != null) {
-					echo $row["HoDem"] . $KyTuChiaTruongDL
-						. $row["Ten"] . $KyTuChiaTruongDL
-						. $row["NgaySinh"] . $KyTuChiaTruongDL
-						. $row["Email"] . $KyTuChiaTruongDL
-						. $row["GioiTinh"] . $KyTuChiaTruongDL
-						. $row["DienThoai"] . $KyTuChiaTruongDL
-						. $row["DiaChi"] . $KyTuChiaTruongDL
-						. $row["NgayTao"] . $KyTuChiaTruongDL
-						;
-				}else 
-					echo $false;
-			}else
 				echo $false;
 			break;
 		}
@@ -331,9 +332,16 @@ else if(isset($_SESSION['MaTaiKhoan']))
 		case "HuyTuCach": {
 			$MaNhom = $_REQUEST["xMaNhom"];
 			$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
-			$sql = "DELETE FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."' AND MaNhom = '".$MaNhom."'";
-			$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
-			echo ($result != null) ? $true : $false;
+			$MaTaiKhoanHuy = $_REQUEST["xMaTaiKhoanHuy"];
+			$sqlTruongNhom = "SELECT MaTaiKhoan FROM taikhoan_nhom WHERE MaTaiKhoan='$MaTaiKhoan'";
+			$resultTruongNhom = mysql_query($sqlTruongNhom) or die("Lệnh truy vấn không chính xác!");
+			if (mysql_num_rows($resultTruongNhom) > 0) {
+				$sql = "DELETE FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoanHuy."' AND MaNhom = '".$MaNhom."'";
+				$result = mysql_query($sql) or die("Lệnh truy vấn không chính xác!");
+				echo ($result != null) ? $true : $false;
+			}
+			else
+				echo $false;
 			break;
 		}
 		case "DanhSachThanhVienNhom": {
