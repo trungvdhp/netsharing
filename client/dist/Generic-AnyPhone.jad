@@ -1,9 +1,0 @@
-MIDlet-Name: NetShare
-MIDlet-Version: 1.0.0
-MIDlet-Vendor: Kid-Centre
-MIDlet-Jar-URL: Generic-AnyPhone.jar
-MIDlet-Jar-Size: 186119
-MIDlet-Description: Share news by group
-MIDlet-Icon: /icon.png
-MIDlet-Info-URL: http://hanghaicnt.net
-MIDlet-1: NetShare,/icon.png,app.App
