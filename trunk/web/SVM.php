@@ -130,19 +130,9 @@ else if(isset($_SESSION['MaTaiKhoan']))
 			$MaTaiKhoan = $_REQUEST["xMaTaiKhoan"];
 			$TenNhom = $_REQUEST["xTenNhom"];
 			if ($MaTaiKhoan != "" && $TenNhom != "") {
-				$sqlInsertNhom = "";
-				$sqlMaNhom = "SELECT MaNhom FROM nhom WHERE MaNhom LIKE 'NTD%' ORDER BY MaNhom DESC LIMIT 0,1";
-				$resultMaNhom = mysql_query($sqlMaNhom) or die("Lệnh truy vấn không chính xác!");
-				if (mysql_num_rows($resultMaNhom) == 1) {
-					$MaNhomMoi = 0;
-					$rowMaNhom = mysql_fetch_array($resultMaNhom);
-					$MaNhom = substr($rowMaNhom["MaNhom"], 3);
-					$MaNhom = $MaNhom + 1;
-					$MaNhom = "NTD".$MaNhom;
-					$sqlInsertNhom = "INSERT INTO nhom(MaNhom, TenNhom, MaTaiKhoan) VALUES ('".$MaNhom."', '".$TenNhom."', '".$MaTaiKhoan."')";
-				} else {
-					$sqlInsertNhom = "INSERT INTO nhom(MaNhom, TenNhom, MaTaiKhoan) VALUES ('NTD0', '".$TenNhom."', '".$MaTaiKhoan."')";
-				}
+
+				$sqlInsertNhom = "INSERT INTO nhom( TenNhom, MaTaiKhoan) VALUES ('".$TenNhom."', '".$MaTaiKhoan."')";
+
 				if ($sqlInsertNhom != "") {
 					$resultInsertNhom = mysql_query($sqlInsertNhom) or die("Lệnh truy vấn không chính xác!");
 					if ($resultInsertNhom != null) {
@@ -423,6 +413,7 @@ else if(isset($_SESSION['MaTaiKhoan']))
 			if ($MaTaiKhoan != "") {
 				$sqlTaiKhoan_Nhom = "SELECT n.MaNhom,n.TenNhom, tk.MaTaiKhoan, tk.TaiKhoan,n.NgayTao  FROM nhom n INNER JOIN taikhoan tk ON tk.MaTaiKhoan = n.MaTaiKhoan WHERE TenNhom LIKE '%".$TuKhoa."%' AND MaNhom NOT IN (SELECT MaNhom FROM taikhoan_nhom WHERE MaTaiKhoan = '".$MaTaiKhoan."') LIMIT $Id, $PageSize";
 				$resultTaiKhoan_Nhom = mysql_query($sqlTaiKhoan_Nhom) or die("Lệnh truy vấn không chính xác!");
+				//echo $sqlTaiKhoan_Nhom;
 				while ($rowTaiKhoan_Nhom = mysql_fetch_array($resultTaiKhoan_Nhom)) {
 					echo $rowTaiKhoan_Nhom["MaNhom"] . $KyTuChiaTruongDL
 						.$rowTaiKhoan_Nhom["TenNhom"] . $KyTuChiaTruongDL
