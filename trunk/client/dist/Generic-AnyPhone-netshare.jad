@@ -1,8 +1,8 @@
 MIDlet-Name: NetShare
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: Kid-Centre
-MIDlet-Jar-URL: Nokia-E61-en_US-blank.jar
-MIDlet-Jar-Size: 147770
+MIDlet-Jar-URL: Generic-AnyPhone-netshare.jar
+MIDlet-Jar-Size: 190434
 MIDlet-Description: Share news by group
 MIDlet-Info-URL: http://hanghaicnt.net
-MIDlet-1: BlankApp,,app.App
+MIDlet-1: NetShare,,app.App
