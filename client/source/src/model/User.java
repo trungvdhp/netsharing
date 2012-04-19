@@ -5,6 +5,7 @@ package model;
 //import de.enough.polish.ui.Displayable;
 //import de.enough.polish.ui.AlertType;
 import control.Controller;
+import control.MessageBox;
 //import control.MessageBox;
 import de.enough.polish.util.ArrayList;
 
@@ -681,7 +682,7 @@ public class User {
 			);
 			if(s.indexOf("false")>=0)
 				return groups;
-			
+			//MessageBox.Show(s);
 			ArrayList data = UtilString.Split(s, Constants.KyTuChiaTruongDL);
 			int len = data.size();
 			int i=0;
