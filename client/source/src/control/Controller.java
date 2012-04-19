@@ -1595,7 +1595,7 @@ implements ApplicationInitializer, CommandListener
 					}
 					else
 					{
-						MessageBox.Show("Đăng ký tài khoản thất bại!",  AlertType.ERROR);
+						MessageBox.Show("Đăng ký tài khoản thất bại!" + rs,  AlertType.ERROR);
 					}
 				}
 				else
