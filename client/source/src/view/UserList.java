@@ -3,7 +3,7 @@ package view;
 import model.Group;
 //import model.Request;
 //import model.Topic;
-import model.GroupTopic;
+//import model.GroupTopic;
 //import control.MessageBox;
 import control.UserItem;
 //import de.enough.polish.ui.Display;
