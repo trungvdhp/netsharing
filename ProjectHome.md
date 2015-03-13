@@ -1,0 +1,1 @@
+share news by group
